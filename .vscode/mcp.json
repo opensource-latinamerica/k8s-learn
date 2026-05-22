@@ -1,0 +1,8 @@
+{
+  "servers": {
+    "open-aware": {
+      "type": "http",
+      "url": "https://open-aware.qodo.ai/mcp"
+    }
+  }
+}
