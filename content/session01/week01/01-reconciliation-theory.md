@@ -95,13 +95,13 @@ flowchart TB
     K2 <-->|"Heartbeat + estado de Pods"| API
 ```
 
-| Controlador   | Recurso que observa        | Acción típica                         |
-| ------------- | -------------------------- | ------------------------------------- |
-| `Deployment`  | `Deployment`, `ReplicaSet` | Crea o elimina `ReplicaSet`           |
-| `ReplicaSet`  | `ReplicaSet`, `Pod`        | Crea o elimina `Pod`                  |
-| `Job`         | `Job`, `Pod`               | Crea `Pod` hasta completar el trabajo |
-| `DaemonSet`   | `DaemonSet`, `Pod`         | Garantiza un `Pod` por nodo           |
-| `StatefulSet` | `StatefulSet`, `Pod`       | Gestiona `Pod` con identidad estable  |
+| Controlador     | Recursos que observa (informers) | Recursos que gestiona | Función principal                                                         |
+| --------------- | -------------------------------- | --------------------- | ------------------------------------------------------------------------- |
+| **Deployment**  | Deployment, ReplicaSet, Pod      | ReplicaSet            | Mantener el estado deseado de la aplicación (rollouts, updates, rollback) |
+| **ReplicaSet**  | ReplicaSet, Pod                  | Pod                   | Mantener un número deseado de Pods con base en label selectors            |
+| **Job**         | Job, Pod                         | Pod                   | Ejecutar tareas batch hasta completarse                                   |
+| **DaemonSet**   | DaemonSet, Pod, Node             | Pod                   | Asegurar que haya un Pod por nodo elegible                                |
+| **StatefulSet** | StatefulSet, Pod, PVC            | Pod, PVC              | Mantener identidad estable y almacenamiento persistente por réplica       |
 
 Un controlador **no** ejecuta contenedores directamente.
 Su responsabilidad es hablar con el `kube-apiserver`:
