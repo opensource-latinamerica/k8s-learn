@@ -63,6 +63,16 @@ Un _controlador_ (_controller_) es un bucle de control especializado
 que vigila uno o más tipos de recursos de Kubernetes
 y toma acciones para acercar el estado actual al estado deseado.
 
+No existe un único bucle de reconciliación global para todo el clúster.
+Existen múltiples controladores independientes,
+cada uno con su propia lógica,
+su propia cola de trabajo
+y sus propios trabajadores procesando elementos en paralelo.
+Por eso puedes tener al mismo tiempo al controlador de `Deployment`,
+al de `ReplicaSet`
+y al de `Node`
+reconciliando recursos distintos de forma concurrente.
+
 Kubernetes incluye decenas de controladores integrados
 que se ejecutan dentro del componente `kube-controller-manager`.
 Cada controlador es responsable de un aspecto específico del clúster:
@@ -113,24 +123,58 @@ sin perder consistencia.
 ### El ciclo de reconciliación
 
 El núcleo de cada controlador es su función de reconciliación.
-Sigue siempre la misma secuencia:
+La reconciliación en Kubernetes es principalmente **level-based**:
+el controlador decide qué hacer comparando el estado observado ahora
+contra el estado deseado,
+no por el tipo exacto de evento que llegó primero.
+
+Los eventos (_add/update/delete_) se usan como **disparadores**
+para encolar claves de recursos,
+pero la decisión final se toma leyendo el estado actual desde caché.
+Por eso,
+aunque se pierda un evento puntual,
+el siguiente evento o una resincronización periódica
+puede volver a encolar el recurso y corregir la desviación.
+
+Cada iteración suele verse así:
 
 ```mermaid
 flowchart LR
-    A["1️⃣ Observar\nel API server notifica\ncambios (Watch)"]
-    B["2️⃣ Leer\nse consulta la caché\nlocal del informer"]
-    C["3️⃣ Calcular\nspec (deseado)\nvs. status (actual)"]
-    D["4️⃣ Actuar\nllamadas al API server\npara converger"]
-    E["5️⃣ Reportar\nactualiza .status con\nel nuevo estado"]
+  A["1️⃣ Watch / Resync\nse detecta cambio"]
+  B["2️⃣ Encolar\nclave namespace/nombre"]
+  C["3️⃣ Leer desde caché\ninformer/lister"]
+  D["4️⃣ Comparar niveles\ndeseado vs actual"]
+  E["5️⃣ Decidir\nactuar, no-op o reencolar"]
+  F["6️⃣ Actualizar\nrecursos y/o .status"]
 
-    A --> B --> C --> D --> E --> A
+  A --> B --> C --> D --> E --> F --> A
 ```
 
-### Informers: observación eficiente
+### Modelo de `watch`, `informer` y `workqueue` en el plano de control
 
 Los controladores no consultan el API server en cada iteración.
-En su lugar usan _informers_,
-que son componentes que:
+En su lugar usan tres piezas que trabajan juntas:
+
+- **`watcher`** sobre el API server: recibe eventos de cambio en tiempo real.
+- **`informer`/`lister`**: mantiene una caché local indexada para lecturas rápidas.
+- **`workqueue`**: desacopla recepción de eventos y ejecución de reconciliación.
+
+El flujo operativo típico es este:
+
+1. El informer hace un `List` inicial para poblar caché.
+2. El watcher mantiene un `Watch` continuo y actualiza esa caché.
+3. Cada cambio relevante encola una clave lógica del recurso.
+4. Un trabajador toma la clave,
+   lee el estado actual desde caché,
+   y ejecuta reconciliación.
+5. Si hay error transitorio,
+   la clave se reencola con _backoff_.
+
+Este diseño permite alta concurrencia,
+reduce carga sobre `kube-apiserver`
+y evita que ráfagas de eventos saturen la lógica del controlador.
+
+Los informers son componentes que:
 
 - **Sincronizan** una caché local con el estado del API server al arrancar.
 - **Observan** cambios mediante una conexión de larga duración (_watch_).
@@ -160,6 +204,51 @@ Esta propiedad tiene consecuencias importantes:
   simplemente lee el estado actual y reconcilia desde ahí.
 - Múltiples controladores pueden coexistir sin interferirse,
   porque cada uno solo atiende los recursos vinculados a su tipo.
+
+También implica matices prácticos:
+
+- Un controlador puede decidir **no actuar inmediatamente**
+  si detecta que aún falta información,
+  que una dependencia no está lista,
+  o que conviene esperar un reintento con _backoff_.
+- El resultado de reconciliar puede ser **no-op**
+  (sin cambios)
+  cuando el estado actual ya cumple lo deseado.
+- El orden temporal de eventos no siempre coincide con el orden de observación
+  por parte de cada controlador;
+  por eso el modelo level-based es clave para mantener consistencia lógica.
+
+> **Nota:** En producción,
+> "eventual" significa "converge cuando las condiciones lo permiten",
+> no "converge instantáneamente".
+
+## Ejemplo práctico: escalado de Deployment
+
+Este ejemplo muestra dos controladores independientes actuando en cadena.
+
+**Paso 1 — Cambias el objetivo.**
+Aplicas un `Deployment` de `replicas: 3` a `replicas: 5`.
+Aquí solo cambias `.spec` del `Deployment`.
+
+**Paso 2 — Reconciliación del Deployment Controller.**
+El controlador de `Deployment` observa la diferencia,
+reconcilia,
+y actualiza el `ReplicaSet` objetivo para reflejar el nuevo tamaño.
+
+**Paso 3 — Reconciliación del ReplicaSet Controller.**
+En paralelo,
+el controlador de `ReplicaSet` compara su deseado (`5`)
+con su actual (`3`)
+y crea dos `Pod` adicionales.
+
+**Paso 4 — Programación y ejecución.**
+El `kube-scheduler` asigna los nuevos `Pod` a nodos,
+y los `kubelet` de esos nodos arrancan los contenedores.
+
+**Paso 5 — Estado estable.**
+Cuando `.status.availableReplicas` llega a `5`,
+los controladores mantienen vigilancia,
+pero no realizan más acciones.
 
 ## Un ejemplo concreto: fallo de nodo
 
@@ -242,18 +331,20 @@ El patrón de reconciliación tiene propiedades arquitectónicas destacadas:
 
 ## Glosario
 
-| Término                   | Definición breve                                                                                       |
-| ------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `bucle de control`        | Ciclo continuo que compara estado deseado y actual, y toma acciones correctivas.                       |
-| `controlador`             | Componente que implementa un bucle de control para un tipo de recurso específico.                      |
-| `estado deseado`          | Configuración declarada por el usuario en el campo `.spec` de un recurso.                              |
-| `estado actual`           | Estado reportado por el sistema en el campo `.status` de un recurso.                                   |
-| `reconciliación`          | Proceso de calcular y eliminar la diferencia entre estado deseado y estado actual.                     |
-| `informer`                | Componente que sincroniza una caché local con el API server y notifica cambios vía _watch_.            |
-| `kube-controller-manager` | Proceso del plano de control que ejecuta todos los controladores integrados de Kubernetes.             |
-| `CRD`                     | `CustomResourceDefinition` — mecanismo para definir nuevos tipos de recursos en Kubernetes.            |
-| `Operator`                | Patrón de extensión que combina un `CRD` con un controlador personalizado para gestionar aplicaciones. |
-| `convergencia eventual`   | Garantía de que el sistema alcanzará el estado deseado si los controladores permanecen activos.        |
+| Término                      | Definición breve                                                                                         |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `bucle de control`           | Ciclo continuo que compara estado deseado y actual, y toma acciones correctivas.                         |
+| `controlador`                | Componente que implementa un bucle de control para un tipo de recurso específico.                        |
+| `estado deseado`             | Configuración declarada por el usuario en el campo `.spec` de un recurso.                                |
+| `estado actual`              | Estado reportado por el sistema en el campo `.status` de un recurso.                                     |
+| `reconciliación`             | Proceso de calcular y eliminar la diferencia entre estado deseado y estado actual.                       |
+| `informer`                   | Componente que sincroniza una caché local con el API server y notifica cambios vía _watch_.              |
+| `workqueue`                  | Cola de trabajo del controlador donde se encolan claves de recursos para reconciliar con reintentos.     |
+| `level-based reconciliation` | Enfoque donde el controlador decide por comparación de estado actual vs deseado, no por el evento bruto. |
+| `kube-controller-manager`    | Proceso del plano de control que ejecuta todos los controladores integrados de Kubernetes.               |
+| `CRD`                        | `CustomResourceDefinition` — mecanismo para definir nuevos tipos de recursos en Kubernetes.              |
+| `Operator`                   | Patrón de extensión que combina un `CRD` con un controlador personalizado para gestionar aplicaciones.   |
+| `convergencia eventual`      | Garantía de que el sistema alcanzará el estado deseado si los controladores permanecen activos.          |
 
 ## Referencias
 
