@@ -58,11 +58,11 @@ flowchart TB
 
 Cada controlador ilustra un patrón diferente:
 
-| Controlador                    | Patrón principal              | Novedad respecto a semana 1               |
-| ------------------------------ | ----------------------------- | ----------------------------------------- |
-| `NamespaceController`          | Delegación + estimado de espera | `ResourcesRemainingError`, grace period  |
-| `LegacySATokenCleaner`         | Bucle periódico sin workqueue | `wait.UntilWithContext`, lógica de tiempo |
-| `ServiceAccountsController`    | Get-or-create idempotente     | Tombstone handling, fase del `Namespace`  |
+| Controlador                 | Patrón principal                | Novedad respecto a semana 1               |
+| --------------------------- | ------------------------------- | ----------------------------------------- |
+| `NamespaceController`       | Delegación + estimado de espera | `ResourcesRemainingError`, grace period   |
+| `LegacySATokenCleaner`      | Bucle periódico sin workqueue   | `wait.UntilWithContext`, lógica de tiempo |
+| `ServiceAccountsController` | Get-or-create idempotente       | Tombstone handling, fase del `Namespace`  |
 
 ## Contenido
 
@@ -102,4 +102,3 @@ e ilustra el manejo de tombstones en borrados y la idempotencia defensiva.
 Conceptos clave: `ServiceAccountsController`, `serviceAccountDeleted`,
 `DeletedFinalStateUnknown`, `syncNamespace`,
 `NamespaceTerminatingCause`, `get-or-create`.
-

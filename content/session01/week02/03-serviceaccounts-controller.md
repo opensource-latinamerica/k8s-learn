@@ -105,11 +105,11 @@ flowchart LR
     WQ --> SYNC
 ```
 
-| Evento                    | Por qué dispara reconciliación                                              |
-| ------------------------- | --------------------------------------------------------------------------- |
-| `Namespace` creado        | Un `Namespace` nuevo no tiene `ServiceAccounts`; hay que crearlas.          |
-| `Namespace` actualizado   | Si cambió a fase `Active` (p. ej., tras un resync), puede necesitar la SA.  |
-| `ServiceAccount` borrada  | La `default` SA fue eliminada; hay que recrearla en ese `namespace`.        |
+| Evento                   | Por qué dispara reconciliación                                             |
+| ------------------------ | -------------------------------------------------------------------------- |
+| `Namespace` creado       | Un `Namespace` nuevo no tiene `ServiceAccounts`; hay que crearlas.         |
+| `Namespace` actualizado  | Si cambió a fase `Active` (p. ej., tras un resync), puede necesitar la SA. |
+| `ServiceAccount` borrada | La `default` SA fue eliminada; hay que recrearla en ese `namespace`.       |
 
 ### El manejo del borrado con tombstone
 
@@ -201,13 +201,13 @@ flowchart TB
 Cada componente tiene una responsabilidad única y no puede sustituirse por
 otro:
 
-| Componente   | Responsabilidad                                                       |
-| ------------ | --------------------------------------------------------------------- |
-| `saLister`   | Consultar la caché local de `ServiceAccounts` sin ir al API server.   |
-| `nsLister`   | Consultar la caché local de `Namespaces` para leer su fase actual.    |
-| `queue`      | Desacoplar los eventos del informer del procesamiento del worker.     |
-| `syncHandler`| Implementar la lógica de reconciliación idempotente.                  |
-| `workers`    | Procesar las claves del workqueue en paralelo (varios goroutines).    |
+| Componente    | Responsabilidad                                                     |
+| ------------- | ------------------------------------------------------------------- |
+| `saLister`    | Consultar la caché local de `ServiceAccounts` sin ir al API server. |
+| `nsLister`    | Consultar la caché local de `Namespaces` para leer su fase actual.  |
+| `queue`       | Desacoplar los eventos del informer del procesamiento del worker.   |
+| `syncHandler` | Implementar la lógica de reconciliación idempotente.                |
+| `workers`     | Procesar las claves del workqueue en paralelo (varios goroutines).  |
 
 ## Configuración y extensión
 
@@ -232,25 +232,25 @@ su arquitectura lo requiere.
 
 ## Comparación con los otros controladores de la semana
 
-| Aspecto                  | `NamespaceController`         | `LegacySATokenCleaner`        | `ServiceAccountsController`    |
-| ------------------------ | ----------------------------- | ----------------------------- | ------------------------------ |
-| Patrón de disparo        | Evento del informer + retraso | Temporizador periódico        | Evento del informer             |
-| Usa workqueue            | Sí                            | No                            | Sí                              |
-| Acción principal         | Borrar recursos               | Borrar `Secrets` obsoletos    | Crear `ServiceAccounts`         |
-| Idempotencia             | Verifica antes de borrar      | Verifica etiquetas y uso      | `Get` antes de `Create`         |
-| Objetos observados       | `Namespace`                   | `Secret`, `Pod`, `SA`         | `Namespace`, `ServiceAccount`   |
-| Complejidad              | Alta (discovery + deletion)   | Media (lógica de tiempo)      | Baja (get-or-create)            |
+| Aspecto            | `NamespaceController`         | `LegacySATokenCleaner`     | `ServiceAccountsController`   |
+| ------------------ | ----------------------------- | -------------------------- | ----------------------------- |
+| Patrón de disparo  | Evento del informer + retraso | Temporizador periódico     | Evento del informer           |
+| Usa workqueue      | Sí                            | No                         | Sí                            |
+| Acción principal   | Borrar recursos               | Borrar `Secrets` obsoletos | Crear `ServiceAccounts`       |
+| Idempotencia       | Verifica antes de borrar      | Verifica etiquetas y uso   | `Get` antes de `Create`       |
+| Objetos observados | `Namespace`                   | `Secret`, `Pod`, `SA`      | `Namespace`, `ServiceAccount` |
+| Complejidad        | Alta (discovery + deletion)   | Media (lógica de tiempo)   | Baja (get-or-create)          |
 
 ## Glosario
 
-| Término                       | Definición breve                                                                   |
-| ----------------------------- | ---------------------------------------------------------------------------------- |
-| `ServiceAccount`              | Identidad para procesos que se ejecutan en un `Pod`.                               |
-| `default` (SA)                | `ServiceAccount` que Kubernetes usa por defecto cuando un `Pod` no especifica una. |
-| `DeletedFinalStateUnknown`    | Envoltura que el informer usa cuando no pudo recibir el evento de borrado directamente. |
-| `NamespaceTerminatingCause`   | Causa de error que el API server devuelve al intentar crear recursos en un `Namespace` en `Terminating`. |
-| `TokensController`            | Controlador que crea `Secrets` de tipo `service-account-token` (mecanismo heredado). |
-| `TokenRequest` API            | Mecanismo moderno para obtener tokens de corta duración sin crear `Secrets`.       |
+| Término                     | Definición breve                                                                                         |
+| --------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `ServiceAccount`            | Identidad para procesos que se ejecutan en un `Pod`.                                                     |
+| `default` (SA)              | `ServiceAccount` que Kubernetes usa por defecto cuando un `Pod` no especifica una.                       |
+| `DeletedFinalStateUnknown`  | Envoltura que el informer usa cuando no pudo recibir el evento de borrado directamente.                  |
+| `NamespaceTerminatingCause` | Causa de error que el API server devuelve al intentar crear recursos en un `Namespace` en `Terminating`. |
+| `TokensController`          | Controlador que crea `Secrets` de tipo `service-account-token` (mecanismo heredado).                     |
+| `TokenRequest` API          | Mecanismo moderno para obtener tokens de corta duración sin crear `Secrets`.                             |
 
 ## Referencias
 

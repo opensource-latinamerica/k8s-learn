@@ -79,14 +79,14 @@ llamada `Deltas`.
 
 Cada `Delta` tiene un tipo:
 
-| Tipo          | Cuándo ocurre                                                                  |
-| ------------- | ------------------------------------------------------------------------------ |
-| `Added`       | El objeto apareció por primera vez.                                            |
-| `Updated`     | El objeto fue modificado.                                                      |
-| `Deleted`     | El objeto fue eliminado (puede llevar un `DeletedFinalStateUnknown`).          |
-| `Replaced`    | Tras un relist, el objeto fue reemplazado. Solo si `EmitDeltaTypeReplaced=true`; si no, se emite `Sync`. |
-| `Sync`        | Resincronización periódica (sin cambio real en el API server).                 |
-| `Bookmark`    | Evento de marcador para propagar el `ResourceVersion` sin datos de objeto.     |
+| Tipo       | Cuándo ocurre                                                                                            |
+| ---------- | -------------------------------------------------------------------------------------------------------- |
+| `Added`    | El objeto apareció por primera vez.                                                                      |
+| `Updated`  | El objeto fue modificado.                                                                                |
+| `Deleted`  | El objeto fue eliminado (puede llevar un `DeletedFinalStateUnknown`).                                    |
+| `Replaced` | Tras un relist, el objeto fue reemplazado. Solo si `EmitDeltaTypeReplaced=true`; si no, se emite `Sync`. |
+| `Sync`     | Resincronización periódica (sin cambio real en el API server).                                           |
+| `Bookmark` | Evento de marcador para propagar el `ResourceVersion` sin datos de objeto.                               |
 
 El `DeltaFIFO` resuelve un problema importante:
 si el mismo objeto se modifica varias veces mientras espera en la cola,
@@ -308,6 +308,7 @@ El `DeltaFIFO` crea una entrada `{Deleted, pod}` para la clave `default/mi-pod`.
 > el `Reflector` genera un delta `Deleted` con un objeto de tipo
 > `DeletedFinalStateUnknown{Key: "default/mi-pod", Obj: <último estado conocido>}`.
 > Los handlers deben detectar este tipo en `DeleteFunc`:
+>
 > ```go
 > DeleteFunc: func(obj interface{}) {
 >     // Detectar si fue un borrado "tombstone" por pérdida de eventos Watch
@@ -361,24 +362,24 @@ El subsistema de informers tiene propiedades arquitectónicas muy importantes:
 
 ## Glosario
 
-| Término                 | Definición breve                                                                                          |
-| ----------------------- | --------------------------------------------------------------------------------------------------------- |
-| `Reflector`             | Componente que ejecuta `ListAndWatch` contra el API server y escribe deltas en el `DeltaFIFO`.            |
-| `DeltaFIFO`             | Cola que agrupa cambios sucesivos del mismo objeto en una lista de `Delta` ordenada.                      |
-| `Store`                 | Almacén thread-safe de objetos de Kubernetes, accesible por clave `namespace/name`.                       |
-| `Indexer`               | Extensión del `Store` que permite consultas por campos indexados (p. ej., namespace).                     |
-| `SharedIndexInformer`   | Informer compartible que combina `Reflector`, `DeltaFIFO` e `Indexer`.                                    |
-| `SharedInformerFactory` | Fábrica que garantiza una sola instancia de `SharedIndexInformer` por tipo de recurso.                    |
-| `Lister`                | Interfaz generada automáticamente para consultar la caché local de forma tipada.                          |
-| `ResourceEventHandler`  | Interfaz con los métodos `OnAdd`, `OnUpdate` y `OnDelete` que notifican cambios a los controladores.      |
-| `HasSynced`                        | Función que retorna `true` cuando el informer ha completado su primer `List` y procesado todos sus items. |
-| `ResourceEventHandlerRegistration` | Handle retornado por `AddEventHandler`; tiene su propio `HasSynced` por handler y permite `RemoveEventHandler`. |
+| Término                            | Definición breve                                                                                                  |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `Reflector`                        | Componente que ejecuta `ListAndWatch` contra el API server y escribe deltas en el `DeltaFIFO`.                    |
+| `DeltaFIFO`                        | Cola que agrupa cambios sucesivos del mismo objeto en una lista de `Delta` ordenada.                              |
+| `Store`                            | Almacén thread-safe de objetos de Kubernetes, accesible por clave `namespace/name`.                               |
+| `Indexer`                          | Extensión del `Store` que permite consultas por campos indexados (p. ej., namespace).                             |
+| `SharedIndexInformer`              | Informer compartible que combina `Reflector`, `DeltaFIFO` e `Indexer`.                                            |
+| `SharedInformerFactory`            | Fábrica que garantiza una sola instancia de `SharedIndexInformer` por tipo de recurso.                            |
+| `Lister`                           | Interfaz generada automáticamente para consultar la caché local de forma tipada.                                  |
+| `ResourceEventHandler`             | Interfaz con los métodos `OnAdd`, `OnUpdate` y `OnDelete` que notifican cambios a los controladores.              |
+| `HasSynced`                        | Función que retorna `true` cuando el informer ha completado su primer `List` y procesado todos sus items.         |
+| `ResourceEventHandlerRegistration` | Handle retornado por `AddEventHandler`; tiene su propio `HasSynced` por handler y permite `RemoveEventHandler`.   |
 | `DeletedFinalStateUnknown`         | Envoltorio que el `Reflector` usa cuando detecta un borrado por relist pero no tuvo el evento `Deleted` original. |
-| `TransformFunc`                    | Función opcional que transforma objetos antes de almacenarlos en caché; usada para reducir RAM.          |
-| `ResourceVersion`                  | Valor opaco que el API server asigna a cada versión de un objeto; usado para reanudar un `Watch`.        |
-| `relist`                           | Nuevo `List` completo que hace el `Reflector` cuando no puede reanudar el `Watch` sin perder eventos.    |
-| resync                             | Reenvío periódico de todos los objetos en caché a los handlers, sin consultar el API server.             |
-| backoff exponencial                | Estrategia del `Reflector` para reconectarse: 800 ms inicial, máximo 30 s, reset tras 2 min de éxito.    |
+| `TransformFunc`                    | Función opcional que transforma objetos antes de almacenarlos en caché; usada para reducir RAM.                   |
+| `ResourceVersion`                  | Valor opaco que el API server asigna a cada versión de un objeto; usado para reanudar un `Watch`.                 |
+| `relist`                           | Nuevo `List` completo que hace el `Reflector` cuando no puede reanudar el `Watch` sin perder eventos.             |
+| resync                             | Reenvío periódico de todos los objetos en caché a los handlers, sin consultar el API server.                      |
+| backoff exponencial                | Estrategia del `Reflector` para reconectarse: 800 ms inicial, máximo 30 s, reset tras 2 min de éxito.             |
 
 ## Referencias
 

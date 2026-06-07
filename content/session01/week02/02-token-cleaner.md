@@ -38,13 +38,13 @@ paquete `k8s.io/kubernetes/pkg/controller/serviceaccount`)
 borra un `Secret` de token heredado únicamente si se cumplen
 **todas** las condiciones siguientes:
 
-| Condición | Descripción |
-| --------- | ----------- |
-| Tipo correcto | `secret.type == kubernetes.io/service-account-token` |
-| Token auto-generado | El `ServiceAccount` referencia el `Secret` en su campo `secrets` |
-| No montado | Ningún `Pod` del mismo `namespace` monta el `Secret` actualmente |
-| No usado recientemente | La etiqueta `kubernetes.io/legacy-token-last-used` es anterior al umbral de limpieza |
-| Marcado como inválido | Tiene la etiqueta `kubernetes.io/legacy-token-invalid-since` con una fecha anterior al umbral |
+| Condición              | Descripción                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------- |
+| Tipo correcto          | `secret.type == kubernetes.io/service-account-token`                                          |
+| Token auto-generado    | El `ServiceAccount` referencia el `Secret` en su campo `secrets`                              |
+| No montado             | Ningún `Pod` del mismo `namespace` monta el `Secret` actualmente                              |
+| No usado recientemente | La etiqueta `kubernetes.io/legacy-token-last-used` es anterior al umbral de limpieza          |
+| Marcado como inválido  | Tiene la etiqueta `kubernetes.io/legacy-token-invalid-since` con una fecha anterior al umbral |
 
 El proceso de eliminación es de **dos pasos**:
 primero el token se invalida (se le añade la etiqueta `invalid-since`),
@@ -186,14 +186,14 @@ Kubernetes utiliza tres etiquetas para rastrear el estado de un token heredado:
 ```yaml
 metadata:
   labels:
-    kubernetes.io/legacy-token-last-used: "2025-10-15"  # última vez que se autenticó
-    kubernetes.io/legacy-token-invalid-since: "2026-01-20"  # fecha de invalidación
+    kubernetes.io/legacy-token-last-used: "2025-10-15" # última vez que se autenticó
+    kubernetes.io/legacy-token-invalid-since: "2026-01-20" # fecha de invalidación
 ```
 
-| Etiqueta                                   | Quién la escribe              | Significado                              |
-| ------------------------------------------ | ----------------------------- | ---------------------------------------- |
-| `kubernetes.io/legacy-token-last-used`     | `kube-apiserver`              | Fecha de la última autenticación exitosa |
-| `kubernetes.io/legacy-token-invalid-since` | `LegacySATokenCleaner`        | Fecha en que se marcó como inválido      |
+| Etiqueta                                   | Quién la escribe       | Significado                              |
+| ------------------------------------------ | ---------------------- | ---------------------------------------- |
+| `kubernetes.io/legacy-token-last-used`     | `kube-apiserver`       | Fecha de la última autenticación exitosa |
+| `kubernetes.io/legacy-token-invalid-since` | `LegacySATokenCleaner` | Fecha en que se marcó como inválido      |
 
 Si un token con `invalid-since` se vuelve a usar,
 el API server registra una anotación de auditoría y devuelve un error.
@@ -219,23 +219,23 @@ El periodo de limpieza se controla con un argumento del
 
 Los parámetros internos del controlador son:
 
-| Parámetro          | Valor por defecto | Descripción                                         |
-| ------------------ | ----------------- | --------------------------------------------------- |
-| `CleanUpPeriod`    | 1 año             | Tiempo mínimo sin uso para invalidar o borrar       |
-| `SyncInterval`     | 24 horas          | Frecuencia con la que se ejecuta `evaluateSATokens` |
+| Parámetro       | Valor por defecto | Descripción                                         |
+| --------------- | ----------------- | --------------------------------------------------- |
+| `CleanUpPeriod` | 1 año             | Tiempo mínimo sin uso para invalidar o borrar       |
+| `SyncInterval`  | 24 horas          | Frecuencia con la que se ejecuta `evaluateSATokens` |
 
 ## Comparación con el patrón de workqueue
 
 El `LegacySATokenCleaner` no necesita workqueue porque su trabajo es
 **por lotes y periódico**, no reactivo a eventos individuales.
 
-| Característica         | Controlador con workqueue            | `LegacySATokenCleaner`                   |
-| ---------------------- | ------------------------------------ | ---------------------------------------- |
-| Disparado por          | Cambios en recursos (informer)       | Temporizador periódico (`wait.Until`)    |
-| Granularidad           | Un objeto por reconciliación         | Todos los `Secrets` en cada ciclo        |
-| Reintentos             | Rate limiter + backoff exponencial   | El siguiente ciclo periódico             |
-| Concurrencia           | Múltiples workers en paralelo        | Un solo goroutine                        |
-| Uso típico             | Reacción rápida a cambios de estado  | Tareas de mantenimiento/limpieza globales|
+| Característica | Controlador con workqueue           | `LegacySATokenCleaner`                    |
+| -------------- | ----------------------------------- | ----------------------------------------- |
+| Disparado por  | Cambios en recursos (informer)      | Temporizador periódico (`wait.Until`)     |
+| Granularidad   | Un objeto por reconciliación        | Todos los `Secrets` en cada ciclo         |
+| Reintentos     | Rate limiter + backoff exponencial  | El siguiente ciclo periódico              |
+| Concurrencia   | Múltiples workers en paralelo       | Un solo goroutine                         |
+| Uso típico     | Reacción rápida a cambios de estado | Tareas de mantenimiento/limpieza globales |
 
 Este patrón es adecuado cuando:
 
@@ -245,15 +245,15 @@ Este patrón es adecuado cuando:
 
 ## Glosario
 
-| Término                              | Definición breve                                                             |
-| ------------------------------------ | ---------------------------------------------------------------------------- |
-| `ServiceAccount`                     | Identidad para procesos que se ejecutan en un `Pod`.                         |
-| Token heredado (_legacy token_)      | `Secret` de tipo `service-account-token` creado automáticamente antes de v1.24. |
-| Token de volumen proyectado          | Token de corta duración inyectado por el kubelet mediante un volumen; reemplaza al token heredado. |
-| `LegacySATokenCleaner`               | Controlador que invalida y borra tokens heredados sin uso.                   |
-| `invalid-since`                      | Etiqueta que marca la fecha en que un token fue declarado inválido.          |
-| `last-used`                          | Etiqueta que el API server actualiza cada vez que el token se usa con éxito. |
-| `wait.UntilWithContext`              | Función de `apimachinery` que ejecuta una función en bucle con un intervalo. |
+| Término                         | Definición breve                                                                                   |
+| ------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `ServiceAccount`                | Identidad para procesos que se ejecutan en un `Pod`.                                               |
+| Token heredado (_legacy token_) | `Secret` de tipo `service-account-token` creado automáticamente antes de v1.24.                    |
+| Token de volumen proyectado     | Token de corta duración inyectado por el kubelet mediante un volumen; reemplaza al token heredado. |
+| `LegacySATokenCleaner`          | Controlador que invalida y borra tokens heredados sin uso.                                         |
+| `invalid-since`                 | Etiqueta que marca la fecha en que un token fue declarado inválido.                                |
+| `last-used`                     | Etiqueta que el API server actualiza cada vez que el token se usa con éxito.                       |
+| `wait.UntilWithContext`         | Función de `apimachinery` que ejecuta una función en bucle con un intervalo.                       |
 
 ## Referencias
 

@@ -30,10 +30,10 @@ en un `Namespace` que ya no existe.
 Un `Namespace` puede estar en dos fases, reflejadas en el campo
 `status.phase` del objeto:
 
-| Fase           | Descripción                                                                    |
-| -------------- | ------------------------------------------------------------------------------ |
-| `Active`       | El `namespace` está activo y acepta nuevos recursos.                           |
-| `Terminating`  | Se ha solicitado el borrado; el controlador está limpiando su contenido.       |
+| Fase          | Descripción                                                              |
+| ------------- | ------------------------------------------------------------------------ |
+| `Active`      | El `namespace` está activo y acepta nuevos recursos.                     |
+| `Terminating` | Se ha solicitado el borrado; el controlador está limpiando su contenido. |
 
 La transición `Active → Terminating` ocurre en cuanto el API server
 registra la petición de borrado en `metadata.deletionTimestamp`.
@@ -293,12 +293,12 @@ status:
 
 El ciclo de borrado de un `Namespace` involucra más de un controlador:
 
-| Controlador                  | Papel en el borrado                                          |
-| ---------------------------- | ------------------------------------------------------------ |
-| `NamespaceController`        | Orquesta el borrado; detecta `Terminating` y delega.         |
-| `ServiceAccountsController`  | Deja de crear `ServiceAccounts` en el `namespace`.           |
-| `GarbageCollector`           | Borra objetos huérfanos cuyo dueño ha sido eliminado.        |
-| `EndpointSlice controller`   | Elimina los `EndpointSlice` asociados a `Services` borrados. |
+| Controlador                 | Papel en el borrado                                          |
+| --------------------------- | ------------------------------------------------------------ |
+| `NamespaceController`       | Orquesta el borrado; detecta `Terminating` y delega.         |
+| `ServiceAccountsController` | Deja de crear `ServiceAccounts` en el `namespace`.           |
+| `GarbageCollector`          | Borra objetos huérfanos cuyo dueño ha sido eliminado.        |
+| `EndpointSlice controller`  | Elimina los `EndpointSlice` asociados a `Services` borrados. |
 
 El `NamespaceController` no coordina directamente con estos controladores:
 simplemente borra todos los recursos con el cliente dinámico,
@@ -307,15 +307,15 @@ propios informers.
 
 ## Glosario
 
-| Término                    | Definición breve                                                                             |
-| -------------------------- | -------------------------------------------------------------------------------------------- |
-| `deletionTimestamp`        | Campo en `metadata` que indica que el objeto está pendiente de borrado.                      |
-| `Terminating`              | Fase de un `Namespace` en proceso de eliminación.                                            |
-| `spec.finalizers`          | Lista de tokens que deben eliminarse antes de que etcd borre el objeto.                      |
-| `NamespacedResourcesDeleter` | Subcomponente que ejecuta el borrado de todos los GVR dentro del `Namespace`.              |
-| `ResourcesRemainingError`  | Error que indica que quedan recursos y que se debe reintentar más tarde con retraso.         |
-| `GVR`                      | `GroupVersionResource`: identificador de un tipo de recurso en la API de Kubernetes.         |
-| `finalizerToken`           | Token específico (`kubernetes`) que el `NamespaceController` elimina al finalizar el borrado.|
+| Término                      | Definición breve                                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------------- |
+| `deletionTimestamp`          | Campo en `metadata` que indica que el objeto está pendiente de borrado.                       |
+| `Terminating`                | Fase de un `Namespace` en proceso de eliminación.                                             |
+| `spec.finalizers`            | Lista de tokens que deben eliminarse antes de que etcd borre el objeto.                       |
+| `NamespacedResourcesDeleter` | Subcomponente que ejecuta el borrado de todos los GVR dentro del `Namespace`.                 |
+| `ResourcesRemainingError`    | Error que indica que quedan recursos y que se debe reintentar más tarde con retraso.          |
+| `GVR`                        | `GroupVersionResource`: identificador de un tipo de recurso en la API de Kubernetes.          |
+| `finalizerToken`             | Token específico (`kubernetes`) que el `NamespaceController` elimina al finalizar el borrado. |
 
 ## Referencias
 

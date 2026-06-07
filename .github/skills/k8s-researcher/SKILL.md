@@ -21,15 +21,15 @@ k8s-learn siguiendo sus convenciones de estilo (Diataxis, SemBr, español neutro
 
 ## Herramientas disponibles
 
-| Herramienta | Propósito |
-|---|---|
-| `mcp_codewiki-mcp_codewiki_search_repos` | Buscar repos disponibles en el servidor code-wiki |
-| `mcp_codewiki-mcp_codewiki_fetch_repo` | Indexar o actualizar el repo `kubernetes/website` |
-| `mcp_codewiki-mcp_codewiki_ask_repo` | Hacer preguntas en lenguaje natural sobre un repo indexado |
-| `mcp_github_mcp_se_search_code` | Buscar texto/código dentro de `kubernetes/website` |
-| `mcp_github_mcp_se_get_file_contents` | Leer archivos concretos del repo oficial |
-| `fetch_webpage` | Obtener contenido de páginas web (kubernetes.io, pkg.go.dev, blog, KEPs) |
-| `semantic_search` | Buscar contexto relevante en el workspace actual |
+| Herramienta                              | Propósito                                                                |
+| ---------------------------------------- | ------------------------------------------------------------------------ |
+| `mcp_codewiki-mcp_codewiki_search_repos` | Buscar repos disponibles en el servidor code-wiki                        |
+| `mcp_codewiki-mcp_codewiki_fetch_repo`   | Indexar o actualizar el repo `kubernetes/website`                        |
+| `mcp_codewiki-mcp_codewiki_ask_repo`     | Hacer preguntas en lenguaje natural sobre un repo indexado               |
+| `mcp_github_mcp_se_search_code`          | Buscar texto/código dentro de `kubernetes/website`                       |
+| `mcp_github_mcp_se_get_file_contents`    | Leer archivos concretos del repo oficial                                 |
+| `fetch_webpage`                          | Obtener contenido de páginas web (kubernetes.io, pkg.go.dev, blog, KEPs) |
+| `semantic_search`                        | Buscar contexto relevante en el workspace actual                         |
 
 > **Estado del servicio code-wiki (verificado 2026-06-06):**
 > `mcp_codewiki-mcp_codewiki_search_repos`, `fetch_repo` y `ask_repo`
@@ -92,16 +92,16 @@ fetch_webpage:
 
 URLs de referencia frecuentes:
 
-| Fuente | URL |
-|---|---|
-| Conceptos | `https://kubernetes.io/docs/concepts/` |
-| Referencia de API | `https://kubernetes.io/docs/reference/kubernetes-api/` |
-| client-go tools/cache | `https://pkg.go.dev/k8s.io/client-go/tools/cache` |
-| client-go util/workqueue | `https://pkg.go.dev/k8s.io/client-go/util/workqueue` |
-| controller-runtime | `https://pkg.go.dev/sigs.k8s.io/controller-runtime` |
-| Blog oficial | `https://kubernetes.io/blog/` |
-| KEPs | `https://github.com/kubernetes/enhancements` |
-| Changelog | `https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/` |
+| Fuente                   | URL                                                               |
+| ------------------------ | ----------------------------------------------------------------- |
+| Conceptos                | `https://kubernetes.io/docs/concepts/`                            |
+| Referencia de API        | `https://kubernetes.io/docs/reference/kubernetes-api/`            |
+| client-go tools/cache    | `https://pkg.go.dev/k8s.io/client-go/tools/cache`                 |
+| client-go util/workqueue | `https://pkg.go.dev/k8s.io/client-go/util/workqueue`              |
+| controller-runtime       | `https://pkg.go.dev/sigs.k8s.io/controller-runtime`               |
+| Blog oficial             | `https://kubernetes.io/blog/`                                     |
+| KEPs                     | `https://github.com/kubernetes/enhancements`                      |
+| Changelog                | `https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/` |
 
 ### Paso 4 — Sintetizar y traducir
 
@@ -133,9 +133,10 @@ Produce un documento Markdown listo para usar en k8s-learn:
 > **Versión de Kubernetes:** vX.YY  
 > **Fuentes:** [kubernetes.io/docs/...](URL), [kubernetes/website](URL)
 
-## Objetivos de aprendizaje        ← solo para tutoriales y guías prácticas
+## Objetivos de aprendizaje ← solo para tutoriales y guías prácticas
 
 Al terminar esta sección serás capaz de:
+
 - ...
 
 ## <Sección principal>

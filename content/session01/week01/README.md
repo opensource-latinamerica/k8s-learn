@@ -96,16 +96,16 @@ Conceptos clave: `SetControllerReference`, `SetOwnerReference`,
 
 ## Referencia rápida de componentes
 
-| Componente                      | Paquete                                        | Qué hace                                             |
-| ------------------------------- | ---------------------------------------------- | ---------------------------------------------------- |
-| `Reflector`                     | `k8s.io/client-go/tools/cache`                 | Ejecuta `ListAndWatch` y escribe deltas en la cola.  |
-| `DeltaFIFO`                     | `k8s.io/client-go/tools/cache`                 | Cola de cambios ordenados por objeto.                |
-| `Indexer`                       | `k8s.io/client-go/tools/cache`                 | Caché local con índices para consultas eficientes.   |
-| `SharedIndexInformer`           | `k8s.io/client-go/tools/cache`                 | Une Reflector + DeltaFIFO + Indexer, compartible.    |
-| `SharedInformerFactory`         | `k8s.io/client-go/informers`                   | Garantiza una sola instancia de informer por tipo.   |
-| _Lister_                        | Código generado (`code-generator`)             | Consulta tipada a la caché sin tocar el API server.  |
-| `TypedRateLimitingInterface`    | `k8s.io/client-go/util/workqueue`              | Cola con deduplicación y backoff automático.         |
-| `DefaultTypedControllerRateLimiter` | `k8s.io/client-go/util/workqueue`          | Rate limiter estándar: exponential + token bucket.   |
-| `SetControllerReference`        | `sigs.k8s.io/controller-runtime/controllerutil` | Owner reference con `controller: true`.             |
-| `CreateOrUpdate`                | `sigs.k8s.io/controller-runtime/controllerutil` | Upsert idempotente vía `PUT`.                       |
-| `CreateOrPatch`                 | `sigs.k8s.io/controller-runtime/controllerutil` | Upsert idempotente vía `PATCH`.                     |
+| Componente                          | Paquete                                         | Qué hace                                            |
+| ----------------------------------- | ----------------------------------------------- | --------------------------------------------------- |
+| `Reflector`                         | `k8s.io/client-go/tools/cache`                  | Ejecuta `ListAndWatch` y escribe deltas en la cola. |
+| `DeltaFIFO`                         | `k8s.io/client-go/tools/cache`                  | Cola de cambios ordenados por objeto.               |
+| `Indexer`                           | `k8s.io/client-go/tools/cache`                  | Caché local con índices para consultas eficientes.  |
+| `SharedIndexInformer`               | `k8s.io/client-go/tools/cache`                  | Une Reflector + DeltaFIFO + Indexer, compartible.   |
+| `SharedInformerFactory`             | `k8s.io/client-go/informers`                    | Garantiza una sola instancia de informer por tipo.  |
+| _Lister_                            | Código generado (`code-generator`)              | Consulta tipada a la caché sin tocar el API server. |
+| `TypedRateLimitingInterface`        | `k8s.io/client-go/util/workqueue`               | Cola con deduplicación y backoff automático.        |
+| `DefaultTypedControllerRateLimiter` | `k8s.io/client-go/util/workqueue`               | Rate limiter estándar: exponential + token bucket.  |
+| `SetControllerReference`            | `sigs.k8s.io/controller-runtime/controllerutil` | Owner reference con `controller: true`.             |
+| `CreateOrUpdate`                    | `sigs.k8s.io/controller-runtime/controllerutil` | Upsert idempotente vía `PUT`.                       |
+| `CreateOrPatch`                     | `sigs.k8s.io/controller-runtime/controllerutil` | Upsert idempotente vía `PATCH`.                     |
