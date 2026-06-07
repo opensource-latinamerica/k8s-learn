@@ -1,10 +1,4 @@
-# Semana 2 — Controladores básicos
-
-> **Tipo de contenido:** Explicación / Navegación
-> **Prerequisitos:**
-> [Semana 1 — Fundamentos del patrón de reconciliación](../week01/README.md)
-> **Relacionado:** [Currícula de la sesión 1](../README.md)
-> **Siguiente paso:** Semana 3 — Deployment a profundidad
+# Controladores básicos
 
 Esta semana aplica los fundamentos de la semana 1 a tres controladores
 integrados de Kubernetes.
@@ -20,7 +14,7 @@ otro garantiza que siempre tenga la identidad mínima necesaria,
 y el tercero limpia las credenciales obsoletas que ese sistema de identidad
 dejó acumuladas en el tiempo.
 
-## Objetivos de aprendizaje
+## Objetivos
 
 Al terminar esta semana serás capaz de:
 
@@ -35,7 +29,7 @@ Al terminar esta semana serás capaz de:
 - Implementar la lógica de "garantizar existencia" de un recurso (`get-or-create`)
   de forma idempotente y con manejo de tombstones.
 
-## Cómo encajan los tres documentos
+## Mapa conceptual
 
 Los tres controladores comparten un contexto: el `Namespace`.
 
@@ -60,13 +54,6 @@ flowchart TB
     SA_CTRL -. "crea tokens heredados (solo en k8s < 1.24)\nque se acumulan con el tiempo" .-> TOKEN_CLEAN
 ```
 
-El orden de lectura recomendado es:
-
-1. Empieza por el `NamespaceController` para entender el borrado.
-2. Lee el `LegacySATokenCleaner` para ver el patrón de bucle periódico.
-3. Termina con el `ServiceAccountsController` como síntesis de controlador
-   mínimo con todos los componentes esenciales.
-
 ## Patrones de reconciliación en esta semana
 
 Cada controlador ilustra un patrón diferente:
@@ -77,11 +64,9 @@ Cada controlador ilustra un patrón diferente:
 | `LegacySATokenCleaner`         | Bucle periódico sin workqueue | `wait.UntilWithContext`, lógica de tiempo |
 | `ServiceAccountsController`    | Get-or-create idempotente     | Tombstone handling, fase del `Namespace`  |
 
-## Documentos de la semana
+## Contenido
 
-### 1 · El controlador de Namespace en Kubernetes
-
-**Archivo:** [01-namespace-controller.md](01-namespace-controller.md)
+### 1 · [El controlador de Namespace en Kubernetes](01-namespace-controller.md)
 
 Explica el ciclo de borrado de un `Namespace`:
 cómo el controlador detecta el `deletionTimestamp`,
@@ -94,11 +79,7 @@ Conceptos clave: `Terminating`, `deletionTimestamp`, `spec.finalizers`,
 `deleteCollection` vs. `deleteEachItem`,
 `namespaceDeletionGracePeriod`.
 
----
-
-### 2 · El limpiador de tokens heredados de ServiceAccount
-
-**Archivo:** [02-token-cleaner.md](02-token-cleaner.md)
+### 2 · [El limpiador de tokens heredados de ServiceAccount](02-token-cleaner.md)
 
 Explica por qué existen los tokens heredados,
 las cinco condiciones que deben cumplirse para borrar un token,
@@ -110,11 +91,7 @@ Conceptos clave: `LegacySATokenCleaner`, `legacy-token-last-used`,
 `legacy-token-invalid-since`, `evaluateSATokens`,
 `wait.UntilWithContext`, `Preconditions.ResourceVersion`.
 
----
-
-### 3 · El controlador de ServiceAccounts en Kubernetes
-
-**Archivo:** [03-serviceaccounts-controller.md](03-serviceaccounts-controller.md)
+### 3 · [El controlador de ServiceAccounts en Kubernetes](03-serviceaccounts-controller.md)
 
 Describe el controlador más pequeño de la semana:
 garantiza la presencia de la `ServiceAccount` `default` en todos los
@@ -126,9 +103,3 @@ Conceptos clave: `ServiceAccountsController`, `serviceAccountDeleted`,
 `DeletedFinalStateUnknown`, `syncNamespace`,
 `NamespaceTerminatingCause`, `get-or-create`.
 
-## Orden de lectura recomendado
-
-Lee los documentos en el orden indicado (1 → 2 → 3).
-El primero es el más complejo;
-el tercero es el más sencillo y consolida los patrones vistos en los dos
-anteriores.
