@@ -21,20 +21,23 @@ k8s-learn siguiendo sus convenciones de estilo (Diataxis, SemBr, español neutro
 
 ## Herramientas disponibles
 
-| Herramienta                              | Propósito                                                                |
-| ---------------------------------------- | ------------------------------------------------------------------------ |
-| `mcp_codewiki-mcp_codewiki_search_repos` | Buscar repos disponibles en el servidor code-wiki                        |
-| `mcp_codewiki-mcp_codewiki_fetch_repo`   | Indexar o actualizar el repo `kubernetes/website`                        |
-| `mcp_codewiki-mcp_codewiki_ask_repo`     | Hacer preguntas en lenguaje natural sobre un repo indexado               |
-| `mcp_github_mcp_se_search_code`          | Buscar texto/código dentro de `kubernetes/website`                       |
-| `mcp_github_mcp_se_get_file_contents`    | Leer archivos concretos del repo oficial                                 |
-| `fetch_webpage`                          | Obtener contenido de páginas web (kubernetes.io, pkg.go.dev, blog, KEPs) |
-| `semantic_search`                        | Buscar contexto relevante en el workspace actual                         |
+| Herramienta                              | Propósito                                                                 |
+| ---------------------------------------- | ------------------------------------------------------------------------- |
+| `mcp_codewiki_codewiki_read_structure`   | Ver estructura de secciones disponible para un repositorio                |
+| `mcp_codewiki_codewiki_read_contents`    | Leer contenido del wiki por secciones                                     |
+| `mcp_codewiki_codewiki_search_wiki`      | Hacer preguntas en lenguaje natural sobre un repositorio indexado         |
+| `mcp_codewiki_codewiki_request_indexing` | Solicitar indexación cuando el repositorio no está disponible en CodeWiki |
+| `mcp_github_mcp_se_search_code`          | Buscar texto/código dentro de `kubernetes/website`                        |
+| `mcp_github_mcp_se_get_file_contents`    | Leer archivos concretos del repo oficial                                  |
+| `fetch_webpage`                          | Obtener contenido de páginas web (kubernetes.io, pkg.go.dev, blog, KEPs)  |
+| `semantic_search`                        | Buscar contexto relevante en el workspace actual                          |
 
-> **Estado del servicio code-wiki (verificado 2026-06-06):**
-> `mcp_codewiki-mcp_codewiki_search_repos`, `fetch_repo` y `ask_repo`
-> devuelven `RPC_FAIL: fetch failed` de forma consistente para cualquier consulta.
-> El servicio está caído. Usa el **Procedimiento de fallback** directamente.
+> **Nota operativa:**
+> Si CodeWiki devuelve error temporal,
+> continúa con el fallback sin bloquear la investigación.
+> Si devuelve `NOT_INDEXED`,
+> usa `mcp_codewiki_codewiki_request_indexing`
+> y sigue con fuentes oficiales mientras se procesa la solicitud.
 
 ## Procedimiento
 
@@ -50,17 +53,21 @@ Si la solicitud es ambigua, pregunta antes de investigar.
 
 ### Paso 2 — Intentar code-wiki MCP
 
-1. Llama a `mcp_codewiki-mcp_codewiki_search_repos` con query `"kubernetes/website"`.
-2. Si responde con `RPC_FAIL` o cualquier error, **salta directamente al Paso 3 (fallback)**.
-   No reintentes; el servicio no está disponible.
-3. Si responde correctamente:
-   - Si `kubernetes/website` no aparece, usa `mcp_codewiki-mcp_codewiki_fetch_repo`
-     con `repo: "https://github.com/kubernetes/website"`.
-   - Formula la pregunta en inglés con `mcp_codewiki-mcp_codewiki_ask_repo`:
-     - `repo`: `"https://github.com/kubernetes/website"`
-     - `question`: pregunta concreta en inglés
-   - Registra las secciones y rutas de archivo que devuelva la respuesta.
-   - Continúa con el Paso 3 para profundizar.
+1. Llama a `mcp_codewiki_codewiki_read_structure`
+   con `repo_url: "kubernetes/website"`.
+2. Si responde con `NOT_INDEXED`,
+   usa `mcp_codewiki_codewiki_request_indexing`
+   y continúa con el Paso 3 (fallback).
+3. Si responde con error temporal,
+   **salta directamente al Paso 3 (fallback)**.
+4. Si responde correctamente:
+   - Usa `mcp_codewiki_codewiki_read_contents`
+     para leer las secciones más relevantes.
+   - Si necesitas síntesis dirigida,
+     usa `mcp_codewiki_codewiki_search_wiki`
+     con una pregunta concreta en inglés.
+   - Registra las secciones y rutas citables que sustentan la respuesta.
+   - Continúa con el Paso 3 para profundizar y validar.
 
 ### Paso 3 — Fallback: repositorio oficial + web
 
@@ -123,6 +130,33 @@ Combina la información recopilada siguiendo estas reglas:
 
 4. **Citar las fuentes** al final del documento con enlaces directos a los originales en inglés.
 
+5. **Evitar simplificaciones arquitectónicas** en temas de controladores y reconciliación:
+
+- Explica que no existe un único loop global,
+  sino múltiples controladores independientes en paralelo.
+- Distingue reconciliación **level-based** (comparación de estado)
+  del uso de eventos como disparadores de encolado.
+- Incluye el papel de `watch`, `informer`/`lister` y `workqueue`.
+- Aclara que la consistencia es eventual y que puede haber `no-op`,
+  reintentos o decisiones de no actuar inmediatamente.
+- Añade al menos un ejemplo real enlazando `Deployment` y `ReplicaSet`.
+
+### Paso 5 — Verificación técnica final
+
+Antes de devolver el resultado,
+haz una validación de precisión para detectar sobre-simplificaciones:
+
+1. Revisa que no se afirme implícita o explícitamente
+   la existencia de un controlador único para todo Kubernetes.
+2. Verifica que los eventos no se presenten como fuente de verdad,
+   sino como disparadores hacia una reconciliación basada en estado.
+3. Confirma que el texto indique límites reales:
+   no hay convergencia instantánea,
+   puede haber latencia,
+   backoff y reintentos.
+4. Comprueba que los ejemplos prácticos incluyan recursos concretos
+   y flujo entre componentes del plano de control.
+
 ### Paso 6 — Formatear el resultado
 
 Produce un documento Markdown listo para usar en k8s-learn:
@@ -168,6 +202,10 @@ Antes de entregar el resultado, verifica:
 - [ ] El español es claro y no contiene anglicismos innecesarios.
 - [ ] Las fuentes están citadas con URLs directas.
 - [ ] El documento sigue la estructura Diataxis apropiada para el tipo de contenido.
+- [ ] En temas de reconciliación,
+      se diferencia explícitamente el modelo level-based del modelo basado en eventos.
+- [ ] En temas de controladores,
+      se describe concurrencia entre controladores y no un loop único global.
 
 ## Ejemplos de uso
 
