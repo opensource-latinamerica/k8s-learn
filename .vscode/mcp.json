@@ -1,8 +1,9 @@
 {
   "servers": {
-    "open-aware": {
-      "type": "http",
-      "url": "https://open-aware.qodo.ai/mcp"
+    "codewiki-mcp": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["--from", "codewiki-mcp", "codewiki-mcp"]
     }
   }
 }
