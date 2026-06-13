@@ -62,21 +62,55 @@ La ruta recomendada es:
 
 ### Semana 3 — Deployment a profundidad
 
-[ ] Deployment a profundidad
+[x] [La relación Deployment ↔ ReplicaSet](week03/01-deployment-replicaset.md)
 
-- relación Deployment ↔ ReplicaSet
-- rollouts y estrategias de actualización
-- gestión del campo status
-- rollback y revisiones
+- jerarquía Deployment → ReplicaSet → Pod
+- `ownerReference`, `pod-template-hash` y adopción de `Pods`
+- cuándo se crea un nuevo `ReplicaSet`
+
+[x] [Rollouts y estrategias de actualización](week03/02-rollout-strategies.md)
+
+- estrategias `Recreate` y `RollingUpdate`
+- `maxUnavailable`, `maxSurge`, rollover
+- pausa y reanudación de rollouts
+
+[x] [Gestión del campo status en un Deployment](week03/03-deployment-status.md)
+
+- campos `updatedReplicas`, `readyReplicas`, `availableReplicas`
+- condiciones `Progressing`, `Available`, `ReplicaFailure`
+- `progressDeadlineSeconds` y detección de rollouts atascados
+
+[x] [Rollback y revisiones de un Deployment](week03/04-rollback-revisions.md)
+
+- historial de revisiones basado en `ReplicaSets`
+- `rollout undo` y `--to-revision`
+- `revisionHistoryLimit` y sus implicaciones
 
 ### Semana 4 — Garbage Collector
 
-[ ] Reconciliación basada en grafo: Garbage Collector
+[x] [El grafo de propietarios y el GarbageCollector](week04/01-graph-builder.md)
 
-- graph builder y modelo de grafo de propietarios
-- lógica de borrado por huérfanos (_orphan_) vs. en cascada
-- owner references y ciclos de dependencia
-- eliminación en primer plano (_foreground_) vs. segundo plano (_background_)
+- arquitectura `GraphBuilder` + procesador de workqueue
+- grafo de dependencias (DAG) y tombstones
+- cómo se detectan los objetos huérfanos
+
+[x] [ownerReferences y ciclos de dependencia](week04/02-owner-references.md)
+
+- campos `uid`, `controller`, `blockOwnerDeletion`
+- restricciones de namespace en ownerReferences
+- `SetControllerReference` y propiedad manual
+
+[x] [Borrado en cascada: foreground, background y orphan](week04/03-cascade-orphan.md)
+
+- políticas `Background`, `Foreground` y `Orphan`
+- finalizers de sistema `foregroundDeletion` y `orphan`
+- guía de cuándo usar cada política
+
+[x] [Internos del GarbageCollector: foreground vs. background](week04/04-foreground-background-internals.md)
+
+- algoritmo de evaluación de la workqueue del GC
+- flujo paso a paso del foreground deletion
+- GarbageCollector vs. finalizers, TTLAfterFinished y kubelet
 
 ### Semana 5 — Kubelet
 
