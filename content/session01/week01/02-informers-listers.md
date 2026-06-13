@@ -410,12 +410,12 @@ para las operaciones de lectura.
 
 ### Lister vs. cliente directo: cuándo usar cada uno
 
-| Situación                                         | Usa                   | Motivo                                                    |
-| ------------------------------------------------- | --------------------- | --------------------------------------------------------- |
-| Leer el estado de un recurso en el loop           | Lister                | Sin latencia de red; no carga el API server               |
-| Verificar si un recurso existe antes de crearlo   | Lister                | Mismo motivo                                              |
-| Crear, actualizar o eliminar un recurso           | Cliente (`clientset`) | Las escrituras siempre van al API server                  |
-| Necesitar el estado _garantizadamente_ más fresco | Cliente con `Get`     | La caché puede tardar segundos en actualizarse            |
+| Situación                                         | Usa                   | Motivo                                         |
+| ------------------------------------------------- | --------------------- | ---------------------------------------------- |
+| Leer el estado de un recurso en el loop           | Lister                | Sin latencia de red; no carga el API server    |
+| Verificar si un recurso existe antes de crearlo   | Lister                | Mismo motivo                                   |
+| Crear, actualizar o eliminar un recurso           | Cliente (`clientset`) | Las escrituras siempre van al API server       |
+| Necesitar el estado _garantizadamente_ más fresco | Cliente con `Get`     | La caché puede tardar segundos en actualizarse |
 
 > **Advertencia:** Usar el cliente para _leer_ dentro del loop de reconciliación
 > introduce latencia de red innecesaria y aumenta la carga sobre el API server.

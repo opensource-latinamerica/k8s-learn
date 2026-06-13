@@ -17,6 +17,7 @@ Kubernetes tiene un recolector de basura incorporado.
 Cuando un objeto tiene una _owner reference_ que apunta a otro objeto
 que ya no existe,
 Kubernetes elimina el objeto hijo automáticamente.
+
 > **Analogía — los documentos y la carpeta que los contiene:**
 > Imagina que tienes una carpeta en tu escritorio con varios documentos dentro.
 > Cuando arrastra la carpeta a la papelera,
@@ -26,12 +27,12 @@ Kubernetes elimina el objeto hijo automáticamente.
 > una declaración de "éste objeto le pertenece a éste otro".
 > Cuando el propietario desaparece, el recolector de basura
 > de Kubernetes elimina automáticamente todos sus dependientes.
-Este mecanismo es fundamental para los operadores:
-un controlador que crea recursos secundarios
-(por ejemplo, un `Deployment` y su `ConfigMap`)
-debe establecer una _owner reference_ del secundario hacia el primario.
-De lo contrario, si el usuario elimina el recurso primario,
-los recursos secundarios quedarían huérfanos.
+> Este mecanismo es fundamental para los operadores:
+> un controlador que crea recursos secundarios
+> (por ejemplo, un `Deployment` y su `ConfigMap`)
+> debe establecer una _owner reference_ del secundario hacia el primario.
+> De lo contrario, si el usuario elimina el recurso primario,
+> los recursos secundarios quedarían huérfanos.
 
 ```mermaid
 flowchart TD

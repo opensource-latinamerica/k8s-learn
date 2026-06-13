@@ -35,10 +35,10 @@ sin importar cuántas veces falle en el intento.
 
 Todo recurso de Kubernetes tiene dos perspectivas que coexisten en la API:
 
-| Perspectiva        | Campo en la API | Quién lo escribe           | Descripción                                    |
-| ------------------ | --------------- | -------------------------- | ---------------------------------------------- |
-| **Estado deseado** | `.spec`         | Tú (o tu herramienta CI)   | Lo que declaras que quieres                    |
-| **Estado actual**  | `.status`       | Los controladores/kubelet  | Lo que el clúster reporta que existe en verdad |
+| Perspectiva        | Campo en la API | Quién lo escribe          | Descripción                                    |
+| ------------------ | --------------- | ------------------------- | ---------------------------------------------- |
+| **Estado deseado** | `.spec`         | Tú (o tu herramienta CI)  | Lo que declaras que quieres                    |
+| **Estado actual**  | `.status`       | Los controladores/kubelet | Lo que el clúster reporta que existe en verdad |
 
 Cuando describes un `Deployment` con `replicas: 3`,
 estás declarando el estado deseado.
