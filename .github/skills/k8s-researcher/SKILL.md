@@ -75,7 +75,7 @@ Cuando code-wiki falle (o como complemento), usa estas fuentes en orden de prefe
 
 #### 3a. Archivos del repo `kubernetes/website`
 
-```
+```yaml
 mcp_github_mcp_se_get_file_contents:
   owner: kubernetes
   repo: website
@@ -84,13 +84,13 @@ mcp_github_mcp_se_get_file_contents:
 
 Usa `mcp_github_mcp_se_search_code` para localizar el archivo correcto:
 
-```
+```yaml
 query: "<término técnico> repo:kubernetes/website"
 ```
 
 #### 3b. Documentación web oficial
 
-```
+```yaml
 fetch_webpage:
   urls:
     - https://kubernetes.io/docs/<ruta-del-tema>/
@@ -130,7 +130,52 @@ Combina la información recopilada siguiendo estas reglas:
 
 4. **Citar las fuentes** al final del documento con enlaces directos a los originales en inglés.
 
-5. **Evitar simplificaciones arquitectónicas** en temas de controladores y reconciliación:
+5. **Analogías obligatorias** — cada concepto abstracto debe tener al menos una analogía
+   del mundo cotidiano que lo haga concreto.
+   Sigue este patrón fijo para cada analogía:
+
+   ```markdown
+   > **Analogía — <título breve>:**
+   > <párrafo de 3-5 oraciones que compara el concepto con algo cotidiano>.
+   ```
+
+   Criterios para una buena analogía en k8s-learn:
+
+   - **Concreta:** usa objetos o situaciones reales, no otros conceptos técnicos.
+   - **Proporcional:** la analogía cubre solo el aspecto que estás explicando;
+     no intentes que cubra todo el componente.
+   - **Situada antes del código o tabla:** aparece justo antes del bloque que explica,
+     no al final.
+   - **Coherente con el documento:** no repitas la misma analogía en el mismo artículo.
+
+   Ejemplos de analogías ya establecidas en el proyecto
+   (no las repitas, crea nuevas):
+
+   | Concepto                   | Analogía usada                                      |
+   | -------------------------- | --------------------------------------------------- |
+   | Bucle de control           | Termostato / jardinero del huerto                   |
+   | Level-based reconciliation | Circuito level-based vs edge-based en electrónica   |
+   | Convergencia eventual      | GPS recalculando la ruta                            |
+   | Workqueue                  | Bandeja de comandas del restaurante                 |
+   | DeltaFIFO                  | Extracto bancario con todos los movimientos         |
+   | Reflector                  | Vigilante de almacén que anota entradas y salidas   |
+   | SharedIndexInformer        | Suscripción compartida al periódico                 |
+   | SharedInformerFactory      | Departamento de IT centralizado                     |
+   | Indexer/Store              | Biblioteca con catálogo de fichas temáticas         |
+   | Lister                     | Catálogo en línea de la biblioteca                  |
+   | ownerReferences            | Documentos dentro de una carpeta                    |
+   | Finalizer                  | Fianza del apartamento                              |
+   | CreateOrUpdate             | Perfil de usuario en app (crear o actualizar)       |
+   | NamespaceController        | Dar de baja una empresa ante el registro            |
+   | LegacySATokenCleaner       | Llaves maestras caducadas del hotel                 |
+   | Bucle periódico vs WQ      | Limpieza nocturna vs conserje reactivo              |
+   | ServiceAccountsController  | Tarjeta de acceso de empleado nuevo por RR HH       |
+   | Controlador mínimo         | Cadena de montaje de cuatro puestos                 |
+   | Token bucket               | Cubo de fichas de una máquina expendedora           |
+   | Backoff exponencial        | Dispositivos reconectándose tras apagón             |
+   | Problema de escalar obs.   | Banco y alertas de movimiento vs llamadas repetidas |
+
+6. **Evitar simplificaciones arquitectónicas** en temas de controladores y reconciliación:
 
 - Explica que no existe un único loop global,
   sino múltiples controladores independientes en paralelo.
@@ -164,7 +209,7 @@ Produce un documento Markdown listo para usar en k8s-learn:
 ```markdown
 # <Título descriptivo del tema>
 
-> **Versión de Kubernetes:** vX.YY  
+> **Versión de Kubernetes:** vX.YY
 > **Fuentes:** [kubernetes.io/docs/...](URL), [kubernetes/website](URL)
 
 ## Objetivos de aprendizaje ← solo para tutoriales y guías prácticas
@@ -206,10 +251,16 @@ Antes de entregar el resultado, verifica:
       se diferencia explícitamente el modelo level-based del modelo basado en eventos.
 - [ ] En temas de controladores,
       se describe concurrencia entre controladores y no un loop único global.
+- [ ] **Cada concepto abstracto tiene al menos una analogía** con el formato
+      `> **Analogía — <título>:** ...` situada antes del bloque que explica.
+- [ ] Ninguna analogía repite una que ya exista en otro artículo del mismo proyecto
+      (consulta la tabla del Paso 4 para verificar).
+- [ ] Las analogías son concretas (mundo real) y proporcionales
+      (explican un aspecto, no todo el componente).
 
 ## Ejemplos de uso
 
-```
+```text
 /k8s-researcher ¿Cómo funciona el garbage collection de Pods en Kubernetes?
 /k8s-researcher Explica el concepto de PersistentVolume y PersistentVolumeClaim
 /k8s-researcher ¿Qué cambió en el scheduler de Kubernetes en la versión 1.30?
