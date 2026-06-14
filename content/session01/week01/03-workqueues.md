@@ -68,7 +68,7 @@ Las propiedades clave de esta cola son:
 
 > **Analogía — la casilla de entrada de correo:**
 > Si recibes el mismo email tres veces antes de leerlo,
-> el buznón inteligente no te muestra tres copias: te muestra una.
+> el buzón inteligente no te muestra tres copias: te muestra una.
 > Cuando la abres (Get), el mensaje deja de estar "sin leer"
 > y no puede abrirse en otra ventana simultánea.
 > Cuando la cierras (Done), si llegó una nueva versión del mismo hilo
