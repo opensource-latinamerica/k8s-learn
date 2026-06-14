@@ -24,6 +24,18 @@ habría varios problemas:
 - **Reintentos naïve:** ante un error, el controlador tendría que reintentar
   inmediatamente, generando bucles rápidos que saturan el API server.
 
+> **Analogía — el restaurante y la bandeja de pedidos:**
+> Imagina un cocinero que sale a la sala en cuanto llega cada pedido,
+> atiende al cliente en el acto y vuelve.
+> Si llegan 30 pedidos a la vez, colapsa.
+> La solución real es la **bandeja de comandas**:
+> el camarero anota el pedido (encola la clave),
+> y el cocinero trabaja a su ritmo con la siguiente comanda cuando
+> termina la anterior.
+> Si el mismo cliente pide varias veces lo mismo,
+> la comanda se actualiza sin duplicarse.
+> Eso es el workqueue.
+
 La solución es un **workqueue**:
 el manejador de eventos solo encola una clave (`namespace/name`),
 y uno o más hilos trabajadores la procesan de forma asíncrona.
@@ -53,6 +65,15 @@ Las propiedades clave de esta cola son:
 | **Deduplicación**       | Si un item se encola dos veces antes de ser obtenido con `Get`, solo se procesa una vez.                     |
 | **Procesamiento único** | Un item que ya fue obtenido con `Get` no puede procesarse en paralelo otra vez hasta que se llame a `Done`.  |
 | **Reencolado seguro**   | Si el item se vuelve a encolar mientras está siendo procesado, se reprocesará una vez que se llame a `Done`. |
+
+> **Analogía — la casilla de entrada de correo:**
+> Si recibes el mismo email tres veces antes de leerlo,
+> el buzón inteligente no te muestra tres copias: te muestra una.
+> Cuando la abres (Get), el mensaje deja de estar "sin leer"
+> y no puede abrirse en otra ventana simultánea.
+> Cuando la cierras (Done), si llegó una nueva versión del mismo hilo
+> mientras la leías, aparece como no leida de nuevo.
+> Eso es exactamente `dirty` + `processing` + `queue`.
 
 Internamente la cola mantiene tres estructuras:
 
@@ -162,11 +183,30 @@ $\text{espera} = \text{baseDelay} \times 2^{\text{numFallos}}$
 Es el componente de backoff que evita que un error persistente
 genere un bucle rápido contra el API server.
 
+> **Analogía — el reinicio tras un apagón:**
+> Imagina que todos los dispositivos de un edificio intentan conectarse
+> a internet en cuanto se restituye la luz.
+> Si todos reintentaran cada segundo, el router colapsaría.
+> La solución es que cada dispositivo espere un tiempo aleatorio
+> que crece con cada fallo:
+> 1 s, luego 2 s, luego 4 s, etc.
+> El `TypedItemExponentialFailureRateLimiter` aplica exactamente eso
+> por cada item individual.
+
 ### TypedBucketRateLimiter
 
 Implementa el algoritmo de _token bucket_ (cubo de fichas).
 Controla el ritmo **global** de encolado,
 independientemente de si el item falló antes o no.
+
+> **Analogía — el cubo de fichas:**
+> Imagina una máquina expendedora de fichas.
+> El cubo empieza lleno (10 fichas = burst).
+> Cada reconciliación consume una ficha.
+> El cubo se recarga a un ritmo de 10 fichas por segundo.
+> Si el cubo se vacía, debes esperar a que se recargue.
+> Esto permite ráfagas cortas a máxima velocidad
+> pero impone un límite sostenido.
 
 El `DefaultTypedControllerRateLimiter` usa un cubo configurado con
 10 fichas y una tasa de recarga de 10 fichas por segundo.

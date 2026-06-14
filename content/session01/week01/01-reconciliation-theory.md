@@ -16,6 +16,15 @@ Un nodo puede perder conectividad,
 un contenedor puede salir de forma inesperada,
 o un operador puede aplicar una configuración errónea.
 
+> **Analogía — el jardinero y el huerto:**
+> Imagina un jardinero que quiere mantener exactamente 10 plantas de tomate.
+> Si una se seca, no escribe un informe ni espera instrucciones:
+> simplemente planta una nueva.
+> Si por accidente se añaden 12, arranca las dos sobrantes.
+> Nunca hay que pedirle que "corrija" la situación;
+> solo sabe el objetivo y actúa para lograrlo continuamente.
+> Los controladores de Kubernetes son ese jardinero.
+
 Sin un mecanismo de corrección continua,
 cada fallo requeriría intervención manual.
 Kubernetes lo resuelve con una premisa simple:
@@ -26,10 +35,10 @@ sin importar cuántas veces falle en el intento.
 
 Todo recurso de Kubernetes tiene dos perspectivas que coexisten en la API:
 
-| Perspectiva        | Campo en la API | Descripción                                    |
-| ------------------ | --------------- | ---------------------------------------------- |
-| **Estado deseado** | `.spec`         | Lo que tú declaras que quieres                 |
-| **Estado actual**  | `.status`       | Lo que el clúster reporta que existe en verdad |
+| Perspectiva        | Campo en la API | Quién lo escribe          | Descripción                                    |
+| ------------------ | --------------- | ------------------------- | ---------------------------------------------- |
+| **Estado deseado** | `.spec`         | Tú (o tu herramienta CI)  | Lo que declaras que quieres                    |
+| **Estado actual**  | `.status`       | Los controladores/kubelet | Lo que el clúster reporta que existe en verdad |
 
 Cuando describes un `Deployment` con `replicas: 3`,
 estás declarando el estado deseado.
@@ -39,6 +48,13 @@ Esa diferencia es la que dispara la reconciliación.
 
 > **Nota:** El campo `.spec` es tuyo — tú lo escribes.
 > El campo `.status` es del sistema — los controladores lo actualizan.
+
+Puedes inspeccionar ambos campos en cualquier momento:
+
+```bash
+# Ver el estado deseado (spec) y el actual (status) de un Deployment
+kubectl get deployment mi-app -o jsonpath='{"deseado: "}{.spec.replicas}{"\nactual: "}{.status.availableReplicas}{"\n"}'
+```
 
 ## El bucle de control
 
@@ -56,6 +72,20 @@ El ejemplo clásico es el termostato:
 - El ciclo se repite indefinidamente.
 
 Kubernetes aplica exactamente este principio a escala de clúster.
+
+> **Analogía — el termostato de un datacenter:**
+> Imagina ahora ese mismo termostato controlando no una habitación,
+> sino miles de servidores a la vez.
+> Cada rack tiene su temperatura deseada en la configuración;
+> el sistema central mide constantemente cada uno
+> y activa o desactiva la refrigeración donde sea necesario.
+> Eso es Kubernetes: miles de "termostatos" independientes
+> (los controladores), cada uno responsable de su dominio,
+> ajustando el clúster hacia el estado declarado.
+
+**El bucle no es un proceso secuencial único.**
+En Kubernetes, muchos bucles de control corren en paralelo al mismo tiempo,
+cada uno para un tipo de recurso distinto.
 
 ## Los controladores
 
@@ -128,6 +158,16 @@ el controlador decide qué hacer comparando el estado observado ahora
 contra el estado deseado,
 no por el tipo exacto de evento que llegó primero.
 
+> **Analogía — level-based vs edge-based:**
+> En electrónica, un circuito _edge-based_ reacciona al momento exacto
+> en que una señal cambia de 0 a 1 (el "flanco").
+> Si te pierdes ese flanco, no sabes qué ocurrió.
+> Un circuito _level-based_ mide el nivel actual de la señal en cada instante
+> y actúa según lo que ve ahora, no según cuándo cambió.
+> Kubernetes usa el segundo enfoque:
+> aunque pierdas un evento, la reconciliación posterior
+> mide el estado real y toma la decisión correcta de todos modos.
+
 Los eventos (_add/update/delete_) se usan como **disparadores**
 para encolar claves de recursos,
 pero la decisión final se toma leyendo el estado actual desde caché.
@@ -189,6 +229,17 @@ incluso con miles de recursos en el clúster.
 La reconciliación es **eventual**:
 el clúster no garantiza que el estado deseado se alcance de forma inmediata,
 sino que los controladores **siguen intentándolo** hasta lograrlo.
+
+> **Analogía — el GPS recalculando la ruta:**
+> Cuando sigues el GPS y te equivocas de salida,
+> el sistema no se rinde ni protesta.
+> Recalcula la ruta desde donde estás ahora
+> y te sigue guiando hacia el destino.
+> No importa cuántas veces te equivoques:
+> cada vez que recalcula, parte del estado actual.
+> Kubernetes hace lo mismo: si un Pod falla, se reinicia el cálculo
+> de "¿cómo llego al estado deseado?"
+> sin importar cuántos fallos ocurrieron antes.
 
 En cualquier momento dado,
 el clúster puede estar en un estado de transición.
