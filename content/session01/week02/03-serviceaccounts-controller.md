@@ -1,8 +1,10 @@
 # El controlador de ServiceAccounts en Kubernetes
 
-> **Prerequisitos:** [week01/01-reconciliation-theory.md](../week01/01-reconciliation-theory.md) — bucle de control.
-> [week01/02-informers-listers.md](../week01/02-informers-listers.md) — informers y listers.
-> [week01/03-workqueues.md](../week01/03-workqueues.md) — workqueues y reintentos.
+## Prerequisitos
+
+- [La reconciliación en Kubernetes: fundamentos](../week01/01-reconciliation-theory.md)
+- [Informers, cachés y listers en Kubernetes](../week01/02-informers-listers.md)
+- [Workqueues en Kubernetes](../week01/03-workqueues.md)
 
 Cuando creas un `Namespace`,
 Kubernetes crea automáticamente una `ServiceAccount` llamada `default` dentro
@@ -21,6 +23,16 @@ API server.
 Esa identidad viene de una `ServiceAccount`.
 Si no especificas una, el plugin de admisión `ServiceAccount` usa la
 `ServiceAccount` `default` del `Namespace`.
+
+> **Analogía — el empleado nuevo y su tarjeta de acceso:**
+> Cuando una empresa contrata a un empleado,
+> RR HH le prepara una tarjeta de acceso antes incluso de que llegue
+> su primer día.
+> Si esa tarjeta se pierde o se destruye por error,
+> RR HH emite una nueva de inmediato.
+> El `ServiceAccountsController` es ese departamento:
+> en cuanto un `Namespace` (oficina) se crea o la cuenta `default` desaparece,
+> él genera o regenera la identidad necesaria.
 
 Sin embargo, esa `ServiceAccount` no existe en el `Namespace` por arte de
 magia: alguien debe crearla cuando el `Namespace` nace,
@@ -182,6 +194,15 @@ El `ServiceAccountsController` es un excelente ejemplo de la estructura
 mínima de un controlador en Kubernetes porque implementa todos los componentes
 esenciales sin abstracciones adicionales:
 
+> **Analogía — el controlador como cadena de montaje mínima:**
+> Una fábrica de zapatos mínima tiene cuatro puestos:
+> el recepcionista que toma pedidos (informer + handler),
+> la bandeja de pedidos pendientes (workqueue),
+> el operario que los ejecuta (worker/goroutine)
+> y el libro de inventario que consulta antes de actuar (lister).
+> Ninguno se puede quitar sin romper la cadena.
+> El `ServiceAccountsController` es exactamente esa fábrica de cuatro puestos.
+
 ```mermaid
 flowchart TB
     subgraph "Componentes del controlador"
@@ -258,4 +279,10 @@ su arquitectura lo requiere.
 - [Código fuente: serviceaccounts_controller.go](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/serviceaccount/serviceaccounts_controller.go) — kubernetes/kubernetes
 - [Configure Service Accounts for Pods](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) — Guía práctica
 
-[← Atrás](02-token-cleaner.md) | [Inicio](../README.md)
+## Siguiente paso
+
+[Semana 3: Deployment a profundidad](../week03/README.md) →
+analiza el controlador más usado en Kubernetes: el `Deployment`,
+su relación jerárquica con los `ReplicaSets` y sus estrategias de rollout.
+
+[← Atrás](02-token-cleaner.md) | [Inicio](../README.md) | [Siguiente →](../week03/README.md)

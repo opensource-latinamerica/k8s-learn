@@ -1,8 +1,10 @@
 # El controlador de Namespace en Kubernetes
 
-> **Prerequisitos:** [week01/01-reconciliation-theory.md](../week01/01-reconciliation-theory.md) — bucle de control y reconciliación.
-> [week01/02-informers-listers.md](../week01/02-informers-listers.md) — informers y caché.
-> [week01/03-workqueues.md](../week01/03-workqueues.md) — workqueues y reintentos.
+## Prerequisitos
+
+- [La reconciliación en Kubernetes: fundamentos](../week01/01-reconciliation-theory.md)
+- [Informers, cachés y listers en Kubernetes](../week01/02-informers-listers.md)
+- [Workqueues en Kubernetes](../week01/03-workqueues.md)
 
 ¿Qué ocurre exactamente cuando ejecutas `kubectl delete namespace mi-namespace`?
 ¿Por qué el `namespace` permanece en estado `Terminating` durante varios segundos
@@ -21,11 +23,23 @@ Cuando se borra, Kubernetes debe garantizar que todos los recursos
 que viven dentro de él —`Pod`, `Service`, `ConfigMap`, `Secret`, etc.—
 también sean eliminados antes de que el propio `Namespace` desaparezca.
 
+> **Analogía — dar de baja una empresa:**
+> Cuando cierras una empresa, no puedes simplemente tachar el nombre
+> del registro mercantil.
+> Primero debes liquidar deudas, dar de baja a empleados,
+> cerrar cuentas bancarias y devolver permisos.
+> Solo cuando todo eso está resuelto el registro la elimina definitivamente.
+> El `NamespaceController` es el gestor que coordina esa baja:
+> no deja que el `Namespace` desaparezca hasta que todas sus
+> "obligaciones" (recursos) estén saldadas.
+
 Sin un mecanismo de coordinación esto sería imposible de garantizar,
 ya que los recursos podrían seguir siendo accesibles brevemente
 en un `Namespace` que ya no existe.
 
 ## Ciclo de vida de un Namespace
+
+![Diagrama del ciclo de vida y arquitectura del NamespaceController](diagrams/01-namespace-controller-lifecycle.png)
 
 Un `Namespace` puede estar en dos fases, reflejadas en el campo
 `status.phase` del objeto:
@@ -87,6 +101,12 @@ El controlador tiene dos responsabilidades principales:
 A diferencia de la mayoría de controladores,
 el `NamespaceController` no encola todos los eventos del informer,
 sino únicamente los `namespaces` que ya tienen un `deletionTimestamp`:
+
+> **Por qué encolar solo `Terminating`:**
+> Un `Namespace` `Active` no requiere ninguna acción de limpieza.
+> Si el controlador encolara todos los eventos, desperdiciaría ciclos de CPU
+> procesando miles de `namespaces` sanos sin nada que hacer.
+> Solo cuando aparece `deletionTimestamp` hay trabajo real que realizar.
 
 ```go
 func (nm *NamespaceController) enqueueNamespace(ctx context.Context, obj interface{}) {
@@ -323,5 +343,11 @@ propios informers.
 - [Código fuente: namespace_controller.go](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/namespace/namespace_controller.go) — kubernetes/kubernetes
 - [Código fuente: namespaced_resources_deleter.go](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/namespace/deletion/namespaced_resources_deleter.go) — kubernetes/kubernetes
 - [Configure a namespace to delete resources](https://kubernetes.io/docs/tasks/administer-cluster/namespaces/) — Guía de administración
+
+## Siguiente paso
+
+[El limpiador de tokens heredados de ServiceAccount](02-token-cleaner.md) →
+describe un controlador que usa el patrón de bucle periódico en lugar de workqueue
+para detectar y eliminar credenciales obsoletas acumuladas con el tiempo.
 
 [Inicio](../README.md) | [Siguiente →](02-token-cleaner.md)
