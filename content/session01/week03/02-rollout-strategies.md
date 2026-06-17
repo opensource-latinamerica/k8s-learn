@@ -10,6 +10,8 @@
 
 ## El problema de actualizar sin downtime
 
+![Comparativa de estrategias Recreate vs RollingUpdate](diagrams/02-rollout-strategies.png)
+
 Reemplazar todos los `Pods` de una vez es la forma más rápida de desplegar una versión nueva.
 También es la más arriesgada:
 si la nueva imagen tiene un defecto, la aplicación deja de funcionar completamente
@@ -162,6 +164,17 @@ kubectl rollout status deployment/nginx-deployment
 kubectl describe deployment nginx-deployment | grep -A 20 "Events:"
 ```
 
+## Glosario
+
+| Término                    | Definición breve                                                                                                                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `Recreate`                 | Estrategia que termina todos los `Pods` del RS antiguo antes de crear los nuevos; implica downtime breve.                           |
+| `RollingUpdate`            | Estrategia por defecto que actualiza los `Pods` gradualmente, manteniendo disponibilidad mínima durante la transición.              |
+| `maxUnavailable`           | Máximo de `Pods` que pueden estar no disponibles durante el rollout; acepta número absoluto o porcentaje (redondeo hacia abajo).    |
+| `maxSurge`                 | Máximo de `Pods` extra por encima del total deseado que se permiten durante el rollout; acepta número absoluto o porcentaje.        |
+| rollover                   | Comportamiento en que el `DeploymentController` abandona un rollout en curso al recibir una nueva orden de actualización.           |
+| `progressDeadlineSeconds`  | Tiempo máximo en segundos que puede transcurrir sin avance antes de que el controlador marque el rollout como fallido (defecto: 600). |
+
 ## Siguiente paso
 
 [Gestión del campo status en un Deployment](03-deployment-status.md) →
@@ -172,3 +185,5 @@ está completo o ha fallado.
 
 - [Deployments — Documentación oficial](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
   — kubernetes.io
+
+[← Atrás](01-deployment-replicaset.md) | [Inicio semana](README.md) | [Siguiente →](03-deployment-status.md)

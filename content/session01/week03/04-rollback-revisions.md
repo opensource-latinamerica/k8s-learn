@@ -165,6 +165,17 @@ kubectl rollout status deployment/nginx-deployment
 # deployment "nginx-deployment" successfully rolled out
 ```
 
+## Glosario
+
+| Término                 | Definición breve                                                                                                               |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| revisión                | Número secuencial que el `DeploymentController` asigna a cada cambio en `.spec.template`; se corresponde con un `ReplicaSet`. |
+| `CHANGE-CAUSE`          | Anotación `kubernetes.io/change-cause` que documenta el motivo de cada revisión y se muestra en `kubectl rollout history`.    |
+| `revisionHistoryLimit`  | Número máximo de revisiones históricas conservadas para permitir rollback; si es 0, el rollback queda deshabilitado.           |
+| rollback                | Operación que restaura el `PodTemplate` de una revisión anterior creando una nueva revisión con ese contenido.                 |
+| `kubectl rollout undo`  | Comando que ejecuta un rollback a la revisión inmediatamente anterior o a una revisión específica (`--to-revision`).           |
+| `kubectl rollout history` | Comando que lista el historial de revisiones de un `Deployment` con su `CHANGE-CAUSE`.                                      |
+
 ## Siguiente paso
 
 [README de la semana 3](README.md) →
@@ -176,3 +187,5 @@ revisa el mapa conceptual de la semana para consolidar cómo se relacionan todos
   — kubernetes.io
 - [Clean up Policy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
   — kubernetes.io
+
+[← Atrás](03-deployment-status.md) | [Inicio semana](README.md) | [Siguiente →](../week04/README.md)
