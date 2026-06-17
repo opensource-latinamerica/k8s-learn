@@ -1,6 +1,9 @@
 # La reconciliación en Kubernetes: fundamentos
 
-> **Prerequisitos:** Saber qué es un contenedor y tener nociones básicas de Kubernetes.
+## Prerequisitos
+
+- Saber qué es un contenedor.
+- Tener nociones básicas de Kubernetes (qué es un `Pod`, un `Deployment`).
 
 ¿Por qué Kubernetes puede "curarse solo" cuando un `Pod` falla?
 ¿Qué mecanismo interno garantiza que el clúster siempre intente converger
@@ -57,6 +60,8 @@ kubectl get deployment mi-app -o jsonpath='{"deseado: "}{.spec.replicas}{"\nactu
 ```
 
 ## El bucle de control
+
+![Diagrama del bucle de reconciliación](diagrams/01-reconciliation-loop.png)
 
 En automatización y robótica,
 un _bucle de control_ (_control loop_) es un ciclo sin fin
@@ -407,5 +412,11 @@ El patrón de reconciliación tiene propiedades arquitectónicas destacadas:
   github.com/kubernetes/sample-controller
 - [Documentación oficial: Gestión de cargas de trabajo](https://kubernetes.io/docs/concepts/workloads/controllers/) —
   kubernetes.io
+
+## Siguiente paso
+
+[Informers, cachés y listers en Kubernetes](02-informers-listers.md) →
+explica cómo los controladores observan el clúster de forma eficiente
+sin saturar el API server, y describe cada pieza de la cadena `Reflector` → `DeltaFIFO` → `Indexer` → `SharedIndexInformer`.
 
 [Inicio](../README.md) | [Siguiente →](02-informers-listers.md)

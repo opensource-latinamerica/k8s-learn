@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Informers y Caché">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="2" value="Informers, Caché y Listers en Kubernetes"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="20" width="800" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Container: API Server -->
+        <mxCell id="3" value="API Server"
+          style="swimlane;startSize=30;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="etcd&#xa;(almacén de estado)"
+          style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;"
+          vertex="1" parent="3">
+          <mxGeometry x="20" y="40" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Reflector -->
+        <mxCell id="5" value="Reflector&#xa;ListAndWatch()"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="250" y="110" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- DeltaFIFO -->
+        <mxCell id="6" value="DeltaFIFO&#xa;(cola de deltas)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="470" y="110" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Indexer / Store -->
+        <mxCell id="7" value="Indexer / Store&#xa;(caché local thread-safe)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="690" y="110" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- SharedIndexInformer -->
+        <mxCell id="8" value="SharedIndexInformer&#xa;(despacha eventos)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="690" y="260" width="170" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Event Handlers container -->
+        <mxCell id="9" value="Event Handlers"
+          style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="930" y="230" width="160" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="OnAdd(obj)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;"
+          vertex="1" parent="9">
+          <mxGeometry x="20" y="30" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="OnUpdate(old, new)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;"
+          vertex="1" parent="9">
+          <mxGeometry x="20" y="65" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="OnDelete(obj)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;"
+          vertex="1" parent="9">
+          <mxGeometry x="20" y="100" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Lister -->
+        <mxCell id="13" value="Lister&#xa;(lee desde caché)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="470" y="290" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Controller -->
+        <mxCell id="14" value="Controller&#xa;(reconcileKey)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="470" y="420" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Annotation: List initial -->
+        <mxCell id="15" value="1. List inicial (todos los objetos)"
+          style="text;html=1;strokeColor=none;fillColor=#ffe6cc;align=left;verticalAlign=middle;fontSize=10;rounded=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="140" y="90" width="200" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Annotation: Watch stream -->
+        <mxCell id="16" value="2. Watch continuo (eventos delta)"
+          style="text;html=1;strokeColor=none;fillColor=#ffe6cc;align=left;verticalAlign=middle;fontSize=10;rounded=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="140" y="160" width="200" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Annotation: relist -->
+        <mxCell id="17" value="Relist automático si se pierde la conexión"
+          style="text;html=1;strokeColor=none;fillColor=#e1d5e7;align=center;verticalAlign=middle;fontSize=10;rounded=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="220" y="210" width="220" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- EDGES -->
+        <!-- API Server → Reflector (List + Watch) -->
+        <mxCell id="30" value="List + Watch"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#d79b00;fontSize=10;fontStyle=1;"
+          edge="1" parent="1" source="3" target="5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Reflector → DeltaFIFO -->
+        <mxCell id="31" value="deltas"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#9673a6;fontSize=10;"
+          edge="1" parent="1" source="5" target="6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DeltaFIFO → Indexer -->
+        <mxCell id="32" value="pop + process"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#d6b656;fontSize=10;"
+          edge="1" parent="1" source="6" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Indexer → SharedIndexInformer -->
+        <mxCell id="33" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#6c8ebf;"
+          edge="1" parent="1" source="7" target="8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SharedIndexInformer → Event Handlers -->
+        <mxCell id="34" value="notificaciones"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#82b366;fontSize=10;"
+          edge="1" parent="1" source="8" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Indexer → Lister (read path) -->
+        <mxCell id="35" value="consulta sin red"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#6c8ebf;dashed=1;fontSize=10;"
+          edge="1" parent="1" source="7" target="13">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="680" y="140" />
+              <mxPoint x="680" y="320" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Lister → Controller -->
+        <mxCell id="36" value="pod, rs, deploy..."
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#6c8ebf;fontSize=10;"
+          edge="1" parent="1" source="13" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Handler enqueues key → Controller -->
+        <mxCell id="37" value="encola namespace/name"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;entryX=1;entryY=0.5;strokeColor=#82b366;fontSize=10;"
+          edge="1" parent="1" source="9" target="14">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="930" y="420" />
+              <mxPoint x="930" y="450" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Relist loop back -->
+        <mxCell id="38" value="relist si falla el watch"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;entryX=0;entryY=1;strokeColor=#9673a6;dashed=1;fontSize=9;"
+          edge="1" parent="1" source="5" target="3">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="220" />
+              <mxPoint x="40" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
