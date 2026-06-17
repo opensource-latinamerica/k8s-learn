@@ -192,6 +192,17 @@ Borrar Deployment (foreground)
     └── API Server borra Deployment de etcd
 ```
 
+## Glosario
+
+| Término                  | Definición breve                                                                                                                  |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `GraphBuilder`           | Componente que mantiene el grafo de dependencias en memoria y encola objetos candidatos al `GarbageCollector`.                    |
+| workqueue del GC         | Cola de trabajo del `GarbageCollector` que recibe candidatos a evaluación y aplica la política de borrado correspondiente.        |
+| `DeletedFinalStateUnknown` | Evento que el informer entrega cuando no recibió el borrado en tiempo real; contiene el último estado conocido del objeto.      |
+| borrado foreground       | Modalidad en que el propietario espera, visible en la API, a que todos sus dependientes con `blockOwnerDeletion=true` desaparezcan antes de borrarse. |
+| borrado background       | Modalidad por defecto: el propietario se elimina de `etcd` de inmediato y los dependientes los recoge el GC en segundo plano.    |
+| `GVR`                    | `GroupVersionResource`: identificador de un tipo de recurso en la API de Kubernetes; los informers dinámicos del `GraphBuilder` cubren todos los GVR del clúster. |
+
 ## Siguiente paso
 
 [README de la semana 4](README.md) →
@@ -205,3 +216,5 @@ revisa el mapa conceptual de la semana para consolidar cómo los cuatro artícul
   — kubernetes.io
 - [Use Cascading Deletion](https://kubernetes.io/docs/tasks/administer-cluster/use-cascading-deletion/)
   — kubernetes.io
+
+[← Atrás](03-cascade-orphan.md) | [Inicio semana](README.md)

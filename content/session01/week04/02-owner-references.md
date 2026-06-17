@@ -145,6 +145,17 @@ kubectl get all -n mi-namespace \
   -o custom-columns='KIND:.kind,NAME:.metadata.name,FINALIZERS:.metadata.finalizers,OWNER:.metadata.ownerReferences[0].name'
 ```
 
+## Glosario
+
+| Término                  | Definición breve                                                                                                                  |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| `UID`                    | Identificador único e irrepetible asignado por Kubernetes a cada objeto; no cambia aunque el objeto se borre y recree con el mismo nombre. |
+| `controller` (campo)     | Campo booleano en `ownerReference` que marca a este propietario como el que gestiona activamente el objeto; solo puede ser `true` en uno.  |
+| `blockOwnerDeletion`     | Campo booleano que, si es `true`, impide que el propietario sea eliminado definitivamente en modo foreground hasta que este dependiente desaparezca. |
+| `SetControllerReference` | Función de `controller-runtime` que establece una `ownerReference` con `controller: true` en el objeto dependiente.             |
+| `SetOwnerReference`      | Función que establece una `ownerReference` sin `controller: true` para dependencias de ciclo de vida sin control activo.          |
+| `AlreadyOwnedError`      | Error que retorna `SetControllerReference` cuando el objeto ya tiene un propietario con `controller: true`.                       |
+
 ## Siguiente paso
 
 [Borrado en cascada: foreground, background y orphan](03-cascade-orphan.md) →
@@ -157,3 +168,5 @@ cuando se borra un propietario.
   — kubernetes.io
 - [Garbage Collection](https://kubernetes.io/docs/concepts/architecture/garbage-collection/)
   — kubernetes.io
+
+[← Atrás](01-graph-builder.md) | [Inicio semana](README.md) | [Siguiente →](03-cascade-orphan.md)
