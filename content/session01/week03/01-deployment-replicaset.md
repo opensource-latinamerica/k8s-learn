@@ -13,6 +13,8 @@
 
 ## Por qué existe esta jerarquía
 
+![Jerarquía Deployment → ReplicaSet → Pod durante un rollout](diagrams/01-deployment-replicaset-pods.png)
+
 Un `Deployment` no ejecuta `Pods` directamente.
 En cambio, crea y administra objetos `ReplicaSet`,
 y cada `ReplicaSet` es quien mantiene el grupo de `Pods` corriendo.
@@ -157,6 +159,19 @@ sin esperar instrucción explícita del `DeploymentController`.
 | Reemplazar `Pods` que fallan         | `ReplicaSetController` |
 | Adoptar `Pods` sin dueño             | `ReplicaSetController` |
 
+## Glosario
+
+| Término                | Definición breve                                                                                                             |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `Deployment`           | Recurso que gestiona el ciclo de vida de los `ReplicaSets` y coordina los rollouts de la aplicación.                         |
+| `ReplicaSet`           | Recurso que mantiene un número exacto de `Pods` en ejecución en cualquier momento.                                           |
+| `DeploymentController` | Controlador dentro del `kube-controller-manager` que gestiona los objetos `Deployment`.                                     |
+| `ReplicaSetController` | Controlador que gestiona los `ReplicaSets` y crea o elimina `Pods` para satisfacer el recuento deseado.                      |
+| `pod-template-hash`    | Etiqueta calculada como hash del `PodTemplateSpec`; diferencia los `Pods` de cada versión del `ReplicaSet`.                  |
+| `ownerReference`       | Campo en `metadata.ownerReferences` que vincula un dependiente con su propietario para el recolector de basura.              |
+| `selector`             | Campo `.spec.selector` inmutable que define qué `Pods` pertenecen a un `Deployment` o `ReplicaSet`.                         |
+| `revisionHistoryLimit` | Número máximo de `ReplicaSets` históricos (réplicas=0) que conserva el `Deployment` para permitir rollback (defecto: 10).   |
+
 ## Siguiente paso
 
 [Rollouts y estrategias de actualización](02-rollout-strategies.md) →
@@ -171,3 +186,5 @@ entre el `ReplicaSet` antiguo y el nuevo.
   — kubernetes.io
 - [Owners and Dependents](https://kubernetes.io/docs/concepts/overview/working-with-objects/owners-dependents/)
   — kubernetes.io
+
+[Inicio semana](README.md) | [Siguiente →](02-rollout-strategies.md)

@@ -1,7 +1,9 @@
 # Utilidades de controladores en Kubernetes
 
-> **Prerequisitos:** [week01/02-informers-listers.md](02-informers-listers.md) — informers y caché.
-> [week01/03-workqueues.md](03-workqueues.md) — workqueues y reintentos.
+## Prerequisitos
+
+- [Informers, cachés y listers en Kubernetes](02-informers-listers.md)
+- [Workqueues en Kubernetes](03-workqueues.md)
 
 ¿Cómo le indica un controlador al recolector de basura de Kubernetes
 que debe eliminar un recurso secundario cuando el primario desaparece?
@@ -12,6 +14,9 @@ Esta explicación describe las utilidades del paquete `controller-runtime/contro
 que responden esas preguntas.
 
 ## OwnerReferences y recolección de basura
+
+> El diagrama detallado del grafo de propietarios y el GarbageCollector se explica en
+> [El grafo de propietarios y el GarbageCollector](../week04/01-graph-builder.md).
 
 Kubernetes tiene un recolector de basura incorporado.
 Cuando un objeto tiene una _owner reference_ que apunta a otro objeto
@@ -336,4 +341,10 @@ reduciendo la posibilidad de conflictos.
 - [Documentación oficial: Finalizers en Kubernetes](https://kubernetes.io/docs/concepts/workloads/controllers/finalizers/) —
   kubernetes.io
 
-[← Atrás](03-workqueues.md) | [Inicio](../README.md)
+## Siguiente paso
+
+[Semana 2: Controladores básicos](../week02/README.md) →
+aplica los fundamentos de esta semana analizando tres controladores integrados:
+el `NamespaceController`, el `LegacySATokenCleaner` y el `ServiceAccountsController`.
+
+[← Atrás](03-workqueues.md) | [Inicio](../README.md) | [Siguiente →](../week02/README.md)

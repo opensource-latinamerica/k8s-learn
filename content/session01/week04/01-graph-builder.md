@@ -31,6 +31,8 @@ lo que es frágil y propenso a fugas de recursos.
 
 ## Arquitectura del GarbageCollector
 
+![Grafo de ownerReferences, GraphBuilder y GarbageCollector](diagrams/01-owner-references-garbage-collector.png)
+
 El `GarbageCollector` consta de dos componentes principales
 que corren dentro del `kube-controller-manager`:
 
@@ -128,6 +130,18 @@ kubectl get rs nginx-deployment-75675f5897 \
 # nginx-deployment
 ```
 
+## Glosario
+
+| Término                               | Definición breve                                                                                                                      |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `GarbageCollector`                    | Controlador dentro del `kube-controller-manager` que borra los objetos cuyos propietarios han desaparecido.                            |
+| `GraphBuilder`                        | Subcomponente del `GarbageCollector` que mantiene el grafo de dependencias en memoria a partir de los eventos de todos los recursos.    |
+| DAG                                   | _Directed Acyclic Graph_ — grafo dirigido acíclico; estructura que usa el `GraphBuilder` para modelar las relaciones de propiedad.     |
+| nodo                                  | Representación de un objeto de Kubernetes en el grafo del `GraphBuilder`, identificado por su `uid`.                                  |
+| arista                                | Conexión dirigida en el grafo que va de un dependiente hacia su propietario.                                                           |
+| huérfano                              | Objeto cuyo propietario ya no existe en el grafo; el `GarbageCollector` lo encola para evaluación y posible borrado.                   |
+| tombstone (`DeletedFinalStateUnknown`) | Evento especial que el informer entrega cuando perdió el evento de borrado real; contiene el último estado conocido del objeto.       |
+
 ## Siguiente paso
 
 [ownerReferences en profundidad](02-owner-references.md) →
@@ -140,3 +154,5 @@ y cómo `blockOwnerDeletion` interactúa con el borrado en primer plano.
   — kubernetes.io
 - [Owners and Dependents](https://kubernetes.io/docs/concepts/overview/working-with-objects/owners-dependents/)
   — kubernetes.io
+
+[Inicio semana](README.md) | [Siguiente →](02-owner-references.md)

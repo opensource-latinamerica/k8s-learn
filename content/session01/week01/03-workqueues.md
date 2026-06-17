@@ -1,6 +1,8 @@
 # Workqueues en Kubernetes
 
-> **Prerequisitos:** [week01/02-informers-listers.md](02-informers-listers.md) — informers y el modelo de observación.
+## Prerequisitos
+
+- [Informers, cachés y listers en Kubernetes](02-informers-listers.md)
 
 ¿Por qué los controladores no procesan los eventos del informer directamente?
 ¿Qué pasa si el mismo recurso cambia diez veces antes de que el controlador
@@ -41,6 +43,8 @@ el manejador de eventos solo encola una clave (`namespace/name`),
 y uno o más hilos trabajadores la procesan de forma asíncrona.
 
 ## TypedInterface: la cola básica
+
+![Diagrama del patrón Workqueue](diagrams/03-workqueue-pattern.png)
 
 La interfaz fundamental del workqueue es `TypedInterface[T]`.
 Para los controladores, `T` suele ser `string` (la clave del objeto).
@@ -322,5 +326,11 @@ flowchart TD
   github.com/kubernetes/client-go
 - [sample-controller: uso de workqueue en práctica](https://github.com/kubernetes/sample-controller) —
   github.com/kubernetes/sample-controller
+
+## Siguiente paso
+
+[Utilidades de controladores en Kubernetes](04-controller-utilities.md) →
+describe las funciones del paquete `controllerutil` para gestionar `ownerReferences`,
+finalizers y operaciones idémpotentes de creación (`CreateOrUpdate`, `CreateOrPatch`).
 
 [← Atrás](02-informers-listers.md) | [Inicio](../README.md) | [Siguiente →](04-controller-utilities.md)

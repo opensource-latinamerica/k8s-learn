@@ -1,7 +1,9 @@
 # El limpiador de tokens heredados de ServiceAccount
 
-> **Prerequisitos:** [week01/01-reconciliation-theory.md](../week01/01-reconciliation-theory.md) — bucle de control.
-> [week01/02-informers-listers.md](../week01/02-informers-listers.md) — informers y listers.
+## Prerequisitos
+
+- [La reconciliación en Kubernetes: fundamentos](../week01/01-reconciliation-theory.md)
+- [Informers, cachés y listers en Kubernetes](../week01/02-informers-listers.md)
 
 Kubernetes generaba automáticamente tokens de larga duración para
 cada `ServiceAccount` antes de la versión 1.24.
@@ -19,6 +21,17 @@ el mecanismo preferido para inyectar credenciales en los `Pods` es el
 **token de volumen proyectado** (_projected volume token_):
 tiene tiempo de vida limitado (por defecto 1 hora),
 se renueva automáticamente y se invalida cuando el `Pod` es eliminado.
+
+> **Analogía — las llaves maestras del hotel:**
+> Las tarjetas magnéticas de los hoteles modernos caducan al hacer el
+> _check-out_: aunque alguien conserve la tarjeta, ya no abre la puerta.
+> Los tokens de volumen proyectado funcionan igual:
+> al terminar el `Pod`, el token queda inutilizable.
+> Los tokens heredados, en cambio, son como llaves físicas copiadas
+> hace años: siguen abriendo la puerta indefinidamente,
+> aunque el huésped original se haya ido hace tiempo.
+> El `LegacySATokenCleaner` es el servicio de seguridad
+> que revisa el cajero de llaves y destruye las copias antiguas.
 
 Sin embargo,
 clústeres que llevan años en funcionamiento acumulan `Secrets` del tipo antiguo,
@@ -229,6 +242,15 @@ Los parámetros internos del controlador son:
 El `LegacySATokenCleaner` no necesita workqueue porque su trabajo es
 **por lotes y periódico**, no reactivo a eventos individuales.
 
+> **Analogía — la limpieza nocturna vs. el conserje reactivo:**
+> Un conserje que reacciona a cada suciedad en tiempo real (workqueue)
+> es ideal para derrames en el pasillo: acción rápida y precisa.
+> Pero una limpieza nocturna general (bucle periódico)
+> es más eficiente para revisar todos los espacios del edificio,
+> limpiar lo que se acumuló y llevar un registro.
+> El `LegacySATokenCleaner` es esa limpieza nocturna:
+> una vez al día revisa todos los tokens y aplica las reglas.
+
 | Característica | Controlador con workqueue           | `LegacySATokenCleaner`                    |
 | -------------- | ----------------------------------- | ----------------------------------------- |
 | Disparado por  | Cambios en recursos (informer)      | Temporizador periódico (`wait.Until`)     |
@@ -260,5 +282,11 @@ Este patrón es adecuado cuando:
 - [Managing Service Accounts](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/) — Documentación oficial
 - [Código fuente: legacy_serviceaccount_token_cleaner.go](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/serviceaccount/legacy_serviceaccount_token_cleaner.go) — kubernetes/kubernetes
 - [KEP-2799: Reduction of Secret-based Service Account Tokens](https://github.com/kubernetes/enhancements/tree/master/keps/sig-auth/2799-reduction-of-secret-based-service-account-token) — Propuesta de mejora
+
+## Siguiente paso
+
+[El controlador de ServiceAccounts en Kubernetes](03-serviceaccounts-controller.md) →
+muestra cómo el patrón _get-or-create_ garantiza que cada `Namespace` activo
+tenga siempre la `ServiceAccount` `default` disponible para sus `Pods`.
 
 [← Atrás](01-namespace-controller.md) | [Inicio](../README.md) | [Siguiente →](03-serviceaccounts-controller.md)

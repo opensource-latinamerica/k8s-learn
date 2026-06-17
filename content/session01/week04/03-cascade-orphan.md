@@ -155,6 +155,17 @@ curl -X DELETE localhost:8080/apis/apps/v1/namespaces/default/deployments/nginx-
   -d '{"kind":"DeleteOptions","apiVersion":"v1","propagationPolicy":"Orphan"}'
 ```
 
+## Glosario
+
+| Término                         | Definición breve                                                                                                                        |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `propagationPolicy`             | Parámetro que controla qué ocurre con los dependientes al borrar un propietario: `Background`, `Foreground` u `Orphan`.                 |
+| `Background`                    | Política por defecto: el propietario se elimina de inmediato y el GC borra los dependientes en segundo plano.                           |
+| `Foreground`                    | Política que mantiene visible el propietario hasta que todos sus dependientes con `blockOwnerDeletion=true` hayan sido borrados.          |
+| `Orphan`                        | Política que borra el propietario pero deja los dependientes vivos, eliminándoles las `ownerReferences`.                                 |
+| `foregroundDeletion` (finalizer) | Finalizer de sistema que el API server añade al propietario para mantenerlo visible durante el borrado foreground.                     |
+| `orphan` (finalizer)             | Finalizer de sistema que indica al GC que debe eliminar las `ownerReferences` de los dependientes en lugar de borrarlos.                |
+
 ## Siguiente paso
 
 [Eliminación en primer plano vs. segundo plano: internos del GarbageCollector](04-foreground-background-internals.md) →
@@ -167,3 +178,5 @@ y cómo interactúa con los finalizers del sistema.
   — kubernetes.io
 - [Use Cascading Deletion in a Cluster](https://kubernetes.io/docs/tasks/administer-cluster/use-cascading-deletion/)
   — kubernetes.io
+
+[← Atrás](02-owner-references.md) | [Inicio semana](README.md) | [Siguiente →](04-foreground-background-internals.md)

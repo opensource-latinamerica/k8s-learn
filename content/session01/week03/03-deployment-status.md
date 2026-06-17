@@ -145,6 +145,22 @@ kubectl rollout status deployment/nginx-deployment && echo "Rollout completado"
 kubectl get deployment nginx-deployment -o yaml | grep -A 30 "^status:"
 ```
 
+## Glosario
+
+| Término                      | Definición breve                                                                                                             |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `observedGeneration`         | Última generación del `.spec` procesada por el controlador; confirma que los últimos cambios declarados ya se aplicaron.     |
+| `updatedReplicas`            | Número de `Pods` que ya usan la versión más reciente del `PodTemplate`.                                                     |
+| `readyReplicas`              | Número de `Pods` que han superado sus `readinessProbes`.                                                                    |
+| `availableReplicas`          | Número de `Pods` listos que llevan al menos `minReadySeconds` en ese estado.                                                 |
+| `unavailableReplicas`        | Número de `Pods` que deberían estar disponibles pero no lo están.                                                           |
+| `minReadySeconds`            | Tiempo mínimo (segundos) que un `Pod` debe estar listo antes de contabilizarse como `available` (defecto: 0).                |
+| `Progressing` (condición)    | Condición que indica si el rollout está en marcha, si ha completado correctamente o si ha excedido el deadline.              |
+| `Available` (condición)      | Condición que indica si el `Deployment` tiene al menos el mínimo de réplicas disponibles.                                   |
+| `ReplicaFailure` (condición) | Condición que indica que el `ReplicaSet` no puede crear o mantener `Pods` (cuota agotada, imagen inaccesible, etc.).         |
+| `progressDeadlineSeconds`    | Timeout en segundos tras el que el controlador marca el rollout como fallido si no hay avance (defecto: 600).                |
+| `terminatingReplicas`        | Campo (v1.35+ beta) que muestra el número de `Pods` actualmente en fase `Terminating`.                                      |
+
 ## Siguiente paso
 
 [Rollback y revisiones de un Deployment](04-rollback-revisions.md) →
@@ -154,3 +170,5 @@ explica cómo usar el historial de revisiones para deshacer un rollout problemá
 
 - [Deployments — Deployment status](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#deployment-status)
   — kubernetes.io
+
+[← Atrás](02-rollout-strategies.md) | [Inicio semana](README.md) | [Siguiente →](04-rollback-revisions.md)

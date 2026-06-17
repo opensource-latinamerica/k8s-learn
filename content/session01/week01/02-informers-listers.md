@@ -10,9 +10,9 @@ Esta explicación responde esas preguntas describiendo el subsistema de
 observación del lado del cliente:
 _informers_, `Reflector`, `Store`, `Indexer` y _listers_.
 
-Este documento asume que ya conoces el modelo de reconciliación de Kubernetes.
-Si no, revisa primero
-[01-reconciliation-theory.md](01-reconciliation-theory.md).
+## Prerequisitos
+
+- [La reconciliación en Kubernetes: fundamentos](01-reconciliation-theory.md)
 
 ## El problema de escalar la observación
 
@@ -47,6 +47,8 @@ La tabla siguiente compara las estrategias posibles:
 | `List` + `Watch` + caché (Informer) | Mínima                    | Muy baja (< 1 s)     | Sí: relist automático       |
 
 ## Arquitectura del subsistema de caché
+
+![Diagrama de Informers, caché y Listers](diagrams/02-informers-cache-listers.png)
 
 El subsistema se construye como una cadena de componentes,
 cada uno con una responsabilidad clara:
@@ -579,5 +581,11 @@ El subsistema de informers tiene propiedades arquitectónicas muy importantes:
   github.com/kubernetes/client-go
 - [sample-controller: ejemplo canónico de informer + workqueue](https://github.com/kubernetes/sample-controller) —
   github.com/kubernetes/sample-controller
+
+## Siguiente paso
+
+[Workqueues en Kubernetes](03-workqueues.md) →
+explica por qué los controladores no procesan eventos del informer directamente
+y qué garantías aporta la cola de trabajo: deduplicación, procesamiento único y reintentos con backoff.
 
 [← Atrás](01-reconciliation-theory.md) | [Inicio](../README.md) | [Siguiente →](03-workqueues.md)

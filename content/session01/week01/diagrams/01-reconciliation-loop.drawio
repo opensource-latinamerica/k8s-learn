@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="drawio" version="26.0.0">
+  <diagram name="Bucle de Reconciliación">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="2" value="Bucle de Control y Reconciliación en Kubernetes"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="80" y="30" width="560" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- User / Operator box -->
+        <mxCell id="3" value="Operador / CI-CD"
+          style="shape=mxgraph.kubernetes.icon;html=1;verticalLabelPosition=bottom;align=center;labelBackgroundColor=none;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=12;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- API Server box -->
+        <mxCell id="4" value="API Server&#xa;(etcd)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="270" y="140" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Desired state label -->
+        <mxCell id="5" value=".spec&#xa;(estado deseado)"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#d79b00;"
+          vertex="1" parent="1">
+          <mxGeometry x="200" y="110" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Current state label -->
+        <mxCell id="6" value=".status&#xa;(estado actual)"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#6c8ebf;"
+          vertex="1" parent="1">
+          <mxGeometry x="200" y="180" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Controller box -->
+        <mxCell id="7" value="Controller&#xa;(Control Loop)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="270" y="310" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Compare / diff diamond -->
+        <mxCell id="8" value="¿spec == status?"
+          style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;"
+          vertex="1" parent="1">
+          <mxGeometry x="270" y="440" width="160" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Action box -->
+        <mxCell id="9" value="Tomar acción&#xa;(crear / actualizar / borrar)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="530" y="455" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Update status box -->
+        <mxCell id="10" value="Actualizar .status"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="530" y="310" width="180" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- No change label -->
+        <mxCell id="11" value="No hay diferencia&#xa;(noop)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="100" y="455" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Watch events box -->
+        <mxCell id="12" value="Watch Events&#xa;(Informer)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;arcSize=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="270" y="220" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- EDGES -->
+        <!-- Operator writes spec to API Server -->
+        <mxCell id="20" value="kubectl apply&#xa;(escribe .spec)"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#d79b00;fontColor=#d79b00;fontSize=10;"
+          edge="1" parent="1" source="3" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- API Server → Watch Events -->
+        <mxCell id="21" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#9673a6;"
+          edge="1" parent="1" source="4" target="12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Watch Events → Controller -->
+        <mxCell id="22" value=""
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#6c8ebf;"
+          edge="1" parent="1" source="12" target="7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Controller → Compare -->
+        <mxCell id="23" value="lee spec y status"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;strokeColor=#6c8ebf;fontSize=10;"
+          edge="1" parent="1" source="7" target="8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Compare → No change (left) -->
+        <mxCell id="24" value="Sí"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#82b366;fontColor=#82b366;fontSize=11;fontStyle=1;"
+          edge="1" parent="1" source="8" target="11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Compare → Action (right) -->
+        <mxCell id="25" value="No"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#b85450;fontColor=#b85450;fontSize=11;fontStyle=1;"
+          edge="1" parent="1" source="8" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Action → Update status -->
+        <mxCell id="26" value="actualiza clúster"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;strokeColor=#b85450;fontSize=10;"
+          edge="1" parent="1" source="9" target="10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Update status → API Server -->
+        <mxCell id="27" value="escribe .status"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;strokeColor=#82b366;fontSize=10;"
+          edge="1" parent="1" source="10" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Loop arrow from no-change back up (to watch) -->
+        <mxCell id="28" value="espera próximo evento"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;strokeColor=#9673a6;fontSize=10;dashed=1;"
+          edge="1" parent="1" source="11" target="12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="60" y="480" />
+              <mxPoint x="60" y="245" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
