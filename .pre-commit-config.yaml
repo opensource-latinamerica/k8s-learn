@@ -17,12 +17,12 @@ repos:
       - id: trailing-whitespace
       - id: check-yaml
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.48.0
+    rev: v0.49.0
     hooks:
       - id: markdownlint
         files: \.(md|mdown|markdown)$
   - repo: https://github.com/electrocucaracha/ai-prepare-commit-msg
-    rev: 6017f17bdf75bda958ea9ad99dec12f866a211e1
+    rev: 36b906055bc054b4f0e7e7488781fcd786ca37aa
     hooks:
       - id: ai-prepare-commit
         stages:

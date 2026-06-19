@@ -1,0 +1,34 @@
+# Jekyll Configuration for GitHub Pages
+# Theme: Just the Docs (https://just-the-docs.github.io/just-the-docs/)
+title: k8s-learn
+description: Grupo de estudio de Kubernetes - Profundidad en el patrón de reconciliación
+baseurl: "/k8s-learn"
+url: "https://github.com/electrocucaracha/k8s-learn"
+
+# Theme
+remote_theme: just-the-docs/just-the-docs
+
+# Just the Docs settings
+color_scheme: light
+search_enabled: true
+heading_anchors: true
+enable_copy_code_button: true
+footer_content: "Copyright © 2026. Grupo de estudio k8s-learn."
+
+# Aux links
+aux_links:
+  GitHub: "https://github.com/electrocucaracha/k8s-learn"
+
+# Navigation
+nav_sort: case_insensitive
+
+# Markdown processor
+markdown: kramdown
+
+# Exclude from processing
+exclude:
+  - .gitignore
+  - .github
+  - Makefile
+  - README.md
+  - "*.drawio"
