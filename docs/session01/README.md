@@ -1,4 +1,9 @@
-# Currícula de estudio: reconciliación en Kubernetes a profundidad
+---
+layout: default
+title: Session 01 - Currícula de estudio: reconciliación en Kubernetes a profundidad
+nav_order: 2
+has_children: true
+---
 
 ## Mapa general de estudio
 

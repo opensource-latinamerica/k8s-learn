@@ -1,4 +1,9 @@
-# Internos del GarbageCollector: foreground vs. background
+---
+layout: default
+title: 04 — GC Internals
+nav_order: 4
+parent: Week 4 — Garbage Collector
+---
 
 > **Versión de Kubernetes:** v1.29+
 > **Fuentes:**
@@ -194,14 +199,14 @@ Borrar Deployment (foreground)
 
 ## Glosario
 
-| Término                  | Definición breve                                                                                                                  |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| `GraphBuilder`           | Componente que mantiene el grafo de dependencias en memoria y encola objetos candidatos al `GarbageCollector`.                    |
-| workqueue del GC         | Cola de trabajo del `GarbageCollector` que recibe candidatos a evaluación y aplica la política de borrado correspondiente.        |
-| `DeletedFinalStateUnknown` | Evento que el informer entrega cuando no recibió el borrado en tiempo real; contiene el último estado conocido del objeto.      |
-| borrado foreground       | Modalidad en que el propietario espera, visible en la API, a que todos sus dependientes con `blockOwnerDeletion=true` desaparezcan antes de borrarse. |
-| borrado background       | Modalidad por defecto: el propietario se elimina de `etcd` de inmediato y los dependientes los recoge el GC en segundo plano.    |
-| `GVR`                    | `GroupVersionResource`: identificador de un tipo de recurso en la API de Kubernetes; los informers dinámicos del `GraphBuilder` cubren todos los GVR del clúster. |
+| Término                    | Definición breve                                                                                                                                                  |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GraphBuilder`             | Componente que mantiene el grafo de dependencias en memoria y encola objetos candidatos al `GarbageCollector`.                                                    |
+| workqueue del GC           | Cola de trabajo del `GarbageCollector` que recibe candidatos a evaluación y aplica la política de borrado correspondiente.                                        |
+| `DeletedFinalStateUnknown` | Evento que el informer entrega cuando no recibió el borrado en tiempo real; contiene el último estado conocido del objeto.                                        |
+| borrado foreground         | Modalidad en que el propietario espera, visible en la API, a que todos sus dependientes con `blockOwnerDeletion=true` desaparezcan antes de borrarse.             |
+| borrado background         | Modalidad por defecto: el propietario se elimina de `etcd` de inmediato y los dependientes los recoge el GC en segundo plano.                                     |
+| `GVR`                      | `GroupVersionResource`: identificador de un tipo de recurso en la API de Kubernetes; los informers dinámicos del `GraphBuilder` cubren todos los GVR del clúster. |
 
 ## Siguiente paso
 

@@ -1,4 +1,9 @@
-# Gestión del campo status en un Deployment
+---
+layout: default
+title: 03 — Deployment Status
+nav_order: 3
+parent: Week 3 — Deployment
+---
 
 > **Versión de Kubernetes:** v1.29+
 > **Fuentes:**
@@ -147,19 +152,19 @@ kubectl get deployment nginx-deployment -o yaml | grep -A 30 "^status:"
 
 ## Glosario
 
-| Término                      | Definición breve                                                                                                             |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `observedGeneration`         | Última generación del `.spec` procesada por el controlador; confirma que los últimos cambios declarados ya se aplicaron.     |
-| `updatedReplicas`            | Número de `Pods` que ya usan la versión más reciente del `PodTemplate`.                                                     |
-| `readyReplicas`              | Número de `Pods` que han superado sus `readinessProbes`.                                                                    |
-| `availableReplicas`          | Número de `Pods` listos que llevan al menos `minReadySeconds` en ese estado.                                                 |
-| `unavailableReplicas`        | Número de `Pods` que deberían estar disponibles pero no lo están.                                                           |
-| `minReadySeconds`            | Tiempo mínimo (segundos) que un `Pod` debe estar listo antes de contabilizarse como `available` (defecto: 0).                |
-| `Progressing` (condición)    | Condición que indica si el rollout está en marcha, si ha completado correctamente o si ha excedido el deadline.              |
-| `Available` (condición)      | Condición que indica si el `Deployment` tiene al menos el mínimo de réplicas disponibles.                                   |
-| `ReplicaFailure` (condición) | Condición que indica que el `ReplicaSet` no puede crear o mantener `Pods` (cuota agotada, imagen inaccesible, etc.).         |
-| `progressDeadlineSeconds`    | Timeout en segundos tras el que el controlador marca el rollout como fallido si no hay avance (defecto: 600).                |
-| `terminatingReplicas`        | Campo (v1.35+ beta) que muestra el número de `Pods` actualmente en fase `Terminating`.                                      |
+| Término                      | Definición breve                                                                                                         |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `observedGeneration`         | Última generación del `.spec` procesada por el controlador; confirma que los últimos cambios declarados ya se aplicaron. |
+| `updatedReplicas`            | Número de `Pods` que ya usan la versión más reciente del `PodTemplate`.                                                  |
+| `readyReplicas`              | Número de `Pods` que han superado sus `readinessProbes`.                                                                 |
+| `availableReplicas`          | Número de `Pods` listos que llevan al menos `minReadySeconds` en ese estado.                                             |
+| `unavailableReplicas`        | Número de `Pods` que deberían estar disponibles pero no lo están.                                                        |
+| `minReadySeconds`            | Tiempo mínimo (segundos) que un `Pod` debe estar listo antes de contabilizarse como `available` (defecto: 0).            |
+| `Progressing` (condición)    | Condición que indica si el rollout está en marcha, si ha completado correctamente o si ha excedido el deadline.          |
+| `Available` (condición)      | Condición que indica si el `Deployment` tiene al menos el mínimo de réplicas disponibles.                                |
+| `ReplicaFailure` (condición) | Condición que indica que el `ReplicaSet` no puede crear o mantener `Pods` (cuota agotada, imagen inaccesible, etc.).     |
+| `progressDeadlineSeconds`    | Timeout en segundos tras el que el controlador marca el rollout como fallido si no hay avance (defecto: 600).            |
+| `terminatingReplicas`        | Campo (v1.35+ beta) que muestra el número de `Pods` actualmente en fase `Terminating`.                                   |
 
 ## Siguiente paso
 

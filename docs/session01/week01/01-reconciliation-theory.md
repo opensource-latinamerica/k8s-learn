@@ -1,4 +1,9 @@
-# La reconciliación en Kubernetes: fundamentos
+---
+layout: default
+title: 01 — Reconciliación
+nav_order: 1
+parent: Week 1 — Fundamentos
+---
 
 ## Prerequisitos
 

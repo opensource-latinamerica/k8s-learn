@@ -1,4 +1,9 @@
-# Minuta de sesión (2026-05-22)
+---
+layout: default
+title: Minuta de sesión (2026-05-22)
+nav_order: 0
+parent: Session 01
+---
 
 ## Contexto
 
@@ -24,19 +29,19 @@ Sesión inicial del grupo de estudio para aprender Kubernetes a profundidad desd
 - Se compartió un [intento previo](https://github.com/kubernetes/kubernetes/pull/112289) de mejora en pruebas unitarias para ejecución en paralelo.
 - El cambio llegó a merge, pero fue revertido al detectarse dependencias y problemas de concurrencia.
 
-2. Enfoque del grupo de estudio
+1. Enfoque del grupo de estudio
 
 - La prioridad es aprender juntos "las tripas" de Kubernetes.
 - Se acuerda usar un repositorio para centralizar minutas, hallazgos y material técnico.
 - Se enfatiza el uso de IA como apoyo de aprendizaje, no para atajos.
 
-3. Posibles líneas técnicas de investigación
+1. Posibles líneas técnicas de investigación
 
 - Flujo de API y ciclo de reconciliación.
 - Rol de cachés locales y su impacto en rendimiento.
 - Exploración conceptual de mejoras de inteligencia en reconciliación (idea inicial, sujeta a investigación).
 
-4. Herramientas y entorno
+1. Herramientas y entorno
 
 - Se intentó usar un servicio MCP ([Open Aware](https://github.com/qodo-ai/open-aware)), pero estuvo caído.
 - Se revisó alternativa con [DevContainers](https://containers.dev/)/[Codespaces](https://github.com/codespaces/) para evitar dependencias fuertes en máquinas locales.

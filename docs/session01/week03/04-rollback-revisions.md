@@ -1,4 +1,9 @@
-# Rollback y revisiones de un Deployment
+---
+layout: default
+title: 04 — Rollback & Revisions
+nav_order: 4
+parent: Week 3 — Deployment
+---
 
 > **Versión de Kubernetes:** v1.29+
 > **Fuentes:**
@@ -167,14 +172,14 @@ kubectl rollout status deployment/nginx-deployment
 
 ## Glosario
 
-| Término                 | Definición breve                                                                                                               |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| revisión                | Número secuencial que el `DeploymentController` asigna a cada cambio en `.spec.template`; se corresponde con un `ReplicaSet`. |
-| `CHANGE-CAUSE`          | Anotación `kubernetes.io/change-cause` que documenta el motivo de cada revisión y se muestra en `kubectl rollout history`.    |
-| `revisionHistoryLimit`  | Número máximo de revisiones históricas conservadas para permitir rollback; si es 0, el rollback queda deshabilitado.           |
-| rollback                | Operación que restaura el `PodTemplate` de una revisión anterior creando una nueva revisión con ese contenido.                 |
-| `kubectl rollout undo`  | Comando que ejecuta un rollback a la revisión inmediatamente anterior o a una revisión específica (`--to-revision`).           |
-| `kubectl rollout history` | Comando que lista el historial de revisiones de un `Deployment` con su `CHANGE-CAUSE`.                                      |
+| Término                   | Definición breve                                                                                                              |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| revisión                  | Número secuencial que el `DeploymentController` asigna a cada cambio en `.spec.template`; se corresponde con un `ReplicaSet`. |
+| `CHANGE-CAUSE`            | Anotación `kubernetes.io/change-cause` que documenta el motivo de cada revisión y se muestra en `kubectl rollout history`.    |
+| `revisionHistoryLimit`    | Número máximo de revisiones históricas conservadas para permitir rollback; si es 0, el rollback queda deshabilitado.          |
+| rollback                  | Operación que restaura el `PodTemplate` de una revisión anterior creando una nueva revisión con ese contenido.                |
+| `kubectl rollout undo`    | Comando que ejecuta un rollback a la revisión inmediatamente anterior o a una revisión específica (`--to-revision`).          |
+| `kubectl rollout history` | Comando que lista el historial de revisiones de un `Deployment` con su `CHANGE-CAUSE`.                                        |
 
 ## Siguiente paso
 

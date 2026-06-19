@@ -1,4 +1,9 @@
-# El controlador de Namespace en Kubernetes
+---
+layout: default
+title: 01 — Namespace
+nav_order: 1
+parent: Week 2 — Controladores básicos
+---
 
 ## Prerequisitos
 

@@ -1,4 +1,9 @@
-# Workqueues en Kubernetes
+---
+layout: default
+title: 03 — Workqueues
+nav_order: 3
+parent: Week 1 — Fundamentos
+---
 
 ## Prerequisitos
 

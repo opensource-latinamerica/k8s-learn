@@ -1,4 +1,10 @@
-# Reconciliación basada en grafo: Garbage Collector
+---
+layout: default
+title: Week 4 — Garbage Collector
+nav_order: 4
+parent: Session 01
+has_children: true
+---
 
 Esta semana estudia el `GarbageCollector` de Kubernetes,
 el controlador responsable de limpiar los objetos que pierden a su propietario.

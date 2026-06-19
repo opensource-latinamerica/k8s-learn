@@ -1,4 +1,9 @@
-# Rollouts y estrategias de actualización en Kubernetes
+---
+layout: default
+title: 02 — Rollout Strategies
+nav_order: 2
+parent: Week 3 — Deployment
+---
 
 > **Versión de Kubernetes:** v1.29+
 > **Fuentes:**
@@ -166,14 +171,14 @@ kubectl describe deployment nginx-deployment | grep -A 20 "Events:"
 
 ## Glosario
 
-| Término                    | Definición breve                                                                                                                    |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `Recreate`                 | Estrategia que termina todos los `Pods` del RS antiguo antes de crear los nuevos; implica downtime breve.                           |
-| `RollingUpdate`            | Estrategia por defecto que actualiza los `Pods` gradualmente, manteniendo disponibilidad mínima durante la transición.              |
-| `maxUnavailable`           | Máximo de `Pods` que pueden estar no disponibles durante el rollout; acepta número absoluto o porcentaje (redondeo hacia abajo).    |
-| `maxSurge`                 | Máximo de `Pods` extra por encima del total deseado que se permiten durante el rollout; acepta número absoluto o porcentaje.        |
-| rollover                   | Comportamiento en que el `DeploymentController` abandona un rollout en curso al recibir una nueva orden de actualización.           |
-| `progressDeadlineSeconds`  | Tiempo máximo en segundos que puede transcurrir sin avance antes de que el controlador marque el rollout como fallido (defecto: 600). |
+| Término                   | Definición breve                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `Recreate`                | Estrategia que termina todos los `Pods` del RS antiguo antes de crear los nuevos; implica downtime breve.                             |
+| `RollingUpdate`           | Estrategia por defecto que actualiza los `Pods` gradualmente, manteniendo disponibilidad mínima durante la transición.                |
+| `maxUnavailable`          | Máximo de `Pods` que pueden estar no disponibles durante el rollout; acepta número absoluto o porcentaje (redondeo hacia abajo).      |
+| `maxSurge`                | Máximo de `Pods` extra por encima del total deseado que se permiten durante el rollout; acepta número absoluto o porcentaje.          |
+| rollover                  | Comportamiento en que el `DeploymentController` abandona un rollout en curso al recibir una nueva orden de actualización.             |
+| `progressDeadlineSeconds` | Tiempo máximo en segundos que puede transcurrir sin avance antes de que el controlador marque el rollout como fallido (defecto: 600). |
 
 ## Siguiente paso
 

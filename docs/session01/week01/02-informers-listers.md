@@ -1,4 +1,9 @@
-# Informers, cachés y listers en Kubernetes
+---
+layout: default
+title: 02 — Informers y Listers
+nav_order: 2
+parent: Week 1 — Fundamentos
+---
 
 ¿Cómo sabe un controlador que algo cambió en el clúster
 sin consultar el API server en cada iteración?

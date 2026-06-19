@@ -1,4 +1,10 @@
-# Controladores básicos
+---
+layout: default
+title: Week 2 — Controladores básicos
+nav_order: 2
+parent: Session 01
+has_children: true
+---
 
 Esta semana aplica los fundamentos de la semana 1 a tres controladores
 integrados de Kubernetes.

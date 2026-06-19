@@ -1,4 +1,9 @@
-# El controlador de ServiceAccounts en Kubernetes
+---
+layout: default
+title: 03 — ServiceAccounts
+nav_order: 3
+parent: Week 2 — Controladores básicos
+---
 
 ## Prerequisitos
 

@@ -1,4 +1,10 @@
-# Deployment a profundidad
+---
+layout: default
+title: Week 3 — Deployment
+nav_order: 3
+parent: Session 01
+has_children: true
+---
 
 Esta semana analiza el `Deployment`,
 el controlador más usado en Kubernetes y el ejemplo canónico de reconciliación compuesta.

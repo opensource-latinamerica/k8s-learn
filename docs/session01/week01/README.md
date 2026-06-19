@@ -1,4 +1,10 @@
-# Fundamentos del patrón de reconciliación
+---
+layout: default
+title: Week 1 — Fundamentos
+nav_order: 1
+parent: Session 01
+has_children: true
+---
 
 Esta semana se cubre los fundamentos que todo controlador de Kubernetes comparte,
 sin importar su complejidad.

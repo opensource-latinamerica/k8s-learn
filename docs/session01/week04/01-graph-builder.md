@@ -1,4 +1,9 @@
-# El grafo de propietarios y el GarbageCollector en Kubernetes
+---
+layout: default
+title: 01 — GraphBuilder
+nav_order: 1
+parent: Week 4 — Garbage Collector
+---
 
 > **Versión de Kubernetes:** v1.29+
 > **Fuentes:**
@@ -132,15 +137,15 @@ kubectl get rs nginx-deployment-75675f5897 \
 
 ## Glosario
 
-| Término                               | Definición breve                                                                                                                      |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `GarbageCollector`                    | Controlador dentro del `kube-controller-manager` que borra los objetos cuyos propietarios han desaparecido.                            |
-| `GraphBuilder`                        | Subcomponente del `GarbageCollector` que mantiene el grafo de dependencias en memoria a partir de los eventos de todos los recursos.    |
-| DAG                                   | _Directed Acyclic Graph_ — grafo dirigido acíclico; estructura que usa el `GraphBuilder` para modelar las relaciones de propiedad.     |
-| nodo                                  | Representación de un objeto de Kubernetes en el grafo del `GraphBuilder`, identificado por su `uid`.                                  |
-| arista                                | Conexión dirigida en el grafo que va de un dependiente hacia su propietario.                                                           |
-| huérfano                              | Objeto cuyo propietario ya no existe en el grafo; el `GarbageCollector` lo encola para evaluación y posible borrado.                   |
-| tombstone (`DeletedFinalStateUnknown`) | Evento especial que el informer entrega cuando perdió el evento de borrado real; contiene el último estado conocido del objeto.       |
+| Término                                | Definición breve                                                                                                                     |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `GarbageCollector`                     | Controlador dentro del `kube-controller-manager` que borra los objetos cuyos propietarios han desaparecido.                          |
+| `GraphBuilder`                         | Subcomponente del `GarbageCollector` que mantiene el grafo de dependencias en memoria a partir de los eventos de todos los recursos. |
+| DAG                                    | _Directed Acyclic Graph_ — grafo dirigido acíclico; estructura que usa el `GraphBuilder` para modelar las relaciones de propiedad.   |
+| nodo                                   | Representación de un objeto de Kubernetes en el grafo del `GraphBuilder`, identificado por su `uid`.                                 |
+| arista                                 | Conexión dirigida en el grafo que va de un dependiente hacia su propietario.                                                         |
+| huérfano                               | Objeto cuyo propietario ya no existe en el grafo; el `GarbageCollector` lo encola para evaluación y posible borrado.                 |
+| tombstone (`DeletedFinalStateUnknown`) | Evento especial que el informer entrega cuando perdió el evento de borrado real; contiene el último estado conocido del objeto.      |
 
 ## Siguiente paso
 

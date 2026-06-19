@@ -1,4 +1,9 @@
-# Borrado en cascada: foreground, background y orphan
+---
+layout: default
+title: 03 — Cascade & Orphan
+nav_order: 3
+parent: Week 4 — Garbage Collector
+---
 
 > **Versión de Kubernetes:** v1.29+
 > **Fuentes:**
@@ -157,14 +162,14 @@ curl -X DELETE localhost:8080/apis/apps/v1/namespaces/default/deployments/nginx-
 
 ## Glosario
 
-| Término                         | Definición breve                                                                                                                        |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `propagationPolicy`             | Parámetro que controla qué ocurre con los dependientes al borrar un propietario: `Background`, `Foreground` u `Orphan`.                 |
-| `Background`                    | Política por defecto: el propietario se elimina de inmediato y el GC borra los dependientes en segundo plano.                           |
-| `Foreground`                    | Política que mantiene visible el propietario hasta que todos sus dependientes con `blockOwnerDeletion=true` hayan sido borrados.          |
-| `Orphan`                        | Política que borra el propietario pero deja los dependientes vivos, eliminándoles las `ownerReferences`.                                 |
-| `foregroundDeletion` (finalizer) | Finalizer de sistema que el API server añade al propietario para mantenerlo visible durante el borrado foreground.                     |
-| `orphan` (finalizer)             | Finalizer de sistema que indica al GC que debe eliminar las `ownerReferences` de los dependientes en lugar de borrarlos.                |
+| Término                          | Definición breve                                                                                                                 |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `propagationPolicy`              | Parámetro que controla qué ocurre con los dependientes al borrar un propietario: `Background`, `Foreground` u `Orphan`.          |
+| `Background`                     | Política por defecto: el propietario se elimina de inmediato y el GC borra los dependientes en segundo plano.                    |
+| `Foreground`                     | Política que mantiene visible el propietario hasta que todos sus dependientes con `blockOwnerDeletion=true` hayan sido borrados. |
+| `Orphan`                         | Política que borra el propietario pero deja los dependientes vivos, eliminándoles las `ownerReferences`.                         |
+| `foregroundDeletion` (finalizer) | Finalizer de sistema que el API server añade al propietario para mantenerlo visible durante el borrado foreground.               |
+| `orphan` (finalizer)             | Finalizer de sistema que indica al GC que debe eliminar las `ownerReferences` de los dependientes en lugar de borrarlos.         |
 
 ## Siguiente paso
 

@@ -1,4 +1,9 @@
-# ownerReferences y ciclos de dependencia en Kubernetes
+---
+layout: default
+title: 02 — ownerReferences
+nav_order: 2
+parent: Week 4 — Garbage Collector
+---
 
 > **Versión de Kubernetes:** v1.29+
 > **Fuentes:**
@@ -147,14 +152,14 @@ kubectl get all -n mi-namespace \
 
 ## Glosario
 
-| Término                  | Definición breve                                                                                                                  |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
-| `UID`                    | Identificador único e irrepetible asignado por Kubernetes a cada objeto; no cambia aunque el objeto se borre y recree con el mismo nombre. |
-| `controller` (campo)     | Campo booleano en `ownerReference` que marca a este propietario como el que gestiona activamente el objeto; solo puede ser `true` en uno.  |
+| Término                  | Definición breve                                                                                                                                     |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UID`                    | Identificador único e irrepetible asignado por Kubernetes a cada objeto; no cambia aunque el objeto se borre y recree con el mismo nombre.           |
+| `controller` (campo)     | Campo booleano en `ownerReference` que marca a este propietario como el que gestiona activamente el objeto; solo puede ser `true` en uno.            |
 | `blockOwnerDeletion`     | Campo booleano que, si es `true`, impide que el propietario sea eliminado definitivamente en modo foreground hasta que este dependiente desaparezca. |
-| `SetControllerReference` | Función de `controller-runtime` que establece una `ownerReference` con `controller: true` en el objeto dependiente.             |
-| `SetOwnerReference`      | Función que establece una `ownerReference` sin `controller: true` para dependencias de ciclo de vida sin control activo.          |
-| `AlreadyOwnedError`      | Error que retorna `SetControllerReference` cuando el objeto ya tiene un propietario con `controller: true`.                       |
+| `SetControllerReference` | Función de `controller-runtime` que establece una `ownerReference` con `controller: true` en el objeto dependiente.                                  |
+| `SetOwnerReference`      | Función que establece una `ownerReference` sin `controller: true` para dependencias de ciclo de vida sin control activo.                             |
+| `AlreadyOwnedError`      | Error que retorna `SetControllerReference` cuando el objeto ya tiene un propietario con `controller: true`.                                          |
 
 ## Siguiente paso
 
