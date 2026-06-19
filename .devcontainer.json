@@ -1,3 +1,20 @@
 {
-  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-24.04"
+  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers/features/node:2": {},
+    "ghcr.io/devcontainers-extra/features/bun:1": {},
+    "ghcr.io/devcontainers-extra/features/bun-package:1": {
+      "package": "@tobilu/qmd",
+      "package": "@getagentseal/codeburn"
+    }
+  },
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb"
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.cache/huggingface/hub,target=/home/vscode/.cache/qmd/models,type=bind"
+  ],
+  "postCreateCommand": "cd scripts/; ./update.sh | tee ~/update.log"
 }

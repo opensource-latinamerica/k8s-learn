@@ -4,6 +4,10 @@
       "type": "stdio",
       "command": "uvx",
       "args": ["--from", "codewiki-mcp", "codewiki-mcp"]
+    },
+    "qmd": {
+      "command": "qmd",
+      "args": ["mcp"]
     }
   }
 }

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "bash scripts/update.sh",
+        "cwd": ".",
+        "timeoutSec": 120
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "make fmt",
+        "cwd": ".",
+        "timeoutSec": 120
+      }
+    ]
+  }
+}
