@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Preguntas generales sobre el grupo de estudio
+    url: https://github.com/electrocucaracha/k8s-learn/discussions
+    about: Usa Discussions para dudas o conversaciones que no son mejoras concretas de documentacion.
