@@ -306,6 +306,19 @@ flowchart TD
 | `TypedDelayingInterface[T]`     | Reintentos con retraso fijo conocido de antemano.                       |
 | `TypedRateLimitingInterface[T]` | **Caso habitual** — reintentos con backoff automático y control global. |
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Por qué una workqueue usa la clave del objeto y no el objeto completo?
+2. ¿Qué problema resuelven la deduplicación y el ordenamiento implícito de la cola?
+3. ¿Qué hace un rate limiter cuando una reconciliación falla varias veces?
+4. ¿Cuándo conviene llamar a `Forget` y por qué?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                                  | Definición breve                                                                                        |

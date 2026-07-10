@@ -197,6 +197,19 @@ Borrar Deployment (foreground)
     └── API Server borra Deployment de etcd
 ```
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué papel cumple el finalizer `foregroundDeletion` en el borrado foreground?
+2. ¿Cómo coordina el `GarbageCollector` la eliminación de propietarios y dependientes?
+3. ¿Qué diferencia práctica hay entre la vista externa del borrado y su procesamiento interno?
+4. ¿Por qué este mecanismo es distinto de un finalizer definido por una aplicación?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                    | Definición breve                                                                                                                                                  |

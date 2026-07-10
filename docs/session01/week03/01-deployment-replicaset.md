@@ -164,6 +164,19 @@ sin esperar instrucción explícita del `DeploymentController`.
 | Reemplazar `Pods` que fallan         | `ReplicaSetController` |
 | Adoptar `Pods` sin dueño             | `ReplicaSetController` |
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Por qué un `Deployment` crea un nuevo `ReplicaSet` en cada cambio de plantilla?
+2. ¿Cómo ayuda `pod-template-hash` a distinguir las versiones de los `Pods`?
+3. ¿Qué significa que un `ReplicaSet` adopte `Pods` sin dueño?
+4. ¿Qué controla realmente el `DeploymentController` y qué deja al `ReplicaSetController`?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                | Definición breve                                                                                                          |

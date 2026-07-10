@@ -330,6 +330,19 @@ simplemente borra todos los recursos con el cliente dinámico,
 y los controladores secundarios reaccionan a esos borrados a través de sus
 propios informers.
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Por qué un `Namespace` puede permanecer en estado `Terminating`?
+2. ¿Qué trabajo delega el `NamespaceController` en `NamespacedResourcesDeleter`?
+3. ¿Por qué el controlador solo encola `namespaces` con `deletionTimestamp`?
+4. ¿Qué garantiza que el `Namespace` no desaparezca antes de limpiar su contenido?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                      | Definición breve                                                                              |

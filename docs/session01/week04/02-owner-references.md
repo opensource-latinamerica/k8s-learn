@@ -150,6 +150,19 @@ kubectl get all -n mi-namespace \
   -o custom-columns='KIND:.kind,NAME:.metadata.name,FINALIZERS:.metadata.finalizers,OWNER:.metadata.ownerReferences[0].name'
 ```
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Por qué Kubernetes usa `uid` y no solo el nombre para identificar al propietario?
+2. ¿Qué diferencia hay entre `controller: true` y `blockOwnerDeletion`?
+3. ¿Qué restricción importante existe cuando el dueño y el dependiente viven en `namespaces` distintos?
+4. ¿Cómo evita `SetControllerReference` que un objeto quede con dos controladores activos?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                  | Definición breve                                                                                                                                     |

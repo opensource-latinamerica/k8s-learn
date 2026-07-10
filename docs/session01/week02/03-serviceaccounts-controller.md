@@ -267,6 +267,19 @@ su arquitectura lo requiere.
 | Objetos observados | `Namespace`                   | `Secret`, `Pod`, `SA`      | `Namespace`, `ServiceAccount` |
 | Complejidad        | Alta (discovery + deletion)   | Media (lógica de tiempo)   | Baja (get-or-create)          |
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Por qué el controlador asegura la existencia de una `ServiceAccount` `default` en cada `Namespace` activo?
+2. ¿Qué hace que este controlador sea un ejemplo de get-or-create idempotente?
+3. ¿Qué cambia cuando el `Namespace` se está borrando?
+4. ¿Por qué este controlador debe manejar tombstones al recibir eventos de borrado?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                     | Definición breve                                                                                         |

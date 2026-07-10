@@ -169,6 +169,19 @@ kubectl rollout status deployment/nginx-deployment
 kubectl describe deployment nginx-deployment | grep -A 20 "Events:"
 ```
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué diferencia práctica hay entre `Recreate` y `RollingUpdate`?
+2. ¿Cómo influyen `maxUnavailable` y `maxSurge` en la disponibilidad durante un rollout?
+3. ¿Por qué `RollingUpdate` suele ser la estrategia por defecto?
+4. ¿En qué escenario elegirías `Recreate` aunque implique downtime?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                   | Definición breve                                                                                                                      |
