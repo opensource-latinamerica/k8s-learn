@@ -24,7 +24,7 @@ Una ruta de aprendizaje estructurada en 4 semanas, cubriendo:
 
 ## Cómo usar esta documentación
 
-1. **Comienza con [Session 01 → Week 1](session01/)** si es tu primera vez
+1. **Comienza con [Session 01 → Week 1](./session01/)** si es tu primera vez
 2. Cada semana tiene un **README** con objetivos y mapa conceptual
 3. Los artículos incluyen **diagramas interactivos** (.drawio) y conceptos clave
 4. Los vínculos entre temas están claramente marcados
