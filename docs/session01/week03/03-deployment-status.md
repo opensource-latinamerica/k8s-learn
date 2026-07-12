@@ -150,6 +150,19 @@ kubectl rollout status deployment/nginx-deployment && echo "Rollout completado"
 kubectl get deployment nginx-deployment -o yaml | grep -A 30 "^status:"
 ```
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué información aporta cada campo entre `replicas`, `updatedReplicas`, `readyReplicas` y `availableReplicas`?
+2. ¿Qué te indica la condición `Progressing` sobre el rollout?
+3. ¿Cómo ayuda `progressDeadlineSeconds` a detectar un despliegue atascado?
+4. ¿Por qué `availableReplicas` y `readyReplicas` no siempre tienen el mismo valor?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                      | Definición breve                                                                                                         |

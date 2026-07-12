@@ -270,6 +270,19 @@ Este patrón es adecuado cuando:
 - No se necesita reactividad inmediata a cambios individuales.
 - La lógica es principalmente de lectura con pocas escrituras.
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué señales usa el limpiador para decidir que un token ya está obsoleto?
+2. ¿Por qué el proceso de borrado ocurre en dos etapas?
+3. ¿Qué ventaja ofrece un bucle periódico frente a una workqueue para este caso?
+4. ¿Qué puede pasar si borras un token demasiado pronto?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                         | Definición breve                                                                                   |

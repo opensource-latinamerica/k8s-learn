@@ -135,6 +135,19 @@ kubectl get rs nginx-deployment-75675f5897 \
 # nginx-deployment
 ```
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué problema resuelve el `GraphBuilder` dentro del `GarbageCollector`?
+2. ¿Cómo se construye el grafo de dependencias a partir de las `ownerReferences`?
+3. ¿Qué papel tienen los eventos de todos los recursos del clúster en esta arquitectura?
+4. ¿Por qué el `GarbageCollector` necesita una workqueue además del grafo?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                                | Definición breve                                                                                                                     |

@@ -555,6 +555,19 @@ El subsistema de informers tiene propiedades arquitectónicas muy importantes:
 | **Seguridad ante fallos** | Si la conexión Watch cae, el Reflector reconecta y hace relist automáticamente.                 |
 | **Compartición**          | Múltiples controladores reutilizan el mismo informer, eliminando trabajo duplicado.             |
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué papel cumple cada pieza de la cadena `Reflector` → `DeltaFIFO` → `Indexer` → `Lister`?
+2. ¿Por qué un `SharedIndexInformer` reduce la carga sobre el API server?
+3. ¿Qué riesgo tiene leer datos desde la caché si todavía no se ha sincronizado?
+4. ¿Cómo ayuda `WaitForCacheSync` a evitar errores de reconciliación?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                            | Definición breve                                                                                                  |

@@ -170,6 +170,19 @@ kubectl rollout status deployment/nginx-deployment
 # deployment "nginx-deployment" successfully rolled out
 ```
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Cómo usa `Deployment` el historial de `ReplicaSets` para permitir un rollback?
+2. ¿Qué papel cumple `revisionHistoryLimit` en la estrategia de recuperación?
+3. ¿Qué cambia y qué no cambia cuando ejecutas `kubectl rollout undo`?
+4. ¿Por qué conviene registrar `kubernetes.io/change-cause` en los cambios importantes?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                   | Definición breve                                                                                                              |

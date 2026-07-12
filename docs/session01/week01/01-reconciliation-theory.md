@@ -390,6 +390,19 @@ El patrón de reconciliación tiene propiedades arquitectónicas destacadas:
 | **Observabilidad**  | El estado siempre es legible en `.status`, lo que facilita el diagnóstico. |
 | **Extensibilidad**  | El mismo patrón se aplica a recursos nativos y a recursos personalizados.  |
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué diferencia hay entre el estado deseado en `.spec` y el estado actual en `.status`?
+2. ¿Por qué Kubernetes necesita varios controladores y no un único bucle global?
+3. ¿Qué ocurre cuando el estado actual se aleja del estado deseado?
+4. ¿Cómo ayuda el bucle de control a que Kubernetes se recupere de fallos?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                      | Definición breve                                                                                         |

@@ -316,6 +316,19 @@ reduciendo la posibilidad de conflictos.
 | Crear o actualizar un recurso en cada reconciliación.          | `CreateOrUpdate` o `CreateOrPatch`             |
 | Verificar si un finalizer está presente antes de actuar.       | `ContainsFinalizer`                            |
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Cuándo usarías `SetControllerReference` y cuándo `SetOwnerReference`?
+2. ¿Qué papel cumplen los finalizers en el ciclo de borrado de un recurso?
+3. ¿Por qué `CreateOrUpdate` y `CreateOrPatch` son útiles en un reconciler?
+4. ¿Qué debes hacer después de añadir o quitar un finalizer para que el cambio persista?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                  | Definición breve                                                                                                         |

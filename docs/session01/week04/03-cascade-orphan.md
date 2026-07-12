@@ -160,6 +160,19 @@ curl -X DELETE localhost:8080/apis/apps/v1/namespaces/default/deployments/nginx-
   -d '{"kind":"DeleteOptions","apiVersion":"v1","propagationPolicy":"Orphan"}'
 ```
 
+## Preguntas de repaso
+
+Antes de continuar con la siguiente sesión,
+intenta responder las siguientes preguntas:
+
+1. ¿Qué ocurre con los dependientes cuando borras un objeto con `Background`?
+2. ¿Por qué `Foreground` espera antes de borrar definitivamente al propietario?
+3. ¿Qué significa que `Orphan` deje vivos a los dependientes?
+4. ¿En qué caso te conviene preservar los `Pods` aunque borres el `Deployment`?
+
+Si no puedes responder alguna pregunta con confianza,
+revisa nuevamente el contenido de la sesión antes de avanzar.
+
 ## Glosario
 
 | Término                          | Definición breve                                                                                                                 |
