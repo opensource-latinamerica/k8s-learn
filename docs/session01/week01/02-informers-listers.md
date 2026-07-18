@@ -27,17 +27,6 @@ pero eso no escala:
 con miles de controladores y miles de objetos,
 el API server quedaría saturado de peticiones redundantes.
 
-> **Analogía — el banco y las alertas de movimiento:**
-> Imagina que tienes una cuenta bancaria y cada minuto llamas al banco
-> para preguntar si hubo algún movimiento.
-> Ahora multiplica eso por mil clientes llamando cada segundo.
-> El banco colapsaría.
-> La solución inteligente es que el banco te envíe una notificación
-> solo cuando ocurre un cargo o un abono.
-> Eso es exactamente `List`+`Watch`:
-> obtienes el estado inicial (_List_) una sola vez,
-> y después el API server te avisa de cada cambio (_Watch_).
-
 Kubernetes resuelve esto con un modelo **observar-y-cachear**:
 los controladores no consultan directamente al API server;
 en cambio, mantienen una copia local sincronizada,
@@ -57,24 +46,6 @@ La tabla siguiente compara las estrategias posibles:
 
 El subsistema se construye como una cadena de componentes,
 cada uno con una responsabilidad clara:
-
-```mermaid
-flowchart LR
-    A["API server\n(Watch stream)"]
-    B["Reflector\nListAndWatch"]
-    C["DeltaFIFO\n(cola de deltas)"]
-    D["Indexer/Store\n(caché local thread-safe)"]
-    E["SharedIndexInformer\n(despacha eventos)"]
-    F["Handler\nOnAdd / OnUpdate / OnDelete"]
-    G["Lister\n(consulta la caché)"]
-
-    A -->|"eventos Watch"| B
-    B -->|"deltas"| C
-    C -->|"pop + process"| D
-    D --> E
-    E -->|"notificaciones"| F
-    D --> G
-```
 
 ### Reflector
 
@@ -197,7 +168,7 @@ lo que permite leer desde múltiples goroutines sin bloqueos explícitos.
 
 > **Analogía — la biblioteca con catálogo de fichas:**
 > El `Store` es el fondo bibliográfico completo:
-> cada libro tiene un número de catalogación único (`namespace/name`)
+> cada libro tiene un número de catalogo único (`namespace/name`)
 > que permite acceder directamente a él.
 > El `Indexer` añade los ficheros de catálogo temáticos:
 > puedes encontrar todos los libros de ciencias (_namespace_ "production")
