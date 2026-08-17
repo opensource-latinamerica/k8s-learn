@@ -77,21 +77,11 @@ El ejemplo clásico es el termostato:
 
 - Tú defines la temperatura deseada (por ejemplo, 22 °C).
 - El termostato mide la temperatura actual.
-- Si la actual es menor, enciende la calefacción.
+- Si la temperatura actual es menor, enciende la calefacción.
 - Cuando se alcanza la temperatura deseada, la apaga.
 - El ciclo se repite indefinidamente.
 
 Kubernetes aplica exactamente este principio a escala de clúster.
-
-> **Analogía — el termostato de un datacenter:**
-> Imagina ahora ese mismo termostato controlando no una habitación,
-> sino miles de servidores a la vez.
-> Cada rack tiene su temperatura deseada en la configuración;
-> el sistema central mide constantemente cada uno
-> y activa o desactiva la refrigeración donde sea necesario.
-> Eso es Kubernetes: miles de "termostatos" independientes
-> (los controladores), cada uno responsable de su dominio,
-> ajustando el clúster hacia el estado declarado.
 
 **El bucle no es un proceso secuencial único.**
 En Kubernetes, muchos bucles de control corren en paralelo al mismo tiempo,
@@ -282,34 +272,6 @@ También implica matices prácticos:
 > **Nota:** En producción,
 > "eventual" significa "converge cuando las condiciones lo permiten",
 > no "converge instantáneamente".
-
-## Ejemplo práctico: escalado de Deployment
-
-Este ejemplo muestra dos controladores independientes actuando en cadena.
-
-**Paso 1 — Cambias el objetivo.**
-Aplicas un `Deployment` de `replicas: 3` a `replicas: 5`.
-Aquí solo cambias `.spec` del `Deployment`.
-
-**Paso 2 — Reconciliación del Deployment Controller.**
-El controlador de `Deployment` observa la diferencia,
-reconcilia,
-y actualiza el `ReplicaSet` objetivo para reflejar el nuevo tamaño.
-
-**Paso 3 — Reconciliación del ReplicaSet Controller.**
-En paralelo,
-el controlador de `ReplicaSet` compara su deseado (`5`)
-con su actual (`3`)
-y crea dos `Pod` adicionales.
-
-**Paso 4 — Programación y ejecución.**
-El `kube-scheduler` asigna los nuevos `Pod` a nodos,
-y los `kubelet` de esos nodos arrancan los contenedores.
-
-**Paso 5 — Estado estable.**
-Cuando `.status.availableReplicas` llega a `5`,
-los controladores mantienen vigilancia,
-pero no realizan más acciones.
 
 ## Un ejemplo concreto: fallo de nodo
 
