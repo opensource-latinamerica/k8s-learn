@@ -27,6 +27,17 @@ pero eso no escala:
 con miles de controladores y miles de objetos,
 el API server quedaría saturado de peticiones redundantes.
 
+> **Analogía — el banco y las alertas de movimiento:**
+> Imagina que tienes una cuenta bancaria y cada minuto llamas al banco
+> para preguntar si hubo algún movimiento.
+> Ahora multiplica eso por mil clientes llamando cada segundo.
+> El banco colapsaría.
+> La solución inteligente es que el banco te envíe una notificación
+> solo cuando ocurre un cargo o un abono.
+> Eso es exactamente `List`+`Watch`:
+> obtienes el estado inicial (_List_) una sola vez,
+> y después el API server te avisa de cada cambio (_Watch_).
+
 Kubernetes resuelve esto con un modelo **observar-y-cachear**:
 los controladores no consultan directamente al API server;
 en cambio, mantienen una copia local sincronizada,
@@ -46,6 +57,54 @@ La tabla siguiente compara las estrategias posibles:
 
 El subsistema se construye como una cadena de componentes,
 cada uno con una responsabilidad clara:
+
+```mermaid
+flowchart LR
+    A["API server\n(Watch stream)"]
+    B["Reflector\nListAndWatch"]
+    C["DeltaFIFO\n(cola de deltas)"]
+    D["Indexer/Store\n(caché local thread-safe)"]
+    E["SharedIndexInformer\n(despacha eventos)"]
+    F["Handler\nOnAdd / OnUpdate / OnDelete"]
+    G["Lister\n(consulta la caché)"]
+
+    A -->|"eventos Watch"| B
+    B -->|"deltas"| C
+    C -->|"pop + process"| D
+    D --> E
+    E -->|"notificaciones"| F
+    D --> G
+```
+
+### Trazando un ejemplo: un Pod nuevo del Deployment `web`
+
+Para que la cadena anterior no quede abstracta,
+sigue el mismo `Pod` a través de cada componente.
+Un `Deployment` llamado `web` en el `namespace` `produccion` escala de 3 a 4 réplicas,
+y el `ReplicaSetController` crea el `Pod` `web-7d8f9-x4k2p`:
+
+1. **Reflector** — recibe el evento `Added` desde el `Watch` del API server
+   y calcula que la clave del `Pod` es `produccion/web-7d8f9-x4k2p`.
+2. **DeltaFIFO** — inserta un `Delta{Type: Added, Object: <Pod>}`
+   bajo esa clave.
+   Si el `Pod` cambia de fase (`Pending` → `Running`) antes de procesarse,
+   se agrega un segundo `Delta{Type: Updated}` a la misma entrada.
+3. **Indexer/Store** — al procesar la entrada,
+   guarda el objeto en la caché local
+   y lo registra en el índice `NamespaceIndex` bajo la clave `produccion`.
+4. **SharedIndexInformer** — despacha el evento a todos los handlers registrados:
+   el controlador de `ReplicaSet` (que ya sabe que creó este `Pod`)
+   y cualquier otro controlador que observe `Pod` en ese `namespace`.
+5. **Handler** — el `AddFunc` del `ReplicaSetController` encola la clave
+   del `ReplicaSet` propietario (no la del `Pod`) en su workqueue,
+   para recalcular cuántas réplicas están `Ready`.
+6. **Lister** — minutos después, cuando el controlador de `Deployment` reconcilia,
+   consulta `podLister.Pods("produccion").List(selector)`
+   y encuentra el `Pod` `web-7d8f9-x4k2p` sin hacer ninguna llamada de red.
+
+Este recorrido explica por qué el `Reflector` es el único punto de tráfico real
+hacia el API server:
+todo lo que ocurre después —`DeltaFIFO`, `Indexer`, `Lister`— es trabajo en memoria.
 
 ### Reflector
 
@@ -168,7 +227,7 @@ lo que permite leer desde múltiples goroutines sin bloqueos explícitos.
 
 > **Analogía — la biblioteca con catálogo de fichas:**
 > El `Store` es el fondo bibliográfico completo:
-> cada libro tiene un número de catalogo único (`namespace/name`)
+> cada libro tiene un número de catalogación único (`namespace/name`)
 > que permite acceder directamente a él.
 > El `Indexer` añade los ficheros de catálogo temáticos:
 > puedes encontrar todos los libros de ciencias (_namespace_ "production")

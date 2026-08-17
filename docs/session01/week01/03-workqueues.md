@@ -47,6 +47,27 @@ La solución es un **workqueue**:
 el manejador de eventos solo encola una clave (`namespace/name`),
 y uno o más hilos trabajadores la procesan de forma asíncrona.
 
+## Ejemplo guía: escalar un Deployment
+
+Para no perderte entre interfaces y estructuras abstractas,
+usaremos el mismo escenario concreto en toda esta explicación:
+un `Deployment` llamado `web` en el namespace `produccion`.
+
+1. Un usuario ejecuta `kubectl scale deployment/web -n produccion --replicas=5`.
+2. El informer del `Deployment` recibe el evento `OnUpdate`
+   y llama al manejador del controlador.
+3. El manejador **no** procesa el escalado ahí mismo;
+   solo encola la clave `produccion/web` en el workqueue.
+4. Antes de que un worker recoja la clave,
+   otro usuario corrige el comando a `--replicas=3`.
+   El informer dispara un segundo `OnUpdate` para el mismo objeto.
+5. Un worker libre llama a `queue.Get()`,
+   obtiene la clave `produccion/web` **una sola vez**,
+   y reconcilia el estado deseado (3 réplicas) contra el `ReplicaSet` real.
+
+Este flujo —una clave, varios cambios, un solo procesamiento— es exactamente
+lo que las siguientes secciones explican con las estructuras internas del workqueue.
+
 ## TypedInterface: la cola básica
 
 ![Diagrama del patrón Workqueue](diagrams/03-workqueue-pattern.png)
@@ -96,6 +117,24 @@ si `item` está en `dirty` (llegó un nuevo cambio mientras se procesaba),
 se mueve automáticamente a `queue` para su reprocesamiento.
 Así se garantiza que ningún cambio se pierda aunque el controlador esté ocupado.
 
+### Trazando el ejemplo del Deployment `web`
+
+Retomando el escenario anterior, así se mueve la clave `produccion/web`
+entre las tres estructuras internas:
+
+| Paso                                    | `queue`           | `dirty`           | `processing`      |
+| --------------------------------------- | ----------------- | ----------------- | ------------------ |
+| 1. Llega el evento de `--replicas=5`   | `[produccion/web]` | `{produccion/web}` | `{}`                |
+| 2. Llega el evento de `--replicas=3`   | `[produccion/web]` | `{produccion/web}` | `{}` (no se duplica) |
+| 3. Un worker llama a `Get()`           | `[]`               | `{}`               | `{produccion/web}`  |
+| 4. El worker aún reconcilia y llega un tercer cambio (`--replicas=4`) | `[]` | `{produccion/web}` | `{produccion/web}` |
+| 5. El worker llama a `Done()`          | `[produccion/web]` | `{}`               | `{}` (se reencola por el cambio del paso 4) |
+
+Así, aunque el `Deployment` cambió tres veces,
+el controlador solo reconcilia dos veces:
+una con el estado que encontró al llamar a `Get`,
+y otra con el estado final tras el reencolado automático del paso 5.
+
 ### El ciclo del trabajador
 
 El patrón estándar de un hilo trabajador (_worker_) es:
@@ -122,6 +161,24 @@ func (c *Controlador) processNextItem(ctx context.Context) bool {
 
     c.queue.Forget(key) // elimina el historial de fallos del rate limiter
     return true
+}
+```
+
+Para nuestro ejemplo, `key` llega como `"produccion/web"`.
+El método `reconcile` haría algo como:
+
+```go
+func (c *Controlador) reconcile(ctx context.Context, key string) error {
+    namespace, name, _ := cache.SplitMetaNamespaceKey(key) // "produccion", "web"
+
+    deployment, err := c.deploymentLister.Deployments(namespace).Get(name)
+    if apierrors.IsNotFound(err) {
+        return nil // el Deployment fue eliminado; nada que hacer
+    }
+
+    // Compara réplicas deseadas (deployment.Spec.Replicas) contra el ReplicaSet real
+    // y aplica los cambios necesarios (crear, escalar o eliminar Pods).
+    return c.syncReplicaSet(ctx, deployment)
 }
 ```
 
@@ -192,6 +249,13 @@ $\text{espera} = \text{baseDelay} \times 2^{\text{numFallos}}$
 Es el componente de backoff que evita que un error persistente
 genere un bucle rápido contra el API server.
 
+En nuestro ejemplo, imagina que reconciliar `produccion/web` falla
+porque el `ServiceAccount` que usan sus Pods todavía no existe
+(quizás lo está creando otro controlador en paralelo).
+El primer reintento espera 5 ms, el segundo 10 ms, el tercero 20 ms,
+y así sucesivamente, hasta que el `ServiceAccount` aparezca
+y la reconciliación tenga éxito.
+
 > **Analogía — el reinicio tras un apagón:**
 > Imagina que todos los dispositivos de un edificio intentan conectarse
 > a internet en cuanto se restituye la luz.
@@ -223,6 +287,12 @@ Esto significa que el controlador puede procesar un máximo de 10 items
 de golpe,
 pero a largo plazo no puede exceder 10 reconciliaciones por segundo
 en total.
+
+Si además de `produccion/web` se despliegan otros 20 Deployments a la vez
+(por ejemplo, durante un `kubectl apply -f` masivo),
+el cubo de fichas limita cuántos de esos 20 se reconcilian de inmediato
+y cuántos deben esperar su turno,
+sin importar si cada uno individualmente tuvo éxito o fallo previo.
 
 ### TypedItemFastSlowRateLimiter
 
