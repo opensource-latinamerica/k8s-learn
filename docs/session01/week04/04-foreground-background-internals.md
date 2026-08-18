@@ -210,6 +210,24 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy comprendí que el borrado foreground tiene dos caras.
+Desde fuera parece que el propietario sigue ahí,
+pero por dentro el `GarbageCollector` está retirando sus dependientes y espera
+la señal de que ya no quedan dependientes que bloqueen el borrado.
+El finalizer `foregroundDeletion` funciona como un comprobante pendiente:
+mantiene visible el propietario hasta completar la limpieza,
+mientras que un finalizer de aplicación puede ejecutar una tarea propia antes
+de permitir el borrado.
+
+Esta lección reúne la ruta completa del borrado en cascada descrito en
+[la lección anterior](03-cascade-orphan.md): los informers detectan cambios,
+el `GraphBuilder` mantiene las relaciones, la workqueue ordena el trabajo
+y el `GarbageCollector` aplica la política de borrado.
+Así, el patrón de reconciliación de la semana 1 explica el funcionamiento
+interno del proceso.
+
 ## Glosario
 
 | Término                    | Definición breve                                                                                                                                                  |

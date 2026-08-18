@@ -163,6 +163,23 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy aprendí que una `ownerReference` no es solo un nombre escrito en un objeto.
+Es más parecido a una identificación completa:
+el `uid` confirma que hablo de esa instancia exacta,
+aunque otra use el mismo nombre más adelante.
+`controller: true` indica quién manda activamente,
+`blockOwnerDeletion` puede bloquear la eliminación definitiva del propietario
+durante un borrado foreground,
+y `SetControllerReference` evita que dos controladores intenten dirigir el
+mismo recurso.
+
+Estas referencias explican con más detalle la relación entre `Deployment`,
+`ReplicaSet` y `Pod` que viste en [la lección anterior](01-graph-builder.md),
+y por qué un `Deployment` puede controlar indirectamente sus `Pod`.
+Los campos de la referencia determinan cómo el grafo interpreta cada relación.
+
 ## Glosario
 
 | Término                  | Definición breve                                                                                                                                     |

@@ -319,6 +319,22 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí que una `workqueue` es como una bandeja de tareas con una sola ficha
+por asunto: si el mismo recurso cambia varias veces,
+no necesito meter cinco copias de la ficha.
+El controlador toma la clave,
+comprueba el estado real y vuelve a intentarlo si algo falla.
+El backoff es como esperar cada vez un poco más antes de insistir,
+mientras que `Forget` limpia el contador cuando el trabajo por fin sale bien.
+
+La cola recibe las claves que producen los informers estudiados en
+[la lección anterior](02-informers-listers.md) y entrega al controlador
+una oportunidad ordenada de volver a reconciliar.
+Así, los cambios observados se convierten en trabajo que puede procesarse
+con reintentos.
+
 ## Glosario
 
 | Término                                  | Definición breve                                                                                        |

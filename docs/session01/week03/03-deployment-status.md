@@ -163,6 +163,23 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy aprendí a leer `.status` como el tablero de un viaje:
+no basta con saber cuántos vehículos salieron,
+también necesito saber cuántos llevan la versión nueva,
+están listos y llevan el tiempo suficiente disponibles.
+`Progressing` me dice si el viaje avanza y `progressDeadlineSeconds` evita
+esperar indefinidamente cuando algo se atora.
+Así puedo distinguir entre un rollout todavía en curso y uno que necesita
+investigación.
+
+`.status` es la evidencia observable de que el controlador está acercando
+el estado actual al estado deseado durante el rollout descrito en
+[la lección anterior](02-rollout-strategies.md).
+Por eso permite distinguir entre un cambio que avanza y uno que necesita
+investigación.
+
 ## Glosario
 
 | Término                      | Definición breve                                                                                                         |

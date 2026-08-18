@@ -173,6 +173,22 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí las políticas de borrado como tres formas de cerrar un negocio.
+Con `Background`, cierro la puerta principal y la limpieza continúa detrás.
+Con `Foreground`, espero en el lugar hasta que desaparezcan los dependientes
+que bloquean el borrado.
+Con `Orphan`, cierro el negocio pero dejo los recursos hijos funcionando y
+sin la etiqueta que los ataba al dueño.
+La política correcta depende de si priorizo rapidez, limpieza completa o
+conservar temporalmente los dependientes.
+
+Las tres políticas toman decisiones distintas sobre las relaciones de
+propiedad que acabas de estudiar en [la lección anterior](02-owner-references.md).
+El comportamiento depende de si quieres borrar los dependientes,
+conservarlos o esperar a que terminen de desaparecer.
+
 ## Glosario
 
 | Término                          | Definición breve                                                                                                                 |

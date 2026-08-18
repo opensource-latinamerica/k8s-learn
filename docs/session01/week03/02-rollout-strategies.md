@@ -182,6 +182,21 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí un rollout como cambiar las ruedas de un vehículo mientras sigue
+avanzando.
+Con `RollingUpdate`, Kubernetes reemplaza los Pods poco a poco y usa
+`maxUnavailable` y `maxSurge` para decidir cuánto puede bajar o subir la carga.
+`Recreate` es distinto: primero retira lo anterior y después coloca lo nuevo,
+como cerrar el local para hacer el cambio completo.
+La elección depende de si necesito disponibilidad continua o si prefiero
+evitar que convivan dos versiones.
+
+Las estrategias de rollout deciden cómo cambia la jerarquía de `Deployment`,
+`ReplicaSet` y `Pod` que viste en [la lección anterior](01-deployment-replicaset.md).
+`RollingUpdate` y `Recreate` aplican políticas distintas a esa misma jerarquía.
+
 ## Glosario
 
 | Término                   | Definición breve                                                                                                                      |

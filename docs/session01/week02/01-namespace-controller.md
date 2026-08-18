@@ -343,6 +343,23 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí que borrar un `Namespace` no es quitar una carpeta de golpe.
+Es más parecido a vaciar una habitación antes de entregar la llave:
+el `NamespaceController` descubre qué recursos quedan,
+intenta eliminarlos por partes y solo termina cuando ya no quedan recursos
+o cuando debe informar de un error.
+El `finalizer` mantiene la puerta abierta mientras falta trabajo,
+por eso un namespace puede quedarse en `Terminating` sin que sea un fallo
+misterioso.
+
+Este controlador aplica el bucle de reconciliación y las utilidades de borrado
+que viste en [la semana anterior](../week01/04-controller-utilities.md)
+a un recurso que contiene muchos objetos.
+La idea de observar el estado actual y corregirlo permite vaciar un namespace
+sin depender de una secuencia fija de pasos.
+
 ## Glosario
 
 | Término                      | Definición breve                                                                              |

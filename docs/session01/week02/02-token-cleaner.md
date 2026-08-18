@@ -283,6 +283,22 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy aprendí que el `LegacySATokenCleaner` funciona como una revisión periódica
+de objetos que se fueron acumulando en un cajón.
+No necesita reaccionar en el mismo instante a cada cambio:
+cada ciclo revisa las etiquetas `invalid-since` y `last-used`,
+marca primero lo que parece obsoleto y lo borra después si sigue sin usarse.
+Ese periodo de gracia evita borrar una credencial que todavía podría necesitar
+alguien.
+
+Al igual que el controlador de namespaces explicado en
+[la lección anterior](01-namespace-controller.md), este controlador observa
+el estado mediante informers y procesa el trabajo de forma periódica.
+La diferencia es que aquí evalúa tokens heredados y aplica una limpieza en dos
+etapas para no borrar de inmediato una credencial potencialmente utilizada.
+
 ## Glosario
 
 | Término                         | Definición breve                                                                                   |

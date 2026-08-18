@@ -280,6 +280,22 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí el controlador de `ServiceAccounts` como una persona que comprueba
+que cada `Namespace` activo tenga siempre una cuenta básica disponible.
+Cuando aparece un `Namespace` activo,
+usa el patrón get-or-create: busca la cuenta `default` y solo la crea si falta.
+Si el namespace se está borrando,
+deja de reponerla porque ya no tendría sentido preparar una llave para una
+habitación que está a punto de desaparecer.
+
+Esta reconciliación completa el ciclo de vida del `Namespace`:
+después de estudiar cómo se limpia un token heredado en
+[la lección anterior](02-token-cleaner.md), aquí se garantiza la identidad
+básica en un namespace activo y se deja de crear cuando comienza su eliminación.
+El patrón get-or-create muestra otra forma de mantener el estado deseado.
+
 ## Glosario
 
 | Término                     | Definición breve                                                                                         |

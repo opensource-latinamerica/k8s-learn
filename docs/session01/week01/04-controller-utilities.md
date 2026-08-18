@@ -329,6 +329,23 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy me quedó claro que estas utilidades ayudan a que un controlador deje
+explícitas sus relaciones y sus tareas pendientes.
+Una `ownerReference` es como poner el nombre del responsable en un objeto,
+un finalizer es como una lista de limpieza que debe completarse antes de cerrar,
+y `CreateOrUpdate` o `CreateOrPatch` permiten mantener el recurso en el estado
+correcto sin escribir lógica repetida.
+La idea común es que cada reconciliación pueda volver a ejecutar estas acciones
+sin romper lo que ya estaba funcionando.
+
+Aquí se unen los elementos de la semana: como vimos en [las lecciones
+anteriores](03-workqueues.md), el controlador observa mediante informers,
+recibe trabajo desde una workqueue y ejecuta cambios idempotentes.
+Estas utilidades permiten aplicar el patrón de reconciliación a recursos
+concretos sin repetir lógica.
+
 ## Glosario
 
 | Término                  | Definición breve                                                                                                         |
