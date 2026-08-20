@@ -148,6 +148,23 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí el `GraphBuilder` como un mapa vivo del clúster.
+Cada objeto es un punto y cada `ownerReference` es una flecha que va del
+dependiente hacia su propietario.
+Cuando llegan eventos de creación, actualización o borrado,
+el mapa se ajusta y la workqueue deja pendientes los objetos que necesitan
+revisión.
+Así el `GarbageCollector` no tiene que adivinar las relaciones cuando busca
+recursos huérfanos.
+
+El `GraphBuilder` convierte en un grafo las relaciones de propiedad que
+aparecen en la jerarquía de `Deployment`, `ReplicaSet` y `Pod` estudiada en
+[la semana anterior](../week03/01-deployment-replicaset.md).
+Así, el patrón de reconciliación y sus eventos adquieren una representación
+que el `GarbageCollector` puede consultar.
+
 ## Glosario
 
 | Término                                | Definición breve                                                                                                                     |

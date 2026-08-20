@@ -365,6 +365,20 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí que Kubernetes funciona como alguien que revisa una lista de pendientes
+una y otra vez: compara lo que pedí en `.spec` con lo que realmente está pasando
+en `.status` y corrige la diferencia.
+No necesita recordar cada paso anterior,
+porque puede mirar el estado actual y volver a acercarlo al objetivo.
+Eso explica por qué el sistema puede recuperarse de un fallo y por qué la
+reconciliación debe ser idempotente: repetir la misma revisión no debe causar
+un cambio inesperado.
+
+Este patrón es el punto de partida para entender cómo Kubernetes observa
+el estado y decide cuándo reconciliarlo.
+
 ## Glosario
 
 | Término                      | Definición breve                                                                                         |

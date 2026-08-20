@@ -539,6 +539,20 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy aprendí que, a partir del bucle de reconciliación explicado en
+[la lección anterior](01-reconciliation-theory.md), un informer es como una recepción que mantiene una copia
+actualizada de lo que ocurre en el API server.
+El `Reflector` trae las novedades,
+la `DeltaFIFO` agrupa los cambios pendientes,
+el `Indexer` almacena los objetos y el `Lister` me deja consultarlos sin hacer otra
+llamada a la fuente principal.
+Por eso los controladores pueden trabajar con rapidez sin golpear al API server
+cada vez que necesitan leer un objeto.
+El informer alimenta la observación del bucle de reconciliación,
+y deja preparados los cambios que después consumirá el controlador.
+
 ## Glosario
 
 | Término                            | Definición breve                                                                                                  |

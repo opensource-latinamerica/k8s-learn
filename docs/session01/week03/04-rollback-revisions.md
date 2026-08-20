@@ -183,6 +183,21 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy entendí las revisiones como una libreta de versiones del `Deployment`.
+Cada cambio en la plantilla de los `Pod` deja una página asociada a un `ReplicaSet`,
+así que un rollback no borra el pasado: crea una nueva revisión usando una
+plantilla anterior.
+`revisionHistoryLimit` decide cuántas páginas conservo,
+y `CHANGE-CAUSE` me ayuda a recordar por qué hice cada cambio cuando toca
+investigar un problema.
+
+El rollback reutiliza la relación entre `Deployment`, `ReplicaSet` y `Pod`
+que viste en [la primera lección de esta semana](01-deployment-replicaset.md),
+y aplica una estrategia de actualización como las estudiadas después.
+El controlador sigue reconciliando hasta alcanzar el estado deseado restaurado.
+
 ## Glosario
 
 | Término                   | Definición breve                                                                                                              |

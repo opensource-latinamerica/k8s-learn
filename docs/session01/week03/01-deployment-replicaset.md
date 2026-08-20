@@ -177,6 +177,22 @@ intenta responder las siguientes preguntas:
 Si no puedes responder alguna pregunta con confianza,
 revisa nuevamente el contenido de la sesión antes de avanzar.
 
+## Lo que aprendí hoy
+
+Hoy me quedó claro que un `Deployment` no administra cada `Pod` directamente.
+Es como un director que encarga una función a un responsable de escenario:
+el `DeploymentController` crea y escala el `ReplicaSet`,
+y el `ReplicaSetController` se encarga de mantener el número correcto de Pods.
+Cada cambio en la plantilla crea una nueva versión,
+lo que permite distinguir la versión nueva de la anterior y avanzar sin perder
+el historial.
+
+La jerarquía `Deployment` → `ReplicaSet` → `Pod` retoma el patrón de
+reconciliación y creación condicional que estudiaste en
+[la semana anterior](../week02/03-serviceaccounts-controller.md).
+Además, usa `ownerReferences` para expresar qué controlador gestiona cada
+recurso.
+
 ## Glosario
 
 | Término                | Definición breve                                                                                                          |
