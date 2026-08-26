@@ -23,13 +23,15 @@ si la nueva imagen tiene un defecto, la aplicación deja de funcionar completame
 hasta que corriges el problema.
 Kubernetes ofrece dos estrategias de actualización que representan extremos distintos de esta disyuntiva.
 
-> **Analogía — el cambio de menú en un restaurante:**
-> La estrategia `Recreate` es como cerrar el restaurante un día entero para renovar completamente la cocina.
-> Los clientes no pueden entrar durante la renovación,
-> pero al reabrir todo funciona con el nuevo equipamiento.
-> La estrategia `RollingUpdate` es como renovar la cocina en secciones mientras el restaurante sigue abierto:
-> una parte de los cocineros trabaja con la cocina nueva y otra con la vieja,
-> los clientes notan una transición suave y el servicio nunca se interrumpe por completo.
+> **Analogía — cambiar el menú de un comedor escolar:**
+> La estrategia `Recreate` es como cerrar el comedor durante un turno
+> para renovar por completo la cocina.
+> Durante la renovación nadie recibe el servicio,
+> pero al reabrir todo funciona con el nuevo equipo.
+> La estrategia `RollingUpdate` es como renovar la cocina por secciones
+> mientras el comedor sigue abierto:
+> una parte trabaja con el equipo nuevo y otra con el anterior,
+> sin interrumpir por completo el servicio.
 
 ## Estrategia Recreate
 

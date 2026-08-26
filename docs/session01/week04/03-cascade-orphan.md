@@ -34,12 +34,12 @@ y lo elimina de `etcd` inmediatamente.
 El `GarbageCollector` detecta que los dependientes tienen una `ownerReference`
 a un propietario que ya no existe y los borra en el fondo.
 
-> **Analogía — derribo de un edificio sin aviso previo:**
-> El ayuntamiento firma la orden de derribo y el edificio desaparece del registro oficial al instante.
+> **Analogía — clausurar un negocio y limpiar después:**
+> La autoridad registra la clausura y el negocio desaparece del padrón al instante.
 > La cuadrilla de limpieza (el GarbageCollector) llega después
-> para recoger los escombros (los Pods, ReplicaSets, etc.).
-> Los vecinos (el sistema de monitoreo) pueden ver brevemente
-> que los escombros existen sin que el edificio figure en los registros.
+> para retirar lo que quedó dentro (los Pods, ReplicaSets, etc.).
+> Durante un momento, el sistema de monitoreo puede ver esos recursos
+> aunque el propietario ya no figure en los registros.
 
 ```bash
 # Borrado en background (comportamiento por defecto)
@@ -65,12 +65,12 @@ Solo cuando todos esos dependientes han desaparecido,
 el `GarbageCollector` elimina el finalizer `foregroundDeletion` del propietario,
 lo que permite que el API server lo borre definitivamente.
 
-> **Analogía — protocolo de evacuación antes de demoler:**
-> En un derribo controlado, las autoridades primero confirman
-> que todos los inquilinos (Pods con `blockOwnerDeletion=true`) han abandonado el edificio.
-> Solo cuando el último inquilino está fuera, proceden a demoler el edificio principal.
-> El edificio aparece en los registros como "en proceso de desalojo"
-> hasta que la demolición termina por completo.
+> **Analogía — desalojar un local antes de entregarlo:**
+> En una entrega controlada, la persona responsable primero confirma
+> que todo el equipo (Pods con `blockOwnerDeletion=true`) salió del local.
+> Solo cuando no queda nada pendiente, entrega el espacio principal.
+> El local aparece en los registros como "en proceso de entrega"
+> hasta que la operación termina por completo.
 
 ```bash
 # Iniciar borrado foreground

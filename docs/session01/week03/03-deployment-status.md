@@ -21,11 +21,11 @@ No es solo información de lectura:
 herramientas de CI/CD, controladores de nivel superior y el propio operador humano
 dependen de él para decidir si continuar, esperar o intervenir.
 
-> **Analogía — el panel de control de un vuelo:**
-> Así como los pilotos no necesitan asomarse por la ventana para saber si el avión está subiendo,
+> **Analogía — el tablero de un autobús en carretera:**
+> Así como quien conduce no necesita detenerse para revisar cada componente,
 > el `.status` del `Deployment` te da todos los indicadores sin tener que inspeccionar cada `Pod`.
-> Cuando la altimetría (`availableReplicas`) coincide con el plan de vuelo (`replicas`),
-> el sistema está en crucero estable.
+> Cuando las réplicas disponibles (`availableReplicas`) coinciden con el objetivo (`replicas`),
+> el sistema mantiene una operación estable.
 > Cuando una condición cambia a `False`,
 > es la luz de emergencia que indica que algo requiere atención.
 

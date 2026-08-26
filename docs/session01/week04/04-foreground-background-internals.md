@@ -21,12 +21,11 @@ Es un **controlador** que reacciona a eventos en tiempo real.
 Corre dentro del `kube-controller-manager` y procesa una workqueue
 con los objetos candidatos a borrado.
 
-> **Analogía — el gestor de residuos de un edificio de oficinas:**
-> El gestor no pasa a horas fijas con un calendario.
-> Tiene un intercomunicador conectado a cada oficina (los informers).
+> **Analogía — el encargado de mantenimiento de un edificio:**
+> El encargado no revisa las oficinas solo a horas fijas.
+> Recibe avisos de cada espacio (los informers).
 > Cuando una oficina se vacía (el propietario desaparece),
-> el intercomunicador avisa al gestor,
-> quien apunta la oficina en su lista de pendientes (la workqueue).
+> registra el pendiente en su lista de trabajo (la workqueue).
 > Si la política es "foreground", el gestor espera a que todos los muebles sean retirados
 > antes de liberar la llave de la oficina principal.
 > Si es "background", la llave se libera de inmediato

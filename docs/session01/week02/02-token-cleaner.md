@@ -27,16 +27,15 @@ el mecanismo preferido para inyectar credenciales en los `Pods` es el
 tiene tiempo de vida limitado (por defecto 1 hora),
 se renueva automáticamente y se invalida cuando el `Pod` es eliminado.
 
-> **Analogía — las llaves maestras del hotel:**
-> Las tarjetas magnéticas de los hoteles modernos caducan al hacer el
-> _check-out_: aunque alguien conserve la tarjeta, ya no abre la puerta.
+> **Analogía — un pase temporal de una empresa:**
+> Un pase temporal deja de funcionar cuando termina el periodo autorizado,
+> aunque alguien conserve la tarjeta.
 > Los tokens de volumen proyectado funcionan igual:
 > al terminar el `Pod`, el token queda inutilizable.
-> Los tokens heredados, en cambio, son como llaves físicas copiadas
-> hace años: siguen abriendo la puerta indefinidamente,
-> aunque el huésped original se haya ido hace tiempo.
-> El `LegacySATokenCleaner` es el servicio de seguridad
-> que revisa el cajero de llaves y destruye las copias antiguas.
+> Una credencial antigua que nunca se revocó, en cambio,
+> podría seguir abriendo la puerta indefinidamente.
+> El `LegacySATokenCleaner` es el equipo de seguridad
+> que localiza y desactiva esas credenciales antiguas.
 
 Sin embargo,
 clústeres que llevan años en funcionamiento acumulan `Secrets` del tipo antiguo,
@@ -48,6 +47,34 @@ Esos tokens:
   y el `Secret` tiene la anotación `kubernetes.io/service-account.name`).
 - Nunca expiran por sí solos.
 - Pueden seguir siendo válidos aunque nadie los use.
+
+## Contexto de diseño público
+
+KEP-2799 parte de que los tokens vinculados y proyectados ya eran estables en
+Kubernetes v1.22.
+El objetivo no era borrar todos los tokens basados en `Secret`, sino dejar de crear
+los automáticos y retirar únicamente los automáticos que dejaran de usarse.
+Los `Secrets` creados explícitamente quedan fuera de ese alcance.
+
+La propuesta separa el rastreo del uso de la limpieza.
+El API server registra el uso y mantiene el `ConfigMap` con la fecha desde la que
+ese registro es fiable; el `kube-controller-manager` solo limpia cuando puede usar
+esa fecha como límite seguro.
+En la revisión pública del KEP, se preguntó qué ocurriría al activar la limpieza
+sin el rastreo.
+La respuesta incorporada al diseño fue que, sin ese `ConfigMap`, el limpiador no
+borra tokens porque no puede determinar con seguridad su último uso.
+
+El compromiso es deliberadamente conservador: se invalida primero, se permite que
+el administrador reactive el token durante el periodo de gracia y solo después se
+elimina.
+Así se reduce el riesgo de romper cargas que todavía dependan de una credencial
+heredada, aunque la retirada completa tarde más.
+
+- **Problema:** reducir credenciales automáticas de larga duración sin eliminar tokens solicitados explícitamente.
+- **Decisión:** separar `LegacyServiceAccountTokenTracking` de `LegacyServiceAccountTokenCleanUp` y hacer que la limpieza dependa de la evidencia de rastreo.
+- **Restricción o compromiso:** la limpieza se vuelve una operación segura por defecto, pero no actúa cuando no puede demostrar el periodo sin uso.
+- **Evidencia:** [KEP-2799](https://github.com/kubernetes/enhancements/tree/master/keps/sig-auth/2799-reduction-of-secret-based-service-account-token), [discusión de revisión de KEP-2799](https://github.com/kubernetes/enhancements/pull/2800), [implementación beta](https://github.com/kubernetes/kubernetes/pull/120682).
 
 ## Condiciones para borrar un token heredado
 
@@ -247,14 +274,14 @@ Los parámetros internos del controlador son:
 El `LegacySATokenCleaner` no necesita workqueue porque su trabajo es
 **por lotes y periódico**, no reactivo a eventos individuales.
 
-> **Analogía — la limpieza nocturna vs. el conserje reactivo:**
-> Un conserje que reacciona a cada suciedad en tiempo real (workqueue)
-> es ideal para derrames en el pasillo: acción rápida y precisa.
-> Pero una limpieza nocturna general (bucle periódico)
-> es más eficiente para revisar todos los espacios del edificio,
-> limpiar lo que se acumuló y llevar un registro.
-> El `LegacySATokenCleaner` es esa limpieza nocturna:
-> una vez al día revisa todos los tokens y aplica las reglas.
+> **Analogía — la limpieza programada y la atención urgente:**
+> El personal que atiende una mancha en cuanto aparece (workqueue)
+> es ideal para un incidente puntual: actúa rápido y con precisión.
+> Pero una limpieza programada (bucle periódico)
+> es más eficiente para revisar todos los espacios,
+> atender lo que se acumuló y llevar un registro.
+> El `LegacySATokenCleaner` funciona como esa limpieza programada:
+> revisa todos los tokens y aplica las reglas en cada ciclo.
 
 | Característica | Controlador con workqueue           | `LegacySATokenCleaner`                    |
 | -------------- | ----------------------------------- | ----------------------------------------- |
@@ -316,6 +343,8 @@ etapas para no borrar de inmediato una credencial potencialmente utilizada.
 - [Managing Service Accounts](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/) — Documentación oficial
 - [Código fuente: legacy_serviceaccount_token_cleaner.go](https://github.com/kubernetes/kubernetes/blob/master/pkg/controller/serviceaccount/legacy_serviceaccount_token_cleaner.go) — kubernetes/kubernetes
 - [KEP-2799: Reduction of Secret-based Service Account Tokens](https://github.com/kubernetes/enhancements/tree/master/keps/sig-auth/2799-reduction-of-secret-based-service-account-token) — Propuesta de mejora
+- [Discusión de diseño de KEP-2799](https://github.com/kubernetes/enhancements/pull/2800) — Revisión pública de las puertas de funcionalidad y el requisito de `tracked-since`
+- [Implementación de `LegacyServiceAccountTokenCleanUp` en beta](https://github.com/kubernetes/kubernetes/pull/120682) — Comportamiento entregado en Kubernetes v1.29
 
 ## Siguiente paso
 
