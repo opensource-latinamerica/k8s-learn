@@ -30,24 +30,24 @@ Contribuir → ¿Cómo mejoro el proyecto?        → Lectura de código, propue
 
 ## Contenido disponible
 
-### [Sesión 1 — Reconciliación en Kubernetes a profundidad](content/session01/README.md)
+### [Sesión 1 — Reconciliación en Kubernetes a profundidad](docs/session01/README.md)
 
 **Semana 1 — Fundamentos**
 
 | Documento                                                                                   | Tema                                                                 |
 | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| [01 — La reconciliación: fundamentos](content/session01/week01/01-reconciliation-theory.md) | Bucle de control, estado deseado vs. actual, patrón Operator         |
-| [02 — Informers, cachés y listers](content/session01/week01/02-informers-listers.md)        | `SharedIndexInformer`, `Reflector`, `DeltaFIFO`, `Indexer`, `Lister` |
-| [03 — Workqueues](content/session01/week01/03-workqueues.md)                                | `TypedInterface`, rate limiters, patrón `Forget`                     |
-| [04 — Utilidades de controladores](content/session01/week01/04-controller-utilities.md)     | `SetControllerReference`, finalizers, `CreateOrUpdate`               |
+| [01 — La reconciliación: fundamentos](docs/session01/week01/01-reconciliation-theory.md) | Bucle de control, estado deseado vs. actual, patrón Operator         |
+| [02 — Informers, cachés y listers](docs/session01/week01/02-informers-listers.md)        | `SharedIndexInformer`, `Reflector`, `DeltaFIFO`, `Indexer`, `Lister` |
+| [03 — Workqueues](docs/session01/week01/03-workqueues.md)                                | `TypedInterface`, rate limiters, patrón `Forget`                     |
+| [04 — Utilidades de controladores](docs/session01/week01/04-controller-utilities.md)     | `SetControllerReference`, finalizers, `CreateOrUpdate`               |
 
 **Semana 2 — Controladores básicos**
 
 | Documento                                                                                           | Tema                                                        |
 | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| [01 — El controlador de Namespace](content/session01/week02/01-namespace-controller.md)             | Ciclo de vida `Active / Terminating`, borrado en cascada    |
-| [02 — El limpiador de tokens heredados](content/session01/week02/02-token-cleaner.md)               | Tokens de `ServiceAccount` obsoletos, borrado en dos etapas |
-| [03 — El controlador de ServiceAccounts](content/session01/week02/03-serviceaccounts-controller.md) | Patrón get-or-create idempotente, manejo de tombstones      |
+| [01 — El controlador de Namespace](docs/session01/week02/01-namespace-controller.md)             | Ciclo de vida `Active / Terminating`, borrado en cascada    |
+| [02 — El limpiador de tokens heredados](docs/session01/week02/02-token-cleaner.md)               | Tokens de `ServiceAccount` obsoletos, borrado en dos etapas |
+| [03 — El controlador de ServiceAccounts](docs/session01/week02/03-serviceaccounts-controller.md) | Patrón get-or-create idempotente, manejo de tombstones      |
 
 ## Contexto de creación
 
@@ -56,5 +56,5 @@ que se reúne periódicamente para leer el código fuente de Kubernetes en profu
 Cada sesión genera notas, diagramas y documentos que se incorporan aquí
 para que cualquier persona pueda seguir la misma ruta de aprendizaje.
 
-La [minuta de la sesión inaugural (2026-05-22)](content/session01/2026-05-22-arranque-grupo-estudio-kubernetes.md)
+La [minuta de la sesión inaugural (2026-05-22)](minutes/session01/2026-05-22-meetup.md)
 describe el origen del grupo y sus acuerdos de trabajo.
