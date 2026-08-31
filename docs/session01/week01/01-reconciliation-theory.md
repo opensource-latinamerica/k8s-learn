@@ -24,14 +24,13 @@ Un nodo puede perder conectividad,
 un contenedor puede salir de forma inesperada,
 o un operador puede aplicar una configuración errónea.
 
-> **Analogía — el jardinero y el huerto:**
-> Imagina un jardinero que quiere mantener exactamente 10 plantas de tomate.
-> Si una se seca, no escribe un informe ni espera instrucciones:
-> simplemente planta una nueva.
-> Si por accidente se añaden 12, arranca las dos sobrantes.
-> Nunca hay que pedirle que "corrija" la situación;
-> solo sabe el objetivo y actúa para lograrlo continuamente.
-> Los controladores de Kubernetes son ese jardinero.
+> **Analogía — el encargado de una bodega:**
+> Imagina una bodega que debe mantener exactamente 100 cajas de un producto.
+> Si se dañan cinco, el encargado solicita cinco más sin esperar una orden nueva.
+> Si llegan 105, aparta las cinco sobrantes para devolverlas o distribuirlas.
+> No necesita saber qué causó la diferencia:
+> compara la existencia actual con la cantidad objetivo y actúa para corregirla.
+> Los controladores de Kubernetes trabajan de esa manera.
 
 Sin un mecanismo de corrección continua,
 cada fallo requeriría intervención manual.
@@ -83,13 +82,13 @@ El ejemplo clásico es el termostato:
 
 Kubernetes aplica exactamente este principio a escala de clúster.
 
-> **Analogía — el termostato de un datacenter:**
-> Imagina ahora ese mismo termostato controlando no una habitación,
-> sino miles de servidores a la vez.
-> Cada rack tiene su temperatura deseada en la configuración;
-> el sistema central mide constantemente cada uno
-> y activa o desactiva la refrigeración donde sea necesario.
-> Eso es Kubernetes: miles de "termostatos" independientes
+> **Analogía — un centro de distribución:**
+> Imagina un centro de distribución que abastece a varias tiendas.
+> Cada tienda declara cuántas cajas necesita de cada producto;
+> el centro revisa las existencias y envía solo lo que hace falta.
+> Varios equipos pueden trabajar al mismo tiempo,
+> cada uno responsable de una línea de productos.
+> Eso es Kubernetes: muchos bucles independientes
 > (los controladores), cada uno responsable de su dominio,
 > ajustando el clúster hacia el estado declarado.
 
@@ -168,12 +167,12 @@ el controlador decide qué hacer comparando el estado observado ahora
 contra el estado deseado,
 no por el tipo exacto de evento que llegó primero.
 
-> **Analogía — level-based vs edge-based:**
-> En electrónica, un circuito _edge-based_ reacciona al momento exacto
-> en que una señal cambia de 0 a 1 (el "flanco").
-> Si te pierdes ese flanco, no sabes qué ocurrió.
-> Un circuito _level-based_ mide el nivel actual de la señal en cada instante
-> y actúa según lo que ve ahora, no según cuándo cambió.
+> **Analogía — el nivel de tráfico en una avenida:**
+> Un sistema que reacciona al evento solo registra el instante
+> en que llega el último auto.
+> Si pierde ese aviso, no sabe qué ocurrió.
+> Un sistema basado en el nivel observa cuántos autos hay ahora
+> y actúa según la congestión actual, no según cuándo llegó cada uno.
 > Kubernetes usa el segundo enfoque:
 > aunque pierdas un evento, la reconciliación posterior
 > mide el estado real y toma la decisión correcta de todos modos.
@@ -240,11 +239,11 @@ La reconciliación es **eventual**:
 el clúster no garantiza que el estado deseado se alcance de forma inmediata,
 sino que los controladores **siguen intentándolo** hasta lograrlo.
 
-> **Analogía — el GPS recalculando la ruta:**
-> Cuando sigues el GPS y te equivocas de salida,
-> el sistema no se rinde ni protesta.
-> Recalcula la ruta desde donde estás ahora
-> y te sigue guiando hacia el destino.
+> **Analogía — un taxi que recalcula la ruta:**
+> Cuando el taxi toma una salida equivocada,
+> quien conduce no reinicia todo el viaje.
+> Recalcula la ruta desde donde está ahora
+> y continúa hacia el destino.
 > No importa cuántas veces te equivoques:
 > cada vez que recalcula, parte del estado actual.
 > Kubernetes hace lo mismo: si un Pod falla, se reinicia el cálculo

@@ -38,11 +38,11 @@ tendrá un UID diferente.
 Los `Pods` que apuntaban al UID antiguo quedan huérfanos
 (su propietario no existe en el grafo) y el `GarbageCollector` los limpia.
 
-> **Analogía — el número de pasaporte vs. el nombre:**
-> Dos personas pueden llamarse "María García",
-> pero cada una tiene un número de pasaporte único.
+> **Analogía — el número de identificación y el nombre:**
+> Dos personas pueden tener el mismo nombre,
+> pero cada una tiene un número de identificación único.
 > Si buscas a alguien solo por nombre, puedes confundir a dos personas distintas.
-> El UID del objeto Kubernetes es como el número de pasaporte:
+> El UID del objeto Kubernetes es como ese número de identificación:
 > identifica sin ambigüedad al propietario exacto al que se hace referencia,
 > aunque se cree otro objeto con el mismo nombre después.
 

@@ -20,7 +20,7 @@ el `DeploymentController` crea un nuevo `ReplicaSet` y asigna una nueva **revisi
 Los `ReplicaSets` previos se conservan con cero réplicas:
 son el historial de revisiones que permite el rollback.
 
-> **Analogía — el historial de versiones de un documento:**
+> **Analogía — el historial de un contrato:**
 > Cada vez que guardas una nueva versión de un contrato,
 > las versiones anteriores se archivan automáticamente.
 > Si el cliente rechaza la última versión firmada,

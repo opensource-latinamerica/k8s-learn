@@ -24,9 +24,9 @@ Sin un mecanismo centralizado,
 cada controlador tendría que recordar y rastrear manualmente todos los objetos que creó,
 lo que es frágil y propenso a fugas de recursos.
 
-> **Analogía — el registro de propiedad de inmuebles:**
-> En una ciudad, el ayuntamiento lleva un registro que dice:
-> "el edificio B pertenece al solar A; el apartamento C pertenece al edificio B".
+> **Analogía — un registro catastral:**
+> En una ciudad, el registro catastral conserva relaciones como:
+> "el edificio B pertenece al lote A; el departamento C pertenece al edificio B".
 > Cuando el solar A es demolido, el ayuntamiento sabe automáticamente
 > que el edificio B y el apartamento C ya no tienen propietario legítimo
 > y deben ser gestionados (demolidos o transferidos).

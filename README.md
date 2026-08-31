@@ -21,7 +21,7 @@ partiendo siempre del código real en [`kubernetes/kubernetes`](https://github.c
 
 El contenido sigue una progresión desde los fundamentos hasta los componentes avanzados:
 
-```
+```text
 Descubrir  → ¿Qué es la reconciliación?      → Teoría del bucle de control
 Construir  → ¿Cómo funciona por dentro?       → Informers, workqueues, utilidades
 Analizar   → ¿Cómo lo aplica Kubernetes?      → Controladores reales del código fuente
@@ -32,7 +32,7 @@ Contribuir → ¿Cómo mejoro el proyecto?        → Lectura de código, propue
 
 ### [Sesión 1 — Reconciliación en Kubernetes a profundidad](docs/session01/README.md)
 
-**Semana 1 — Fundamentos**
+#### Semana 1 — Fundamentos
 
 | Documento                                                                                   | Tema                                                                 |
 | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
@@ -41,7 +41,7 @@ Contribuir → ¿Cómo mejoro el proyecto?        → Lectura de código, propue
 | [03 — Workqueues](docs/session01/week01/03-workqueues.md)                                | `TypedInterface`, rate limiters, patrón `Forget`                     |
 | [04 — Utilidades de controladores](docs/session01/week01/04-controller-utilities.md)     | `SetControllerReference`, finalizers, `CreateOrUpdate`               |
 
-**Semana 2 — Controladores básicos**
+#### Semana 2 — Controladores básicos
 
 | Documento                                                                                           | Tema                                                        |
 | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |

@@ -26,14 +26,14 @@ y cada `ReplicaSet` es quien mantiene el grupo de `Pods` corriendo.
 Esta separación de responsabilidades no es arbitraria:
 cada capa resuelve un problema diferente.
 
-> **Analogía — el arquitecto y el capataz de obra:**
-> El `Deployment` actúa como el arquitecto:
-> define el plano (plantilla de `Pod`) y decide cuándo construir, remodelar o derribar.
-> El `ReplicaSet` actúa como el capataz:
+> **Analogía — el ingeniero y el maestro de obra:**
+> El `Deployment` actúa como el ingeniero responsable:
+> define el plano (plantilla de `Pod`) y decide cuándo construir, remodelar o retirar.
+> El `ReplicaSet` actúa como el maestro de obra:
 > traduce las instrucciones del arquitecto en trabajo concreto,
-> asegurándose de que siempre haya exactamente el número de obreros (Pods) trabajando.
-> Si el arquitecto cambia el plano, el capataz viejo no se adapta:
-> se contrata uno nuevo que ejecute el diseño actualizado.
+> asegurándose de que siempre haya exactamente el número de equipos (Pods) trabajando.
+> Si el ingeniero cambia el plano, el maestro de obra anterior no se adapta:
+> se asigna uno nuevo que ejecute el diseño actualizado.
 
 | Capa        | Recurso      | Responsabilidad principal                                       |
 | ----------- | ------------ | --------------------------------------------------------------- |

@@ -110,27 +110,69 @@ URLs de referencia frecuentes:
 | KEPs                     | `https://github.com/kubernetes/enhancements`                      |
 | Changelog                | `https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG/` |
 
+#### 3c. KEPs y discusiones públicas de diseño
+
+Cuando el tema sea una decisión arquitectónica, una puerta de funcionalidad,
+una deprecación o un cambio de comportamiento, investiga también su procedencia:
+
+1. Lee el `README.md` del KEP desde `raw.githubusercontent.com` y registra sus secciones
+   `Motivation`, `Goals`, `Non-Goals`, `Proposal`, `Design Details`, `Alternatives` y
+   `Upgrade / Downgrade Strategy` cuando existan.
+2. Abre el issue de seguimiento del KEP y el PR que introdujo o modificó el diseño.
+   Conserva solo comentarios humanos que expliquen una restricción, una alternativa descartada,
+   una compatibilidad o un cambio de la propuesta.
+3. Vincula el PR de implementación para comprobar que la explicación refleja el comportamiento
+   entregado, no solo una propuesta anterior.
+4. No uses comentarios de bots, aprobaciones sin razonamiento ni mensajes de calendario como evidencia
+   de una decisión de diseño.
+5. Si no hay KEP aplicable, dilo explícitamente y usa los comentarios del código y el historial del PR
+   de implementación como fuentes primarias.
+
+Usa enlaces directos y estables a estos artefactos:
+
+```text
+https://github.com/kubernetes/enhancements/tree/master/keps/<sig>/<numero>-<tema>
+https://github.com/kubernetes/enhancements/issues/<numero>
+https://github.com/kubernetes/enhancements/pull/<numero>
+https://github.com/kubernetes/kubernetes/pull/<numero>
+```
+
 ### Paso 4 — Sintetizar y traducir
 
 Combina la información recopilada siguiendo estas reglas:
 
 1. **Prioridad de fuentes** (de mayor a menor confiabilidad):
    1. Documentación oficial `kubernetes/website` (rama `main`)
-   2. Blog oficial de Kubernetes
-   3. KEPs aprobados
-   4. Fuentes de la comunidad verificadas
+   1. Blog oficial de Kubernetes
+   1. KEPs aprobados
+   1. Fuentes de la comunidad verificadas
 
-2. **Traducción al español**:
+1. **Traducción al español**:
    - Usa español neutro sin regionalismos.
    - Los términos técnicos sin traducción establecida se mantienen en inglés
      (`Pod`, `Deployment`, `namespace`, `kubectl`) y se escriben en `código`.
    - Proporciona una breve explicación la primera vez que aparece un término nuevo.
 
-3. **Indicar la versión** de Kubernetes a la que aplica el contenido cuando sea relevante.
+1. **Indicar la versión** de Kubernetes a la que aplica el contenido cuando sea relevante.
 
-4. **Citar las fuentes** al final del documento con enlaces directos a los originales en inglés.
+1. **Citar las fuentes** al final del documento con enlaces directos a los originales en inglés.
 
-5. **Analogías obligatorias** — cada concepto abstracto debe tener al menos una analogía
+1. **Contexto de diseño público** — cuando el tema esté cubierto por un KEP, añade antes de
+   `## Referencias` una sección con este formato:
+
+```markdown
+## Contexto de diseño público
+
+- **Problema:** <motivación comprobable en el KEP>.
+- **Decisión:** <mecanismo elegido y comportamiento resultante>.
+- **Restricción o compromiso:** <compatibilidad, seguridad, actualización o alternativa descartada>.
+- **Debate que la aclara:** [comentario humano en issue o PR](URL).
+```
+
+Diferencia lo que afirma el KEP de lo que se aclara durante la revisión.
+No infieras intenciones no expresadas ni conviertas una discusión puntual en una regla general.
+
+1. **Analogías obligatorias** — cada concepto abstracto debe tener al menos una analogía
    del mundo cotidiano que lo haga concreto.
    Sigue este patrón fijo para cada analogía:
 
@@ -140,7 +182,6 @@ Combina la información recopilada siguiendo estas reglas:
    ```
 
    Criterios para una buena analogía en k8s-learn:
-
    - **Concreta:** usa objetos o situaciones reales, no otros conceptos técnicos.
    - **Proporcional:** la analogía cubre solo el aspecto que estás explicando;
      no intentes que cubra todo el componente.
@@ -175,7 +216,7 @@ Combina la información recopilada siguiendo estas reglas:
    | Backoff exponencial        | Dispositivos reconectándose tras apagón             |
    | Problema de escalar obs.   | Banco y alertas de movimiento vs llamadas repetidas |
 
-6. **Evitar simplificaciones arquitectónicas** en temas de controladores y reconciliación:
+1. **Evitar simplificaciones arquitectónicas** en temas de controladores y reconciliación:
 
 - Explica que no existe un único loop global,
   sino múltiples controladores independientes en paralelo.
@@ -193,13 +234,13 @@ haz una validación de precisión para detectar sobre-simplificaciones:
 
 1. Revisa que no se afirme implícita o explícitamente
    la existencia de un controlador único para todo Kubernetes.
-2. Verifica que los eventos no se presenten como fuente de verdad,
+1. Verifica que los eventos no se presenten como fuente de verdad,
    sino como disparadores hacia una reconciliación basada en estado.
-3. Confirma que el texto indique límites reales:
+1. Confirma que el texto indique límites reales:
    no hay convergencia instantánea,
    puede haber latencia,
    backoff y reintentos.
-4. Comprueba que los ejemplos prácticos incluyan recursos concretos
+1. Comprueba que los ejemplos prácticos incluyan recursos concretos
    y flujo entre componentes del plano de control.
 
 ### Paso 6 — Formatear el resultado
@@ -247,6 +288,9 @@ Antes de entregar el resultado, verifica:
 - [ ] El español es claro y no contiene anglicismos innecesarios.
 - [ ] Las fuentes están citadas con URLs directas.
 - [ ] El documento sigue la estructura Diataxis apropiada para el tipo de contenido.
+- [ ] Cuando corresponde, el documento distingue el KEP, la discusión pública de diseño y la implementación.
+- [ ] Cada afirmación sobre el motivo de una decisión tiene un enlace a una fuente primaria pública.
+- [ ] Los comentarios citados contienen razonamiento técnico humano; no son mensajes de bots ni aprobaciones vacías.
 - [ ] En temas de reconciliación,
       se diferencia explícitamente el modelo level-based del modelo basado en eventos.
 - [ ] En temas de controladores,

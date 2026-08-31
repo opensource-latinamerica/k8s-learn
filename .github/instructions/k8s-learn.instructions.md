@@ -90,7 +90,7 @@ Reglas clave por tipo:
 
 - Diseña cada sección de acuerdo con el embudo de adopción de este proyecto:
 
-  ```
+  ```text
   Descubrir  → "¿Qué es Kubernetes?"       → Explicación, README
   Evaluar    → "¿Por qué necesito k8s?"    → Arquitectura, Comparativas
   Comenzar   → "¿Cómo empiezo?"            → Quickstart, Tutorial
@@ -167,7 +167,7 @@ Aplica las **4 C's de la documentación técnica efectiva** en cada archivo:
 
   Deberías ver `mi-pod` con estado `Running`.
 
-  ```
+  ```text
 
   ```
 
@@ -175,6 +175,33 @@ Aplica las **4 C's de la documentación técnica efectiva** en cada archivo:
   pídele a alguien ajeno al tema que lo recorra y señale cualquier ambigüedad.
 - **Ciclo de actualización:** revisa cada documento al menos una vez por versión menor de Kubernetes
   o cuando cambien los comandos o manifiestos que contiene.
+
+### 7.4 Contexto de decisiones públicas
+
+- En explicaciones de componentes internos, cambios de comportamiento o características que hayan pasado
+  por un KEP, incluye una sección `## Contexto de diseño público` antes de las referencias.
+- Distingue con claridad entre tres tipos de evidencia: el KEP (problema, objetivos y propuesta),
+  la discusión pública en el issue o PR del KEP (preguntas, restricciones o compromisos) y el código
+  o PR de implementación (comportamiento final).
+- Para cada decisión relevante, explica el problema que la motivó, la restricción que impuso y el efecto
+  observable en el código. Enlaza directamente al encabezado del KEP o al comentario público que la respalda.
+- No atribuyas una intención, consenso o alternativa a una comunidad, SIG o revisor sin una fuente pública.
+  Si no existe KEP o discusión localizable, indícalo y usa los comentarios del código como evidencia primaria.
+- No copies conversaciones extensas ni presentes mensajes operativos de robots como decisiones de diseño.
+  Parafrasea solo el razonamiento técnico verificable y conserva el enlace permanente a la fuente.
+- Si una decisión depende de versión, estado de una puerta de funcionalidad o una estrategia de actualización,
+  indícalo junto con la versión afectada.
+
+Plantilla recomendada:
+
+```markdown
+## Contexto de diseño público
+
+- **Problema:** ...
+- **Decisión:** ...
+- **Restricción o compromiso:** ...
+- **Evidencia:** [KEP-NNNN](URL), [comentario de revisión](URL), [PR de implementación](URL).
+```
 
 ## 8. Saltos de Línea Semánticos (SemBr)
 
@@ -186,24 +213,24 @@ pero hacen que el fuente sea más fácil de leer, revisar y comparar en Git.
 ### Reglas obligatorias
 
 1. Un salto de línea semántico **no debe** alterar la salida renderizada del documento.
-2. Un salto de línea semántico **no debe** alterar el significado previsto del texto.
-3. Un salto de línea semántico **debe** aparecer después de cada oración,
+1. Un salto de línea semántico **no debe** alterar el significado previsto del texto.
+1. Un salto de línea semántico **debe** aparecer después de cada oración,
    marcada por punto (`.`), signo de exclamación (`!`) o signo de interrogación (`?`).
-4. Un salto de línea semántico **no debe** ocurrir dentro de una palabra con guion.
+1. Un salto de línea semántico **no debe** ocurrir dentro de una palabra con guion.
 
 ### Reglas recomendadas
 
-5. Un salto de línea semántico **debería** aparecer después de una cláusula independiente
+1. Un salto de línea semántico **debería** aparecer después de una cláusula independiente
    marcada por coma (`,`), punto y coma (`;`), dos puntos (`:`) o raya (—).
-6. Un salto de línea semántico **puede** aparecer después de una cláusula dependiente
+1. Un salto de línea semántico **puede** aparecer después de una cláusula dependiente
    para aclarar la estructura gramatical o respetar la longitud máxima de línea.
-7. Se **recomienda** un salto de línea antes de una lista enumerada o con viñetas.
-8. Un salto de línea **puede** usarse después de uno o más elementos de una lista
+1. Se **recomienda** un salto de línea antes de una lista enumerada o con viñetas.
+1. Un salto de línea **puede** usarse después de uno o más elementos de una lista
    para agrupar lógicamente ítems relacionados.
-9. Un salto de línea **puede** aparecer antes y después de un hipervínculo.
-10. Un salto de línea **puede** aparecer antes de un elemento de marcado en línea.
-11. La longitud máxima de línea **recomendada** es de **80 caracteres**.
-12. Una línea **puede** superar ese límite cuando sea necesario
+1. Un salto de línea **puede** aparecer antes y después de un hipervínculo.
+1. Un salto de línea **puede** aparecer antes de un elemento de marcado en línea.
+1. La longitud máxima de línea **recomendada** es de **80 caracteres**.
+1. Una línea **puede** superar ese límite cuando sea necesario
     (p. ej., para acomodar enlaces, elementos de código u otro marcado).
 
 ### Ejemplo correcto

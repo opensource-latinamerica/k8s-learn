@@ -29,13 +29,12 @@ Esa identidad viene de una `ServiceAccount`.
 Si no especificas una, el plugin de admisión `ServiceAccount` usa la
 `ServiceAccount` `default` del `Namespace`.
 
-> **Analogía — el empleado nuevo y su tarjeta de acceso:**
-> Cuando una empresa contrata a un empleado,
-> RR HH le prepara una tarjeta de acceso antes incluso de que llegue
-> su primer día.
-> Si esa tarjeta se pierde o se destruye por error,
-> RR HH emite una nueva de inmediato.
-> El `ServiceAccountsController` es ese departamento:
+> **Analogía — el alta de una persona en un equipo:**
+> Cuando una persona se integra a un equipo,
+> el área de sistemas prepara sus credenciales antes de que empiece.
+> Si se pierden o se eliminan por error,
+> el área de sistemas genera unas nuevas de inmediato.
+> El `ServiceAccountsController` funciona como ese equipo:
 > en cuanto un `Namespace` (oficina) se crea o la cuenta `default` desaparece,
 > él genera o regenera la identidad necesaria.
 
@@ -199,14 +198,14 @@ El `ServiceAccountsController` es un excelente ejemplo de la estructura
 mínima de un controlador en Kubernetes porque implementa todos los componentes
 esenciales sin abstracciones adicionales:
 
-> **Analogía — el controlador como cadena de montaje mínima:**
-> Una fábrica de zapatos mínima tiene cuatro puestos:
-> el recepcionista que toma pedidos (informer + handler),
-> la bandeja de pedidos pendientes (workqueue),
-> el operario que los ejecuta (worker/goroutine)
-> y el libro de inventario que consulta antes de actuar (lister).
-> Ninguno se puede quitar sin romper la cadena.
-> El `ServiceAccountsController` es exactamente esa fábrica de cuatro puestos.
+> **Analogía — un taller mecánico pequeño:**
+> Un taller mínimo tiene cuatro puestos:
+> la recepción que registra las órdenes (informer + handler),
+> la bandeja de trabajos pendientes (workqueue),
+> la persona que realiza el servicio (worker/goroutine)
+> y el kardex que consulta antes de actuar (lister).
+> Ninguno se puede quitar sin romper el flujo.
+> El `ServiceAccountsController` tiene exactamente esos cuatro componentes.
 
 ```mermaid
 flowchart TB

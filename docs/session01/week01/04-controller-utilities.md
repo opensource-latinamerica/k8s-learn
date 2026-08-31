@@ -28,11 +28,11 @@ Cuando un objeto tiene una _owner reference_ que apunta a otro objeto
 que ya no existe,
 Kubernetes elimina el objeto hijo automáticamente.
 
-> **Analogía — los documentos y la carpeta que los contiene:**
-> Imagina que tienes una carpeta en tu escritorio con varios documentos dentro.
-> Cuando arrastra la carpeta a la papelera,
-> todos sus documentos también desaparecen:
-> la papelera sabe que esos documentos "pertenecen" a esa carpeta.
+> **Analogía — una carpeta de trámite:**
+> Imagina una carpeta de trámite con varios documentos dentro.
+> Cuando archivas la carpeta principal,
+> sus documentos relacionados también se archivan:
+> el sistema sabe que esos documentos "pertenecen" a esa carpeta.
 > Las `ownerReferences` son exactamente eso:
 > una declaración de "éste objeto le pertenece a éste otro".
 > Cuando el propietario desaparece, el recolector de basura
@@ -115,10 +115,10 @@ err := controllerutil.SetOwnerReference(owner, object, scheme)
 Un _finalizer_ es un campo en `metadata.finalizers`
 que actúa como un bloqueo en el proceso de eliminación.
 
-> **Analogía — la fianza del apartamento:**
-> Cuando alquilas un apartamento, el propietario retiene una fianza.
+> **Analogía — el depósito de un alquiler:**
+> Cuando rentas un local, la persona propietaria retiene un depósito.
 > Puedes entregar las llaves (solicitar el borrado),
-> pero no recuperas la fianza hasta que el piso se inspeccionas y está en orden.
+> pero no recuperas el depósito hasta que el local se inspecciona y está en orden.
 > El finalizer funciona igual:
 > el usuario pide borrar el recurso,
 > pero Kubernetes no lo elimina definitivamente hasta que el controlador
@@ -222,10 +222,10 @@ debe ser idempotente:
 si el recurso ya existe, debe actualizarlo;
 si no existe, debe crearlo.
 
-> **Analogía — el perfil de usuario en una aplicación:**
-> Cuando un usuario inicia sesión en una aplicación por primera vez,
+> **Analogía — un perfil en una aplicación bancaria:**
+> Cuando una persona abre su cuenta por primera vez,
 > el sistema crea su perfil.
-> La segunda vez que inicia sesión,
+> En el siguiente acceso,
 > el sistema actualiza sus datos (hora del último acceso, etc.)
 > en lugar de intentar crear un perfil duplicado.
 > `CreateOrUpdate` hace lo mismo con cualquier recurso de Kubernetes:
