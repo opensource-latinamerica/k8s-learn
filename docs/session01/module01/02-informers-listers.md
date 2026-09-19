@@ -1,8 +1,12 @@
 ---
 layout: default
+type: Explicación
+description: Explica cómo los informers, las cachés y los listers observan el clúster.
+tags: [kubernetes, session01, module01, informers, listers, caché]
+status: stable
 title: 02 — Informers, cachés y listers
 nav_order: 2
-parent: Week 1 — Fundamentos
+parent: Módulo 1 — Fundamentos
 has_children: true
 ---
 
@@ -21,16 +25,7 @@ vista local para la reconciliación.
 
 ## Flujo completo
 
-```mermaid
-flowchart LR
-    A[API server] --> B[Reflector]
-    B --> C[DeltaFIFO]
-    C --> D[Store e Indexer]
-    D --> E[SharedIndexInformer]
-    E --> F[Handlers]
-    D --> G[Listers]
-    F --> H[Workqueue]
-```
+![Diagrama generado de 02 informers listers 1](diagrams/02-informers-listers-mermaid-01.png)
 
 El `Reflector` obtiene y observa recursos.
 `DeltaFIFO` agrupa cambios, `Store` e `Indexer` mantienen la caché,

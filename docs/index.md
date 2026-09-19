@@ -1,5 +1,6 @@
 ---
 layout: home
+okf_version: "0.2"
 title: k8s-learn
 nav_order: 1
 ---
@@ -8,24 +9,24 @@ Guía colaborativa para aprender Kubernetes estudiando su código fuente, con é
 
 ## ¿Qué encontrarás aquí?
 
-Una ruta de aprendizaje estructurada en 4 semanas, cubriendo:
+Una ruta de aprendizaje estructurada en 4 módulos, cubriendo:
 
-- **Semana 1**: Fundamentos del patrón de reconciliación
+- **Módulo 1**: Fundamentos del patrón de reconciliación
   - Bucle de control, informers, listers, workqueues, utilidades de controladores
 
-- **Semana 2**: Controladores básicos
+- **Módulo 2**: Controladores básicos
   - Namespace, ServiceAccount, Garbage Collection
 
-- **Semana 3**: Deployment a profundidad
+- **Módulo 3**: Deployment a profundidad
   - Relación Deployment ↔ ReplicaSet, rollout strategies, rollback y revisiones
 
-- **Semana 4**: Reconciliación basada en grafo
+- **Módulo 4**: Reconciliación basada en grafo
   - GraphBuilder, ownerReferences, políticas de cascada
 
 ## Cómo usar esta documentación
 
-1. **Comienza con [Session 01 → Week 1](./session01/)** si es tu primera vez
-2. Cada semana tiene un **README** con objetivos y mapa conceptual
+1. **Comienza con [Sesión 01](./session01/)** si es tu primera vez
+2. Cada módulo tiene un **README** con objetivos y mapa conceptual
 3. Los artículos incluyen **diagramas interactivos** (.drawio) y conceptos clave
 4. Los vínculos entre temas están claramente marcados
 

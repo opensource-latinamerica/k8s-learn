@@ -1,6 +1,10 @@
 ---
 layout: default
-title: 03d — Rate limiters
+type: Explicación
+description: Describe los limitadores de tasa y el backoff de las workqueues.
+tags: [kubernetes, session01, module01, workqueues, rate-limiters, backoff]
+status: stable
+title: 03d — Limitadores de tasa
 nav_order: 4
 parent: 03 — Workqueues
 ---

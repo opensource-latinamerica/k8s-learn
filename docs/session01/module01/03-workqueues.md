@@ -1,8 +1,12 @@
 ---
 layout: default
+type: Explicación
+description: Explica las garantías y el ciclo de procesamiento de las workqueues.
+tags: [kubernetes, session01, module01, workqueues, controladores, reintentos]
+status: stable
 title: 03 — Workqueues
 nav_order: 3
-parent: Week 1 — Fundamentos
+parent: Módulo 1 — Fundamentos
 has_children: true
 ---
 
@@ -28,14 +32,7 @@ Así se desacoplan la observación, la deduplicación y el procesamiento.
 
 ## Ciclo general
 
-```mermaid
-flowchart LR
-    A[Handler del informer] -->|Add clave| B[Workqueue]
-    B -->|Get| C[Worker]
-    C --> D[Reconciliacion]
-    D -->|Done| B
-    D -->|AddRateLimited si falla| B
-```
+![Diagrama generado de 03 workqueues 1](diagrams/03-workqueues-mermaid-01.png)
 
 La cola no contiene el objeto completo.
 Contiene una clave que permite al worker leer el estado más reciente desde un

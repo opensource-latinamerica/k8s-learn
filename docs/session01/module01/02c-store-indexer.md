@@ -1,5 +1,9 @@
 ---
 layout: default
+type: Explicación
+description: Explica el almacenamiento local y los índices de la caché de Kubernetes.
+tags: [kubernetes, session01, module01, store, indexer, caché]
+status: stable
 title: 02c — Store e Indexer
 nav_order: 3
 parent: 02 — Informers, cachés y listers

@@ -1,5 +1,9 @@
 ---
 layout: default
+type: Explicación
+description: Explica los reintentos, el backoff y el uso correcto de Forget.
+tags: [kubernetes, session01, module01, workqueues, reintentos, forget]
+status: stable
 title: 03e — Reintentos y Forget
 nav_order: 5
 parent: 03 — Workqueues

@@ -1,8 +1,12 @@
 ---
 layout: default
+type: Explicación
+description: Explica el bucle de control, la convergencia eventual y la reconciliación.
+tags: [kubernetes, session01, module01, reconciliación, controladores]
+status: stable
 title: 01 — Reconciliación
 nav_order: 1
-parent: Week 1 — Fundamentos
+parent: Módulo 1 — Fundamentos
 ---
 
 ## Prerequisitos
@@ -116,33 +120,7 @@ Kubernetes incluye decenas de controladores integrados
 que se ejecutan dentro del componente `kube-controller-manager`.
 Cada controlador es responsable de un aspecto específico del clúster:
 
-```mermaid
-flowchart TB
-    subgraph CP["Plano de control"]
-        API["kube-apiserver"]
-        ETCD["etcd"]
-        SCHED["kube-scheduler"]
-
-        subgraph KCM["kube-controller-manager"]
-            DC["Deployment\nController"]
-            RSC["ReplicaSet\nController"]
-            NC["Node\nController"]
-            JC["Job\nController"]
-        end
-
-        API <-->|"Lee / escribe estado"| ETCD
-        KCM <-->|"List + Watch + llamadas API"| API
-        SCHED <-->|"Watch Pods pendientes\n+ Bind al nodo"| API
-    end
-
-    subgraph Nodos
-        K1["kubelet (nodo A)"]
-        K2["kubelet (nodo B)"]
-    end
-
-    K1 <-->|"Heartbeat + estado de Pods"| API
-    K2 <-->|"Heartbeat + estado de Pods"| API
-```
+![Diagrama generado de 01 reconciliation theory 1](diagrams/01-reconciliation-theory-mermaid-01.png)
 
 | Controlador     | Recursos que observa (informers) | Recursos que gestiona | Función principal                                                         |
 | --------------- | -------------------------------- | --------------------- | ------------------------------------------------------------------------- |
@@ -187,17 +165,7 @@ puede volver a encolar el recurso y corregir la desviación.
 
 Cada iteración suele verse así:
 
-```mermaid
-flowchart LR
-  A["1️⃣ Watch / Resync\nse detecta cambio"]
-  B["2️⃣ Encolar\nclave namespace/nombre"]
-  C["3️⃣ Leer desde caché\ninformer/lister"]
-  D["4️⃣ Comparar niveles\ndeseado vs actual"]
-  E["5️⃣ Decidir\nactuar, no-op o reencolar"]
-  F["6️⃣ Actualizar\nrecursos y/o .status"]
-
-  A --> B --> C --> D --> E --> F --> A
-```
+![Diagrama generado de 01 reconciliation theory 2](diagrams/01-reconciliation-theory-mermaid-02.png)
 
 ### Modelo de `watch`, `informer` y `workqueue` en el plano de control
 
@@ -343,25 +311,7 @@ Todo este proceso ocurre automáticamente,
 sin intervención humana,
 en cuestión de segundos.
 
-```mermaid
-sequenceDiagram
-    participant Nodo as Nodo (fallido)
-    participant API as kube-apiserver
-    participant NC as Node Controller
-    participant RSC as ReplicaSet Controller
-    participant SCH as kube-scheduler
-    participant NodoB as Nodo sano
-
-    Nodo->>API: Heartbeat periódico (normal)
-    Note over Nodo,API: El nodo pierde conectividad
-    NC->>API: detecta ausencia de heartbeat → marca NotReady
-    RSC->>API: detecta Pod en nodo NotReady → desired=3, actual=2
-    RSC->>API: emite Create Pod
-    SCH->>API: detecta Pod sin nodo asignado (Watch)
-    SCH->>API: Bind Pod → NodoB
-    NodoB->>API: kubelet reporta Pod Running
-    RSC->>API: desired=3, actual=3 → sin acción necesaria
-```
+![Diagrama generado de 01 reconciliation theory 3](diagrams/01-reconciliation-theory-mermaid-03.png)
 
 ## Controladores personalizados y el patrón Operator
 

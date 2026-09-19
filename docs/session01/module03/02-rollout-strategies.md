@@ -1,8 +1,12 @@
 ---
 layout: default
-title: 02 — Rollout Strategies
+type: Explicación
+description: Compara las estrategias Recreate y RollingUpdate de un Deployment.
+tags: [kubernetes, session01, module03, deployment, rollout, rolling-update]
+status: stable
+title: 02 — Estrategias de rollout
 nav_order: 2
-parent: Week 3 — Deployment
+parent: Módulo 3 — Deployments
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -221,4 +225,4 @@ está completo o ha fallado.
 - [Deployments — Documentación oficial](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
   — kubernetes.io
 
-[← Atrás](01-deployment-replicaset.md) | [Inicio semana](README.md) | [Siguiente →](03-deployment-status.md)
+[← Atrás](01-deployment-replicaset.md) | [Inicio módulo](README.md) | [Siguiente →](03-deployment-status.md)

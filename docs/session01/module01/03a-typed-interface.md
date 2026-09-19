@@ -1,5 +1,10 @@
 ---
 layout: default
+type: Explicación
+description: Describe el contrato y el estado interno de una workqueue tipada.
+tags:
+  [kubernetes, session01, module01, workqueues, typed-interface, concurrencia]
+status: stable
 title: 03a — TypedInterface
 nav_order: 1
 parent: 03 — Workqueues

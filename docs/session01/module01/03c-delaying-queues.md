@@ -1,5 +1,10 @@
 ---
 layout: default
+type: Explicación
+description: Explica cómo las colas con retraso programan el procesamiento futuro.
+tags:
+  [kubernetes, session01, module01, workqueues, delaying-queues, temporización]
+status: stable
 title: 03c — Colas con retraso
 nav_order: 3
 parent: 03 — Workqueues

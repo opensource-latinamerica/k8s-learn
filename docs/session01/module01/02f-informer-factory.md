@@ -1,5 +1,10 @@
 ---
 layout: default
+type: Explicación
+description: Explica cómo SharedInformerFactory coordina informers y sincronización.
+tags:
+  [kubernetes, session01, module01, informer-factory, informers, sincronización]
+status: stable
 title: 02f — SharedInformerFactory
 nav_order: 6
 parent: 02 — Informers, cachés y listers

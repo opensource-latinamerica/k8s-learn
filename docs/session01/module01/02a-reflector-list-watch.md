@@ -1,5 +1,9 @@
 ---
 layout: default
+type: Explicación
+description: Describe el ciclo ListAndWatch y la recuperación del Reflector.
+tags: [kubernetes, session01, module01, reflector, list-watch, resource-version]
+status: stable
 title: 02a — Reflector y ListAndWatch
 nav_order: 1
 parent: 02 — Informers, cachés y listers
@@ -28,17 +32,7 @@ Ejecuta `ListAndWatch` para obtener el estado inicial y observar cambios posteri
 3. Cada evento se convierte en un delta para `DeltaFIFO`.
 4. Si el historial ya no está disponible, el `Reflector` ejecuta otro `List`.
 
-```mermaid
-sequenceDiagram
-    participant R as Reflector
-    participant A as API server
-    participant D as DeltaFIFO
-    R->>A: List
-    A-->>R: Objetos + resourceVersion
-    R->>A: Watch desde resourceVersion
-    A-->>R: Added / Modified / Deleted
-    R->>D: Inserta delta
-```
+![Diagrama generado de 02a reflector list watch 1](diagrams/02a-reflector-list-watch-mermaid-01.png)
 
 ## `ResourceVersion`
 

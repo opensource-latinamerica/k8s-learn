@@ -1,5 +1,9 @@
 ---
 layout: default
+type: Explicación
+description: Explica cómo DeltaFIFO acumula y ordena cambios de recursos.
+tags: [kubernetes, session01, module01, deltafifo, informers, eventos]
+status: stable
 title: 02b — DeltaFIFO
 nav_order: 2
 parent: 02 — Informers, cachés y listers

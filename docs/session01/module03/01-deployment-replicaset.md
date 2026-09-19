@@ -1,8 +1,12 @@
 ---
 layout: default
+type: Explicación
+description: Explica la relación entre Deployment, ReplicaSet y Pod.
+tags: [kubernetes, session01, module03, deployment, replicaset, pods]
+status: stable
 title: 01 — Deployment ↔ ReplicaSet
 nav_order: 1
-parent: Week 3 — Deployment
+parent: Módulo 3 — Deployments
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -12,9 +16,9 @@ parent: Week 3 — Deployment
 
 ## Prerequisitos
 
-- [La reconciliación en Kubernetes: fundamentos](../week01/01-reconciliation-theory.md)
-- [Informers, cachés y listers en Kubernetes](../week01/02-informers-listers.md)
-- [Utilidades de controladores en Kubernetes](../week01/04-controller-utilities.md)
+- [La reconciliación en Kubernetes: fundamentos](../module01/01-reconciliation-theory.md)
+- [Informers, cachés y listers en Kubernetes](../module01/02-informers-listers.md)
+- [Utilidades de controladores en Kubernetes](../module01/04-controller-utilities.md)
 
 ## Por qué existe esta jerarquía
 
@@ -189,7 +193,7 @@ el historial.
 
 La jerarquía `Deployment` → `ReplicaSet` → `Pod` retoma el patrón de
 reconciliación y creación condicional que estudiaste en
-[la semana anterior](../week02/03-serviceaccounts-controller.md).
+[la módulo anterior](../module02/03-serviceaccounts-controller.md).
 Además, usa `ownerReferences` para expresar qué controlador gestiona cada
 recurso.
 
@@ -221,4 +225,4 @@ entre el `ReplicaSet` antiguo y el nuevo.
 - [Owners and Dependents](https://kubernetes.io/docs/concepts/overview/working-with-objects/owners-dependents/)
   — kubernetes.io
 
-[Inicio semana](README.md) | [Siguiente →](02-rollout-strategies.md)
+[Inicio módulo](README.md) | [Siguiente →](02-rollout-strategies.md)

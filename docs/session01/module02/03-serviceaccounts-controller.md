@@ -1,15 +1,20 @@
 ---
 layout: default
-title: 03 — ServiceAccounts
+type: Explicación
+description: Explica cómo el controlador garantiza la ServiceAccount default.
+tags:
+  [kubernetes, session01, module02, serviceaccounts, namespace, idempotencia]
+status: stable
+title: 03 — Controlador de ServiceAccounts
 nav_order: 3
-parent: Week 2 — Controladores básicos
+parent: Módulo 2 — Controladores básicos
 ---
 
 ## Prerequisitos
 
-- [La reconciliación en Kubernetes: fundamentos](../week01/01-reconciliation-theory.md)
-- [Informers, cachés y listers en Kubernetes](../week01/02-informers-listers.md)
-- [Workqueues en Kubernetes](../week01/03-workqueues.md)
+- [La reconciliación en Kubernetes: fundamentos](../module01/01-reconciliation-theory.md)
+- [Informers, cachés y listers en Kubernetes](../module01/02-informers-listers.md)
+- [Workqueues en Kubernetes](../module01/03-workqueues.md)
 
 Cuando creas un `Namespace`,
 Kubernetes crea automáticamente una `ServiceAccount` llamada `default` dentro
@@ -98,28 +103,7 @@ configuradas.
 
 El controlador reacciona a tres tipos de eventos mediante dos informers:
 
-```mermaid
-flowchart LR
-    subgraph "Informers"
-        NSI["NamespaceInformer"]
-        SAI["ServiceAccountInformer"]
-    end
-    subgraph "Manejadores"
-        ADD["namespaceAdded\n→ queue.Add(ns.Name)"]
-        UPD["namespaceUpdated\n→ queue.Add(ns.Name)"]
-        DEL["serviceAccountDeleted\n→ queue.Add(sa.Namespace)"]
-    end
-    WQ["workqueue\n(TypedRateLimitingInterface)"]
-    SYNC["syncNamespace(key)"]
-
-    NSI -->|"AddFunc"| ADD
-    NSI -->|"UpdateFunc"| UPD
-    SAI -->|"DeleteFunc"| DEL
-    ADD --> WQ
-    UPD --> WQ
-    DEL --> WQ
-    WQ --> SYNC
-```
+![Diagrama generado de 03 serviceaccounts controller 1](diagrams/03-serviceaccounts-controller-mermaid-01.png)
 
 | Evento                   | Por qué dispara reconciliación                                             |
 | ------------------------ | -------------------------------------------------------------------------- |
@@ -152,7 +136,7 @@ func (c *ServiceAccountsController) serviceAccountDeleted(
 Este patrón de manejo de tombstone es estándar en todos los controladores
 de Kubernetes que reaccionan a borrados.
 Viste su fundamento teórico en
-[week01/02-informers-listers.md](../week01/02-informers-listers.md).
+[module01/02-informers-listers.md](../module01/02-informers-listers.md).
 
 ## Interacción con el ciclo de vida del Namespace
 
@@ -174,17 +158,7 @@ en lugar de suponer que las condiciones que la dispararon siguen siendo válidas
 
 El `ServiceAccountsController` es el primero de una cadena:
 
-```mermaid
-flowchart LR
-    SA_CTRL["ServiceAccountsController\ncrea la SA 'default'"]
-    TOKEN_CTRL["TokensController\ncrea el Secret de token\n(solo si se usa el mecanismo legacy)"]
-    ADMISSION["ServiceAccount\nAdmissionController\ninyecta el token en el Pod"]
-    KUBELET["kubelet\nmonta el volumen proyectado\ncon el token de corta duración"]
-
-    SA_CTRL --> TOKEN_CTRL
-    SA_CTRL --> ADMISSION
-    ADMISSION --> KUBELET
-```
+![Diagrama generado de 03 serviceaccounts controller 2](diagrams/03-serviceaccounts-controller-mermaid-02.png)
 
 A partir de Kubernetes 1.24,
 el `TokensController` solo genera `Secrets` para las `ServiceAccounts`
@@ -207,21 +181,7 @@ esenciales sin abstracciones adicionales:
 > Ninguno se puede quitar sin romper el flujo.
 > El `ServiceAccountsController` tiene exactamente esos cuatro componentes.
 
-```mermaid
-flowchart TB
-    subgraph "Componentes del controlador"
-        LISTER_SA["saLister\n(ServiceAccountLister)"]
-        LISTER_NS["nsLister\n(NamespaceLister)"]
-        QUEUE["queue\n(TypedRateLimitingInterface)"]
-        HANDLER["syncHandler\n(función de reconciliación)"]
-        WORKERS["workers\n(goroutines)"]
-    end
-
-    LISTER_SA -->|"consulta caché"| HANDLER
-    LISTER_NS -->|"consulta caché"| HANDLER
-    QUEUE -->|"entrega clave"| WORKERS
-    WORKERS -->|"llama"| HANDLER
-```
+![Diagrama generado de 03 serviceaccounts controller 3](diagrams/03-serviceaccounts-controller-mermaid-03.png)
 
 Cada componente tiene una responsabilidad única y no puede sustituirse por
 otro:
@@ -255,7 +215,7 @@ En la práctica, los clústeres estándar de Kubernetes solo garantizan la
 Los operadores y distribuciones pueden añadir otras cuentas a esta lista si
 su arquitectura lo requiere.
 
-## Comparación con los otros controladores de la semana
+## Comparación con los otros controladores de la módulo
 
 | Aspecto            | `NamespaceController`         | `LegacySATokenCleaner`     | `ServiceAccountsController`   |
 | ------------------ | ----------------------------- | -------------------------- | ----------------------------- |
@@ -314,8 +274,8 @@ El patrón get-or-create muestra otra forma de mantener el estado deseado.
 
 ## Siguiente paso
 
-[Semana 3: Deployment a profundidad](../week03/README.md) →
+[Módulo 3: Deployment a profundidad](../module03/README.md) →
 analiza el controlador más usado en Kubernetes: el `Deployment`,
 su relación jerárquica con los `ReplicaSets` y sus estrategias de rollout.
 
-[← Atrás](02-token-cleaner.md) | [Inicio](../README.md) | [Siguiente →](../week03/README.md)
+[← Atrás](02-token-cleaner.md) | [Inicio](../README.md) | [Siguiente →](../module03/README.md)

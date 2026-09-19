@@ -1,12 +1,17 @@
 ---
 layout: default
-title: Week 3 — Deployment
+type: Ruta de aprendizaje
+description: Análisis de Deployments, ReplicaSets, rollouts, estados y revisiones.
+tags: [kubernetes, session01, module03, deployment, replicaset, rollouts]
+status: stable
+title: Módulo 3 — Deployments
 nav_order: 3
-parent: Session 01
+parent: Sesión 01 — Reconciliación en Kubernetes
+permalink: /session01/module03/
 has_children: true
 ---
 
-Esta semana analiza el `Deployment`,
+Esta módulo analiza el `Deployment`,
 el controlador más usado en Kubernetes y el ejemplo canónico de reconciliación compuesta.
 Un `Deployment` no opera directamente sobre `Pods`:
 delega en `ReplicaSets` y gestiona la transición entre ellos.
@@ -15,7 +20,7 @@ es clave para cualquier ingeniero que trabaje con Kubernetes en producción.
 
 ## Objetivos
 
-Al terminar esta semana serás capaz de:
+Al terminar esta módulo serás capaz de:
 
 - Explicar por qué un `Deployment` crea un nuevo `ReplicaSet` en cada rollout
   en lugar de modificar el existente.
@@ -27,28 +32,9 @@ Al terminar esta semana serás capaz de:
 
 ## Mapa conceptual
 
-Los cuatro artículos de esta semana siguen el ciclo de vida de un rollout:
+Los cuatro artículos de esta módulo siguen el ciclo de vida de un rollout:
 
-```mermaid
-flowchart LR
-    subgraph "Capa de decisión"
-        DEPLOY["Deployment\nDeploymentController"]
-    end
-
-    subgraph "Capa operativa"
-        RS_NEW["ReplicaSet (nuevo)\nReplicaSetController"]
-        RS_OLD["ReplicaSet (antiguo)\n(replicas=0, conservado)"]
-    end
-
-    subgraph "Ejecución"
-        PODS["Pods"]
-    end
-
-    DEPLOY -->|"crea + ownerRef"| RS_NEW
-    DEPLOY -->|"escala a 0 + conserva"| RS_OLD
-    RS_NEW -->|"crea"| PODS
-    RS_OLD -. "disponible para rollback" .-> DEPLOY
-```
+![Diagrama generado de README 1](diagrams/README-mermaid-01.png)
 
 El flujo es:
 
@@ -58,9 +44,9 @@ El flujo es:
 4. El `.status` refleja cada paso; `rollout status` lo expone al operador.
 5. Si algo falla, `rollout undo` restaura el `RS` histórico.
 
-## Patrones de reconciliación en esta semana
+## Patrones de reconciliación en esta módulo
 
-| Artículo                 | Patrón principal                     | Novedad respecto a semana 1                  |
+| Artículo                 | Patrón principal                     | Novedad respecto a módulo 1                  |
 | ------------------------ | ------------------------------------ | -------------------------------------------- |
 | Relación Deployment ↔ RS | Jerarquía de controladores           | `pod-template-hash`, adopción de Pods        |
 | Rollout strategies       | Transición controlada entre estados  | `maxUnavailable`, `maxSurge`, rollover       |

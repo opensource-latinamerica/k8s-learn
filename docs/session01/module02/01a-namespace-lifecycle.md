@@ -1,8 +1,12 @@
 ---
 layout: default
-title: 01a — Ciclo de vida de Namespace
+type: Explicación
+description: Describe las fases Active y Terminating del ciclo de vida de un Namespace.
+tags: [kubernetes, session01, module02, namespace, lifecycle, finalizers]
+status: stable
+title: 01a — Ciclo de vida del Namespace
 nav_order: 1
-parent: 01 — Namespace
+parent: 01 — Controlador de Namespace
 ---
 
 # Ciclo de vida y reconciliación de Namespace
@@ -38,4 +42,4 @@ El API server rechaza crear recursos nuevos en un namespace que ya está en
 ## Contenido relacionado
 
 - [NamespacedResourcesDeleter](01b-namespaced-resources-deleter.md)
-- [Finalizers y ciclo de borrado](../week01/04-controller-utilities.md)
+- [Finalizers y ciclo de borrado](../module01/04-controller-utilities.md)

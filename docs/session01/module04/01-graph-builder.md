@@ -1,8 +1,20 @@
 ---
 layout: default
+type: Explicación
+description: Explica cómo GraphBuilder mantiene el grafo de propietarios.
+tags:
+  [
+    kubernetes,
+    session01,
+    module04,
+    garbage-collector,
+    graph-builder,
+    owner-references,
+  ]
+status: stable
 title: 01 — GraphBuilder
 nav_order: 1
-parent: Week 4 — Garbage Collector
+parent: Módulo 4 — Garbage Collector
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -12,9 +24,9 @@ parent: Week 4 — Garbage Collector
 
 ## Prerequisitos
 
-- [Utilidades de controladores en Kubernetes](../week01/04-controller-utilities.md)
+- [Utilidades de controladores en Kubernetes](../module01/04-controller-utilities.md)
   (ownerReferences y finalizers)
-- [La relación Deployment ↔ ReplicaSet](../week03/01-deployment-replicaset.md)
+- [La relación Deployment ↔ ReplicaSet](../module03/01-deployment-replicaset.md)
 
 ## El problema de los objetos huérfanos
 
@@ -161,7 +173,7 @@ recursos huérfanos.
 
 El `GraphBuilder` convierte en un grafo las relaciones de propiedad que
 aparecen en la jerarquía de `Deployment`, `ReplicaSet` y `Pod` estudiada en
-[la semana anterior](../week03/01-deployment-replicaset.md).
+[la módulo anterior](../module03/01-deployment-replicaset.md).
 Así, el patrón de reconciliación y sus eventos adquieren una representación
 que el `GarbageCollector` puede consultar.
 
@@ -190,4 +202,4 @@ y cómo `blockOwnerDeletion` interactúa con el borrado en primer plano.
 - [Owners and Dependents](https://kubernetes.io/docs/concepts/overview/working-with-objects/owners-dependents/)
   — kubernetes.io
 
-[Inicio semana](README.md) | [Siguiente →](02-owner-references.md)
+[Inicio módulo](README.md) | [Siguiente →](02-owner-references.md)

@@ -1,8 +1,12 @@
 ---
 layout: default
-title: 01b — NamespacedResourcesDeleter
+type: Explicación
+description: Explica cómo NamespacedResourcesDeleter elimina recursos de un Namespace.
+tags: [kubernetes, session01, module02, namespace, borrado, controladores]
+status: stable
+title: 01b — Eliminador de recursos del Namespace
 nav_order: 2
-parent: 01 — Namespace
+parent: 01 — Controlador de Namespace
 ---
 
 # NamespacedResourcesDeleter
@@ -38,4 +42,4 @@ intentos.
 ## Contenido relacionado
 
 - [Diagnóstico de namespaces atascados](01c-namespace-diagnosis.md)
-- [Borrado en cascada](../week04/03-cascade-orphan.md)
+- [Borrado en cascada](../module04/03-cascade-orphan.md)

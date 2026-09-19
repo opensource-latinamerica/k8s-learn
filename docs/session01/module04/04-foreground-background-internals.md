@@ -1,8 +1,13 @@
 ---
 layout: default
-title: 04 — GC Internals
+type: Explicación
+description: Explica los algoritmos internos del borrado foreground y background.
+tags:
+  [kubernetes, session01, module04, garbage-collector, foreground, background]
+status: stable
+title: 04 — Internos del Garbage Collector
 nav_order: 4
-parent: Week 4 — Garbage Collector
+parent: Módulo 4 — Garbage Collector
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -157,7 +162,7 @@ El `GarbageCollector` no es el único mecanismo de limpieza en Kubernetes:
 | Finalizers                   | Recursos externos antes de borrar el objeto Kubernetes | El controlador limpia y retira el finalizer |
 | `TTLAfterFinished` (Jobs)    | Jobs completados después de un tiempo                  | Controlador TTL                             |
 | Kubelet (contenedores)       | Contenedores e imágenes sin usar en el nodo            | Límites de disco (`HighThresholdPercent`)   |
-| `NamespacedResourcesDeleter` | Todos los recursos de un namespace en `Terminating`    | Proceso de borrado de namespace (semana 2)  |
+| `NamespacedResourcesDeleter` | Todos los recursos de un namespace en `Terminating`    | Proceso de borrado de namespace (módulo 2)  |
 
 El `GarbageCollector` no gestiona la limpieza de recursos externos al clúster.
 Para eso, necesitas finalizers con lógica custom en tu controlador.
@@ -224,7 +229,7 @@ Esta lección reúne la ruta completa del borrado en cascada descrito en
 [la lección anterior](03-cascade-orphan.md): los informers detectan cambios,
 el `GraphBuilder` mantiene las relaciones, la workqueue ordena el trabajo
 y el `GarbageCollector` aplica la política de borrado.
-Así, el patrón de reconciliación de la semana 1 explica el funcionamiento
+Así, el patrón de reconciliación de la módulo 1 explica el funcionamiento
 interno del proceso.
 
 ## Glosario
@@ -240,8 +245,8 @@ interno del proceso.
 
 ## Siguiente paso
 
-[README de la semana 4](README.md) →
-revisa el mapa conceptual de la semana para consolidar cómo los cuatro artículos se relacionan.
+[README de la módulo 4](README.md) →
+revisa el mapa conceptual de la módulo para consolidar cómo los cuatro artículos se relacionan.
 
 ## Referencias
 
@@ -252,4 +257,4 @@ revisa el mapa conceptual de la semana para consolidar cómo los cuatro artícul
 - [Use Cascading Deletion](https://kubernetes.io/docs/tasks/administer-cluster/use-cascading-deletion/)
   — kubernetes.io
 
-[← Atrás](03-cascade-orphan.md) | [Inicio semana](README.md)
+[← Atrás](03-cascade-orphan.md) | [Inicio módulo](README.md)

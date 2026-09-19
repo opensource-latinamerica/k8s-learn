@@ -1,5 +1,9 @@
 ---
 layout: default
+type: Explicación
+description: Explica el ciclo Get, procesamiento y Done de los workers.
+tags: [kubernetes, session01, module01, workqueues, workers, concurrencia]
+status: stable
 title: 03b — Workers, Get y Done
 nav_order: 2
 parent: 03 — Workqueues

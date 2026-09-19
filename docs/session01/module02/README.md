@@ -1,12 +1,17 @@
 ---
 layout: default
-title: Week 2 — Controladores básicos
+type: Ruta de aprendizaje
+description: Estudio de controladores básicos para namespaces y ServiceAccounts.
+tags: [kubernetes, session01, module02, namespaces, serviceaccounts]
+status: stable
+title: Módulo 2 — Controladores básicos
 nav_order: 2
-parent: Session 01
+parent: Sesión 01 — Reconciliación en Kubernetes
+permalink: /session01/module02/
 has_children: true
 ---
 
-Esta semana aplica los fundamentos de la semana 1 a tres controladores
+Esta módulo aplica los fundamentos de la módulo 1 a tres controladores
 integrados de Kubernetes.
 Los tres son _controladores básicos_:
 implementan patrones de reconciliación claros,
@@ -22,7 +27,7 @@ dejó acumuladas en el tiempo.
 
 ## Objetivos
 
-Al terminar esta semana serás capaz de:
+Al terminar esta módulo serás capaz de:
 
 - Describir las dos fases de un `Namespace` (`Active` / `Terminating`)
   y el papel del finalizer `kubernetes` en su ciclo de borrado.
@@ -39,32 +44,13 @@ Al terminar esta semana serás capaz de:
 
 Los tres controladores comparten un contexto: el `Namespace`.
 
-```mermaid
-flowchart TB
-    subgraph "Ciclo de vida del Namespace"
-        direction LR
-        NS_ACTIVE["Namespace\nActive"]
-        NS_TERM["Namespace\nTerminating"]
-        NS_GONE["(eliminado de etcd)"]
+![Diagrama generado de README 1](diagrams/README-mermaid-01.png)
 
-        NS_ACTIVE -->|"kubectl delete"| NS_TERM
-        NS_TERM -->|"spec.finalizers vacío"| NS_GONE
-    end
-
-    SA_CTRL["ServiceAccountsController\n03-serviceaccounts-controller.md\nCrea la SA 'default'"]
-    NS_CTRL["NamespaceController\n01-namespace-controller.md\nBorra el contenido y elimina el finalizer"]
-    TOKEN_CLEAN["LegacySATokenCleaner\n02-token-cleaner.md\nElimina tokens de SA obsoletos"]
-
-    NS_ACTIVE -- "reacciona a AddFunc/UpdateFunc" --> SA_CTRL
-    NS_TERM -- "reacciona a deletionTimestamp" --> NS_CTRL
-    SA_CTRL -. "crea tokens heredados (solo en k8s < 1.24)\nque se acumulan con el tiempo" .-> TOKEN_CLEAN
-```
-
-## Patrones de reconciliación en esta semana
+## Patrones de reconciliación en esta módulo
 
 Cada controlador ilustra un patrón diferente:
 
-| Controlador                 | Patrón principal                | Novedad respecto a semana 1               |
+| Controlador                 | Patrón principal                | Novedad respecto a módulo 1               |
 | --------------------------- | ------------------------------- | ----------------------------------------- |
 | `NamespaceController`       | Delegación + estimado de espera | `ResourcesRemainingError`, grace period   |
 | `LegacySATokenCleaner`      | Bucle periódico sin workqueue   | `wait.UntilWithContext`, lógica de tiempo |
@@ -99,7 +85,7 @@ Conceptos clave: `LegacySATokenCleaner`, `legacy-token-last-used`,
 
 ### 3 · [El controlador de ServiceAccounts en Kubernetes](03-serviceaccounts-controller.md)
 
-Describe el controlador más pequeño de la semana:
+Describe el controlador más pequeño de la módulo:
 garantiza la presencia de la `ServiceAccount` `default` en todos los
 `Namespaces` activos.
 Sirve como ejemplo de la anatomía mínima de un controlador de Kubernetes

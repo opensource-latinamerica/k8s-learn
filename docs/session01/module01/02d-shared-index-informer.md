@@ -1,5 +1,10 @@
 ---
 layout: default
+type: Explicación
+description: Describe la caché compartida y sus manejadores de eventos.
+tags:
+  [kubernetes, session01, module01, shared-index-informer, informers, eventos]
+status: stable
 title: 02d — SharedIndexInformer
 nav_order: 4
 parent: 02 — Informers, cachés y listers

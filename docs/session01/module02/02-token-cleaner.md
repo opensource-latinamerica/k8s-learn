@@ -1,14 +1,18 @@
 ---
 layout: default
-title: 02 — Token Cleaner
+type: Explicación
+description: Explica cómo se detectan y eliminan tokens heredados obsoletos.
+tags: [kubernetes, session01, module02, serviceaccounts, tokens, limpieza]
+status: stable
+title: 02 — Limpiador de tokens
 nav_order: 2
-parent: Week 2 — Controladores básicos
+parent: Módulo 2 — Controladores básicos
 ---
 
 ## Prerequisitos
 
-- [La reconciliación en Kubernetes: fundamentos](../week01/01-reconciliation-theory.md)
-- [Informers, cachés y listers en Kubernetes](../week01/02-informers-listers.md)
+- [La reconciliación en Kubernetes: fundamentos](../module01/01-reconciliation-theory.md)
+- [Informers, cachés y listers en Kubernetes](../module01/02-informers-listers.md)
 
 Kubernetes generaba automáticamente tokens de larga duración para
 cada `ServiceAccount` antes de la versión 1.24.
@@ -97,31 +101,12 @@ y solo se borra en el siguiente ciclo si no ha sido usado desde entonces.
 
 ## Arquitectura del controlador
 
-A diferencia de los controladores de la semana 1,
+A diferencia de los controladores de la módulo 1,
 el `LegacySATokenCleaner` **no usa workqueue**.
 En su lugar, emplea el patrón más simple de un bucle temporal periódico
 gestionado por `wait.UntilWithContext`:
 
-```mermaid
-flowchart TD
-    subgraph "LegacySATokenCleaner"
-        RUN["Run()\nwait.UntilWithContext"]
-        EVAL["evaluateSATokens()\ncada syncInterval (24 h)"]
-        CM["Leer ConfigMap\nkube-system/kube-apiserver-legacy-service-account-token-tracking"]
-        LIST["Listar todos los Secrets\ndel tipo service-account-token"]
-        CHECK["Para cada Secret:\n¿cumple las 5 condiciones?"]
-        MARK["Marcar como inválido\nPATCH con etiqueta invalid-since"]
-        DELETE["Eliminar el Secret\nDELETE con precondición ResourceVersion"]
-    end
-
-    RUN -->|"cada syncInterval"| EVAL
-    EVAL --> CM
-    CM --> LIST
-    LIST --> CHECK
-    CHECK -->|"no marcado todavía"| MARK
-    CHECK -->|"marcado y expirado"| DELETE
-    CHECK -->|"no cumple"| CHECK
-```
+![Diagrama generado de 02 token cleaner 1](diagrams/02-token-cleaner-mermaid-01.png)
 
 El controlador usa tres informers (caché local):
 

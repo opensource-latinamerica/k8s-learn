@@ -1,14 +1,19 @@
 ---
 layout: default
-title: Week 4 — Garbage Collector
+type: Ruta de aprendizaje
+description: Reconciliación basada en grafos y borrado mediante Garbage Collector.
+tags: [kubernetes, session01, module04, garbage-collector, owner-references]
+status: stable
+title: Módulo 4 — Garbage Collector
 nav_order: 4
-parent: Session 01
+parent: Sesión 01 — Reconciliación en Kubernetes
+permalink: /session01/module04/
 has_children: true
 ---
 
-Esta semana estudia el `GarbageCollector` de Kubernetes,
+Esta módulo estudia el `GarbageCollector` de Kubernetes,
 el controlador responsable de limpiar los objetos que pierden a su propietario.
-A diferencia de los controladores de las semanas anteriores —que reconcilian el estado
+A diferencia de los controladores de las módulos anteriores —que reconcilian el estado
 de un tipo concreto de recurso—,
 el `GarbageCollector` opera sobre el grafo de dependencias de **todos** los recursos del clúster.
 Entender cómo funciona es fundamental para construir controladores que gestionen correctamente
@@ -16,7 +21,7 @@ el ciclo de vida de los objetos secundarios que crean.
 
 ## Objetivos
 
-Al terminar esta semana serás capaz de:
+Al terminar esta módulo serás capaz de:
 
 - Describir la arquitectura del `GarbageCollector` y la función del `GraphBuilder`.
 - Explicar para qué sirve el `uid` en las `ownerReferences`
@@ -28,26 +33,7 @@ Al terminar esta semana serás capaz de:
 
 ## Mapa conceptual
 
-```mermaid
-flowchart TB
-    subgraph "kube-controller-manager"
-        GB["GraphBuilder\n(mantiene el DAG en memoria)"]
-        GC["GarbageCollector\n(procesa workqueue)"]
-        GB -->|"encola candidatos"| GC
-    end
-
-    subgraph "Grafo de dependencias"
-        DEP["Deployment"]
-        RS["ReplicaSet\nownerRef → Deployment"]
-        POD["Pod\nownerRef → ReplicaSet"]
-        DEP --- RS
-        RS --- POD
-    end
-
-    APISERVER["API Server / etcd"]
-    APISERVER -->|"watch events (todos los GVR)"| GB
-    GC -->|"DELETE / PATCH ownerRef"| APISERVER
-```
+![Diagrama generado de README 1](diagrams/README-mermaid-01.png)
 
 El flujo es:
 
@@ -59,7 +45,7 @@ El flujo es:
    `blockOwnerDeletion=true` desaparezcan antes de liberar el propietario.
 6. Para orphan, elimina la `ownerReference` del dependiente (no lo borra).
 
-## Patrones de reconciliación en esta semana
+## Patrones de reconciliación en esta módulo
 
 | Artículo                       | Concepto clave                                                        |
 | ------------------------------ | --------------------------------------------------------------------- |

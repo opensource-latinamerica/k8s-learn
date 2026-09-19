@@ -1,5 +1,9 @@
 ---
 layout: default
+type: Explicación
+description: Explica las consultas de solo lectura mediante listers y cachés locales.
+tags: [kubernetes, session01, module01, listers, caché, consistencia]
+status: stable
 title: 02e — Listers
 nav_order: 5
 parent: 02 — Informers, cachés y listers

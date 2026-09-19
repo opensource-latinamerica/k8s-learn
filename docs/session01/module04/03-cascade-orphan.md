@@ -1,8 +1,12 @@
 ---
 layout: default
-title: 03 — Cascade & Orphan
+type: Explicación
+description: Compara las políticas de borrado Background, Foreground y Orphan.
+tags: [kubernetes, session01, module04, garbage-collector, borrado, finalizers]
+status: stable
+title: 03 — Borrado en cascada
 nav_order: 3
-parent: Week 4 — Garbage Collector
+parent: Módulo 4 — Garbage Collector
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -213,4 +217,4 @@ y cómo interactúa con los finalizers del sistema.
 - [Use Cascading Deletion in a Cluster](https://kubernetes.io/docs/tasks/administer-cluster/use-cascading-deletion/)
   — kubernetes.io
 
-[← Atrás](02-owner-references.md) | [Inicio semana](README.md) | [Siguiente →](04-foreground-background-internals.md)
+[← Atrás](02-owner-references.md) | [Inicio módulo](README.md) | [Siguiente →](04-foreground-background-internals.md)

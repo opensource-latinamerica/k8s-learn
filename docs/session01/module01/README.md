@@ -1,12 +1,17 @@
 ---
 layout: default
-title: Week 1 — Fundamentos
+type: Ruta de aprendizaje
+description: Fundamentos de reconciliación, cachés, informers, listers y workqueues.
+tags: [kubernetes, session01, module01, reconciliación, controladores]
+status: stable
+title: Módulo 1 — Fundamentos
 nav_order: 1
-parent: Session 01
+parent: Sesión 01 — Reconciliación en Kubernetes
+permalink: /session01/module01/
 has_children: true
 ---
 
-Esta semana se cubre los fundamentos que todo controlador de Kubernetes comparte,
+Esta módulo se cubre los fundamentos que todo controlador de Kubernetes comparte,
 sin importar su complejidad.
 Antes de analizar el código de `ReplicaSet`, `Deployment` o `Job`,
 necesitas entender qué problema resuelve la reconciliación,
@@ -16,7 +21,7 @@ y qué utilidades usan para gestionar el ciclo de vida de los recursos.
 
 ## Objetivos
 
-Al terminar esta semana serás capaz de:
+Al terminar esta módulo serás capaz de:
 
 - Explicar el bucle de control y la diferencia entre estado deseado (`.spec`) y estado actual (`.status`).
 - Describir la cadena de llamadas `Reflector` → `DeltaFIFO` → `Indexer` → `SharedIndexInformer` y el papel de cada componente.
@@ -26,29 +31,10 @@ Al terminar esta semana serás capaz de:
 
 ## Mapa conceptual
 
-Los cuatro temas de esta semana no son independientes:
+Los cuatro temas de esta módulo no son independientes:
 forman la arquitectura interna de cualquier controlador de Kubernetes.
 
-```mermaid
-flowchart LR
-    subgraph "Observación"
-        INF["Informers / listers\n02-informers-listers.md"]
-    end
-
-    subgraph "Procesamiento"
-        WQ["Workqueues\n03-workqueues.md"]
-        REC["Reconciliación\n01-reconciliation-theory.md"]
-    end
-
-    subgraph "Gestión de recursos"
-        CU["Utilidades\n04-controller-utilities.md"]
-    end
-
-    INF -->|"notifica cambios (clave)"| WQ
-    WQ -->|"entrega clave al worker"| REC
-    REC -->|"crea / actualiza / borra"| CU
-    CU -->|"persiste en API server"| INF
-```
+![Diagrama generado de README 1](diagrams/README-mermaid-01.png)
 
 El ciclo completo es:
 el **informer** detecta un cambio y encola la clave del objeto en el **workqueue**;

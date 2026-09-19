@@ -1,8 +1,12 @@
 ---
 layout: default
+type: Explicación
+description: Presenta técnicas para diagnosticar namespaces atascados en Terminating.
+tags: [kubernetes, session01, module02, namespace, diagnóstico, troubleshooting]
+status: stable
 title: 01c — Diagnóstico de namespaces atascados
 nav_order: 3
-parent: 01 — Namespace
+parent: 01 — Controlador de Namespace
 ---
 
 # Diagnóstico de un Namespace atascado
@@ -44,5 +48,5 @@ fallando.
 
 ## Contenido relacionado
 
-- [Finalizers y ciclo de borrado](../week01/04-controller-utilities.md)
+- [Finalizers y ciclo de borrado](../module01/04-controller-utilities.md)
 - [Ciclo de vida y reconciliación](01a-namespace-lifecycle.md)

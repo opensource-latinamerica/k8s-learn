@@ -1,8 +1,13 @@
 ---
 layout: default
+type: Explicación
+description: Describe utilidades para referencias de propietario, finalizers y actualizaciones.
+tags:
+  [kubernetes, session01, module01, controladores, finalizers, controllerutil]
+status: stable
 title: 04 — Utilidades
 nav_order: 4
-parent: Week 1 — Fundamentos
+parent: Módulo 1 — Fundamentos
 ---
 
 ## Prerequisitos
@@ -21,7 +26,7 @@ que responden esas preguntas.
 ## OwnerReferences y recolección de basura
 
 > El diagrama detallado del grafo de propietarios y el GarbageCollector se explica en
-> [El grafo de propietarios y el GarbageCollector](../week04/01-graph-builder.md).
+> [El grafo de propietarios y el GarbageCollector](../module04/01-graph-builder.md).
 
 Kubernetes tiene un recolector de basura incorporado.
 Cuando un objeto tiene una _owner reference_ que apunta a otro objeto
@@ -44,26 +49,7 @@ Kubernetes elimina el objeto hijo automáticamente.
 > De lo contrario, si el usuario elimina el recurso primario,
 > los recursos secundarios quedarían huérfanos.
 
-```mermaid
-flowchart TD
-    subgraph "Cadena de propiedad"
-        O["MiRecurso\n(owner — CRD)"]
-        D["Deployment\ncontroller: true"]
-        CM["ConfigMap\ncontroller: true"]
-        P1["Pod 1"]
-        P2["Pod 2"]
-
-        O -->|"ownerReference"| D
-        O -->|"ownerReference"| CM
-        D -->|"ownerReference"| P1
-        D -->|"ownerReference"| P2
-    end
-
-    GC["Garbage Collector"]
-    O -->|"kubectl delete"| GC
-    GC -->|"borra en cascada"| D
-    GC -->|"borra en cascada"| CM
-```
+![Diagrama generado de 04 controller utilities 1](diagrams/04-controller-utilities-mermaid-01.png)
 
 ### SetControllerReference
 
@@ -142,20 +128,7 @@ por ejemplo, liberar un balanceador de carga externo,
 eliminar registros DNS,
 o realizar copias de seguridad.
 
-```mermaid
-flowchart TD
-    A["objeto creado"] --> B["Reconcile:\nAddFinalizer + Update"]
-    B --> C["objeto activo\ncon finalizer"]
-    C --> D["kubectl delete"]
-    D --> E["Kubernetes establece\ndeletionTimestamp"]
-    E --> F["Reconcile detecta\ndeletionTimestamp != nil"]
-    F --> G["ejecutar lógica\nde limpieza externa"]
-    G --> H{"¿limpieza\nexitosa?"}
-    H -->|"No"| I["retornar error\n→ reintento automático"]
-    I --> F
-    H -->|"Sí"| J["RemoveFinalizer + Update"]
-    J --> K["Kubernetes borra\nel objeto definitivamente"]
-```
+![Diagrama generado de 04 controller utilities 2](diagrams/04-controller-utilities-mermaid-02.png)
 
 ### Funciones para gestionar finalizers
 
@@ -234,26 +207,7 @@ si no existe, debe crearlo.
 
 `CreateOrUpdate` y `CreateOrPatch` implementan este patrón de _upsert_:
 
-```mermaid
-flowchart TD
-    A["CreateOrUpdate(ctx, client, obj, mutateFn)"]
-    B["Get del objeto desde\nel API server"]
-    C{"¿Existe?"}
-    D["Llamar mutateFn\nsobre objeto vacío"]
-    E["Llamar mutateFn\nsobre objeto existente"]
-    F["Create"]
-    G{"¿Cambió\nel objeto?"}
-    H["Update / Patch"]
-    I["OperationResultCreated"]
-    J["OperationResultNone"]
-    K["OperationResultUpdated"]
-
-    A --> B --> C
-    C -->|"NotFound"| D --> F --> I
-    C -->|"Encontrado"| E --> G
-    G -->|"No"| J
-    G -->|"Sí"| H --> K
-```
+![Diagrama generado de 04 controller utilities 3](diagrams/04-controller-utilities-mermaid-03.png)
 
 ```go
 // Definir el objeto con su clave (Name + Namespace)
@@ -340,7 +294,7 @@ correcto sin escribir lógica repetida.
 La idea común es que cada reconciliación pueda volver a ejecutar estas acciones
 sin romper lo que ya estaba funcionando.
 
-Aquí se unen los elementos de la semana: como vimos en [las lecciones
+Aquí se unen los elementos de la módulo: como vimos en [las lecciones
 anteriores](03-workqueues.md), el controlador observa mediante informers,
 recibe trabajo desde una workqueue y ejecuta cambios idempotentes.
 Estas utilidades permiten aplicar el patrón de reconciliación a recursos
@@ -378,8 +332,8 @@ concretos sin repetir lógica.
 
 ## Siguiente paso
 
-[Semana 2: Controladores básicos](../week02/README.md) →
-aplica los fundamentos de esta semana analizando tres controladores integrados:
+[Módulo 2: Controladores básicos](../module02/README.md) →
+aplica los fundamentos de esta módulo analizando tres controladores integrados:
 el `NamespaceController`, el `LegacySATokenCleaner` y el `ServiceAccountsController`.
 
-[← Atrás](03-workqueues.md) | [Inicio](../README.md) | [Siguiente →](../week02/README.md)
+[← Atrás](03-workqueues.md) | [Inicio](../README.md) | [Siguiente →](../module02/README.md)

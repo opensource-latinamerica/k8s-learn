@@ -1,8 +1,20 @@
 ---
 layout: default
+type: Explicación
+description: Describe ownerReferences, sus restricciones y la propiedad de recursos.
+tags:
+  [
+    kubernetes,
+    session01,
+    module04,
+    owner-references,
+    garbage-collector,
+    namespaces,
+  ]
+status: stable
 title: 02 — ownerReferences
 nav_order: 2
-parent: Week 4 — Garbage Collector
+parent: Módulo 4 — Garbage Collector
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -204,4 +216,4 @@ cuando se borra un propietario.
 - [Garbage Collection](https://kubernetes.io/docs/concepts/architecture/garbage-collection/)
   — kubernetes.io
 
-[← Atrás](01-graph-builder.md) | [Inicio semana](README.md) | [Siguiente →](03-cascade-orphan.md)
+[← Atrás](01-graph-builder.md) | [Inicio módulo](README.md) | [Siguiente →](03-cascade-orphan.md)

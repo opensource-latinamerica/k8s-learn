@@ -1,8 +1,12 @@
 ---
 layout: default
-title: 04 — Rollback & Revisions
+type: Explicación
+description: Explica las revisiones y el rollback de un Deployment.
+tags: [kubernetes, session01, module03, deployment, rollback, revisiones]
+status: stable
+title: 04 — Rollback y revisiones
 nav_order: 4
-parent: Week 3 — Deployment
+parent: Módulo 3 — Deployments
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -194,7 +198,7 @@ y `CHANGE-CAUSE` me ayuda a recordar por qué hice cada cambio cuando toca
 investigar un problema.
 
 El rollback reutiliza la relación entre `Deployment`, `ReplicaSet` y `Pod`
-que viste en [la primera lección de esta semana](01-deployment-replicaset.md),
+que viste en [la primera lección de esta módulo](01-deployment-replicaset.md),
 y aplica una estrategia de actualización como las estudiadas después.
 El controlador sigue reconciliando hasta alcanzar el estado deseado restaurado.
 
@@ -211,8 +215,8 @@ El controlador sigue reconciliando hasta alcanzar el estado deseado restaurado.
 
 ## Siguiente paso
 
-[README de la semana 3](README.md) →
-revisa el mapa conceptual de la semana para consolidar cómo se relacionan todos los temas.
+[README de la módulo 3](README.md) →
+revisa el mapa conceptual de la módulo para consolidar cómo se relacionan todos los temas.
 
 ## Referencias
 
@@ -221,4 +225,4 @@ revisa el mapa conceptual de la semana para consolidar cómo se relacionan todos
 - [Clean up Policy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#clean-up-policy)
   — kubernetes.io
 
-[← Atrás](03-deployment-status.md) | [Inicio semana](README.md) | [Siguiente →](../week04/README.md)
+[← Atrás](03-deployment-status.md) | [Inicio módulo](README.md) | [Siguiente →](../module04/README.md)

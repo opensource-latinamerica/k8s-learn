@@ -1,8 +1,12 @@
 ---
 layout: default
-title: 03 — Deployment Status
+type: Explicación
+description: Explica los campos y condiciones del estado de un Deployment.
+tags: [kubernetes, session01, module03, deployment, status, condiciones]
+status: stable
+title: 03 — Estado del Deployment
 nav_order: 3
-parent: Week 3 — Deployment
+parent: Módulo 3 — Deployments
 ---
 
 > **Versión de Kubernetes:** v1.29+
@@ -206,4 +210,4 @@ explica cómo usar el historial de revisiones para deshacer un rollout problemá
 - [Deployments — Deployment status](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#deployment-status)
   — kubernetes.io
 
-[← Atrás](02-rollout-strategies.md) | [Inicio semana](README.md) | [Siguiente →](04-rollback-revisions.md)
+[← Atrás](02-rollout-strategies.md) | [Inicio módulo](README.md) | [Siguiente →](04-rollback-revisions.md)

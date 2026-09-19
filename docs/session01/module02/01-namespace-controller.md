@@ -1,8 +1,12 @@
 ---
 layout: default
-title: 01 — Namespace
+type: Explicación
+description: Explica el ciclo de borrado de un Namespace y su controlador.
+tags: [kubernetes, session01, module02, namespace, controladores, finalizers]
+status: stable
+title: 01 — Controlador de Namespace
 nav_order: 1
-parent: Week 2 — Controladores básicos
+parent: Módulo 2 — Controladores básicos
 has_children: true
 ---
 
@@ -10,9 +14,9 @@ has_children: true
 
 ## Prerequisitos
 
-- [La reconciliación en Kubernetes: fundamentos](../week01/01-reconciliation-theory.md)
-- [Informers, cachés y listers](../week01/02-informers-listers.md)
-- [Workqueues](../week01/03-workqueues.md)
+- [La reconciliación en Kubernetes: fundamentos](../module01/01-reconciliation-theory.md)
+- [Informers, cachés y listers](../module01/02-informers-listers.md)
+- [Workqueues](../module01/03-workqueues.md)
 
 ## Qué problema resuelve
 
@@ -28,14 +32,7 @@ contenido y sus finalizers ya no bloquean el borrado.
 
 ## Flujo general
 
-```mermaid
-flowchart LR
-    A[Namespace con deletionTimestamp] --> B[NamespaceController]
-    B --> C[NamespacedResourcesDeleter]
-    C --> D[Borrar recursos del namespace]
-    D --> E[Eliminar finalizers]
-    E --> F[Namespace desaparece]
-```
+![Diagrama generado de 01 namespace controller 1](diagrams/01-namespace-controller-mermaid-01.png)
 
 ## Ruta de profundización
 
@@ -45,13 +42,13 @@ flowchart LR
 
 ## Contenido relacionado
 
-- [Finalizers y ciclo de borrado](../week01/04-controller-utilities.md)
-- [Borrado en cascada](../week04/03-cascade-orphan.md)
+- [Finalizers y ciclo de borrado](../module01/04-controller-utilities.md)
+- [Borrado en cascada](../module04/03-cascade-orphan.md)
 
 ## Referencias
 
 - [Namespaces en Kubernetes](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
 - [Código del controlador de Namespace](https://github.com/kubernetes/kubernetes/tree/master/pkg/controller/namespace)
 
-[← Atrás](../week01/04-controller-utilities.md) | [Inicio](../README.md) |
+[← Atrás](../module01/04-controller-utilities.md) | [Inicio](../README.md) |
 [Siguiente →](02-token-cleaner.md)
