@@ -23,7 +23,7 @@ qmd init
 
 # Global context orients LLMs to the overall workspace purpose
 qmd context add / \
-    "Kubernetes study group knowledge base: weekly sessions covering controller internals, control loops, reconciliation patterns, and core API machinery"
+    "Kubernetes study group knowledge base: modular sessions covering controller internals, control loops, reconciliation patterns, and core API machinery"
 
 to_title() {
     local value="$1"
@@ -32,13 +32,13 @@ to_title() {
     echo "$value" | sed -E 's/\<./\U&/g'
 }
 
-build_week_topics() {
-    local week_dir="$1"
+build_module_topics() {
+    local module_dir="$1"
     local topics=()
     local lesson
     local lesson_name
 
-    for lesson in "$week_dir"/[0-9][0-9]-*.md; do
+    for lesson in "$module_dir"/[0-9][0-9]-*.md; do
         [[ -f "$lesson" ]] || continue
         lesson_name=$(basename "$lesson" .md)
         lesson_name="${lesson_name#*-}"
@@ -70,34 +70,33 @@ for session_dir in "$root_dir"/docs/session*/; do
     session_name=$(basename "$session_dir")
     session_num="${session_name#session}"
 
-    for week_dir in "$session_dir"/week*/; do
-        [[ -d "$week_dir" ]] || continue
+    for module_dir in "$session_dir"/module*/; do
+        [[ -d "$module_dir" ]] || continue
 
-        week_name=$(basename "$week_dir")
-        week_num="${week_name#WW}"
-        week_num="${week_num#week}"
+        module_name=$(basename "$module_dir")
+        module_num="${module_name#module}"
 
-        collection_name="${session_name}-${week_name}"
-        week_topics=$(build_week_topics "$week_dir")
+        collection_name="${session_name}-${module_name}"
+        module_topics=$(build_module_topics "$module_dir")
 
         # Register collection only if not already present
         if ! qmd collection list 2>/dev/null | grep -qE "^${collection_name}[[:space:]]"; then
-            qmd collection add "$week_dir" --name "$collection_name"
+            qmd collection add "$module_dir" --name "$collection_name"
         fi
 
-        # Collection root context: describe the exact session/week content
+        # Collection root context: describe the exact session/module content
         qmd context add "qmd://${collection_name}" \
-            "Kubernetes study group session ${session_num}, week ${week_num}: ${week_topics}"
+            "Kubernetes study group session ${session_num}, module ${module_num}: ${module_topics}"
 
         # Per document context for finer-grained retrieval
-        for lesson in "$week_dir"/*.md; do
+        for lesson in "$module_dir"/*.md; do
             [[ -f "$lesson" ]] || continue
             lesson_file=$(basename "$lesson")
             lesson_name=$(basename "$lesson" .md)
 
             if [[ "$lesson_name" == "README" ]]; then
                 qmd context add "qmd://${collection_name}/${lesson_file}" \
-                    "Overview and study guide for Kubernetes session ${session_num} week ${week_num}"
+                    "Overview and study guide for Kubernetes session ${session_num} module ${module_num}"
                 continue
             fi
 
@@ -105,7 +104,7 @@ for session_dir in "$root_dir"/docs/session*/; do
             lesson_title=$(to_title "$lesson_slug")
 
             qmd context add "qmd://${collection_name}/${lesson_file}" \
-                "Kubernetes session ${session_num} week ${week_num} lesson: ${lesson_title}"
+                "Kubernetes session ${session_num} module ${module_num} lesson: ${lesson_title}"
         done
     done
 done

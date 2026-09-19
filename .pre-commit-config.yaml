@@ -22,7 +22,7 @@ repos:
       - id: markdownlint
         files: \.(md|mdown|markdown)$
   - repo: https://github.com/electrocucaracha/ai-prepare-commit-msg
-    rev: v7.1.0
+    rev: v18.1.0
     hooks:
       - id: ai-prepare-commit
         stages:

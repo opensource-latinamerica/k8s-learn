@@ -231,7 +231,7 @@ pero hacen que el fuente sea más fácil de leer, revisar y comparar en Git.
 1. Un salto de línea **puede** aparecer antes de un elemento de marcado en línea.
 1. La longitud máxima de línea **recomendada** es de **80 caracteres**.
 1. Una línea **puede** superar ese límite cuando sea necesario
-    (p. ej., para acomodar enlaces, elementos de código u otro marcado).
+   (p. ej., para acomodar enlaces, elementos de código u otro marcado).
 
 ### Ejemplo correcto
 
